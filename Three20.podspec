@@ -71,7 +71,7 @@ Pod::Spec.new do |s|
     ext.subspec 'CSSStyle' do |css|
       css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,ThirdPart}/*.{h,m}"
       css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/CssTokens.h"
-      css.header_dir   = "Pod/Classes/extThree20CSSStyle/Headers"
+      css.header_dir            = "extThree20CSSStyle"
       css.resources             = "Pod/Classes/extThree20CSSStyle/Resources/extThree20CSSStyle.bundle"   
       css.dependency 'Three20/Core'
       css.dependency 'Three20/Network'
