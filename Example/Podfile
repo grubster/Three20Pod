@@ -1,0 +1,8 @@
+source 'https://github.com/CocoaPods/Specs.git'
+
+
+target 'Three20', :exclusive => true do
+  pod "Three20", :path => "../"
+
+  
+end
