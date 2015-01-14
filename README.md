@@ -16,7 +16,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Three20 is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
-    pod "Three20"
+    pod "Three20", :git => 'git@github.com:grubster/Three20Pod.git'
 
 ## Author
 
