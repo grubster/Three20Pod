@@ -8,14 +8,21 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/facebook/three20.git", :tag => "1.0.11" }
   s.platform     = :ios
   s.requires_arc = false
+  s.default_subspec = "UI"
   s.source_files = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
   s.frameworks = 'UIKit'
+  s.preserve_paths = 'Pod/Classes/Three20/libThree20.a'
+  s.ios.vendored_library = 'Pod/Classes/Three20/libThree20.a'
+  s.libraries = 'Three20'
 
   s.subspec 'Core' do |cs| 
     cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.{h,m}"
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/TTExtensionInfoPrivate.h"
     cs.public_header_files  = "Pod/Classes/Three20Core/Headers"
     cs.header_dir           = "Three20Core"
+    cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
+    cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
+    cs.libraries = 'Three20Core'
   end
 
   s.subspec 'Network' do |nt| 
@@ -23,7 +30,10 @@ Pod::Spec.new do |s|
     nt.private_header_files = "Pod/Classes/Three20Network/Headers/{TTRequestLoader,TTURLRequestQueueInternal}.h"
     nt.public_header_files  = "Pod/Classes/Three20Network/Headers"
     nt.header_dir           = 'Three20Network'
-    nt.dependency  "Three20/Core"
+    nt.dependency           "Three20/Core"
+    nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
+    nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
+    nt.libraries = 'Three20Network'
   end
 
   s.subspec 'Style' do |st|
@@ -31,8 +41,11 @@ Pod::Spec.new do |s|
     st.private_header_files = "Pod/Classes/Three20Style/Headers/{TTShapeInternal,TTStyledNodeInternal,TTStyleInternal}.h"
     st.public_header_files  = "Pod/Classes/Three20Style/Headers"
     st.header_dir           = "Three20Style"
-    st.dependency  "Three20/Core"
-    st.dependency  "Three20/Network"
+    st.dependency           "Three20/Core"
+    st.dependency           "Three20/Network"
+    st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
+    st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
+    st.libraries = 'Three20Style'
   end
 
   s.subspec 'UICommon' do |uic|
@@ -43,6 +56,9 @@ Pod::Spec.new do |s|
     uic.dependency            'Three20/Core'
     uic.dependency            'Three20/Network'
     uic.frameworks            = 'UIKit', 'CoreGraphics'
+    uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    uic.libraries = 'Three20UICommon'
   end
 
   s.subspec 'UINavigator' do |uin|
@@ -52,6 +68,9 @@ Pod::Spec.new do |s|
     uin.header_dir            = "Three20UINavigator"
     uin.dependency            "Three20/Core"
     uin.dependency            "Three20/UICommon"
+    uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    uin.libraries = 'Three20UINavigator'
   end
 
   s.subspec 'UI' do |ui|
@@ -65,6 +84,9 @@ Pod::Spec.new do |s|
       ui.dependency           'Three20/UICommon'
       ui.dependency           'Three20/UINavigator'
       ui.frameworks           = "QuartzCore"
+      ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
+      ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
+      ui.libraries = 'Three20UI'
   end
 
   s.subspec 'ext' do |ext|
@@ -76,6 +98,9 @@ Pod::Spec.new do |s|
       css.dependency 'Three20/Core'
       css.dependency 'Three20/Network'
       css.dependency 'Three20/Style'
+      css.libraries = 'extThree20CSSStyle'
+      css.preserve_paths = 'Pod/Classes/extThree20CSSStyle/libextThree20CSSStyle.a'
+      css.ios.vendored_library = 'Pod/Classes/extThree20CSSStyle/libextThree20CSSStyle.a'
     end
 
     ext.subspec 'JSON' do |json|
@@ -94,6 +119,9 @@ Pod::Spec.new do |s|
       sb.dependency 'Three20/Network'
       sb.xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON"}
       sb.dependency 'Three20/ext/JSON'
+      sb.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a'
+      sb.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a'
+      sb.libraries = 'extThree20JSON+SBJSON'
     end
 
     ext.subspec 'YAJL' do |yj|
@@ -102,6 +130,9 @@ Pod::Spec.new do |s|
       yj.header_dir   = "extThree20JSON"
       yj.xcconfig     = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_YAJL" }
       yj.dependency   "Three20/ext/JSON"
+      yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+      yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+      yj.libraries = 'extThree20JSON+YAJL'
     end
 
     ext.subspec 'XML' do |xml|
@@ -109,6 +140,9 @@ Pod::Spec.new do |s|
       xml.header_dir = "extThree20XML"
       xml.dependency 'Three20/Core'
       xml.dependency 'Three20/Network'
+      xml.preserve_paths        = 'Pod/Classes/extThree20XML/libextThree20XML.a'
+      xml.ios.vendored_library  = 'Pod/Classes/extThree20XML/libextThree20XML.a'
+      xml.libraries = 'extThree20XML'
     end
   end
 end
