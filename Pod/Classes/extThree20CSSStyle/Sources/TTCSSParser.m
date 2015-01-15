@@ -16,7 +16,7 @@
 
 #import "extThree20CSSStyle/TTCSSParser.h"
 
-#import "extThree20CSSStyle/private/CssTokens.h"
+#import "extThree20CSSStyle/CssTokens.h"
 
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"

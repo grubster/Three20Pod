@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CSSStyle' do |css|
-    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,ThirdPart}/*.{h,m}"
+    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,Grammars,ThirdPart}/*.{h,m}"
     css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/CssTokens.h"
     css.public_header_files   = "Pod/Classes/extThree20CSSStyle/Headers/*.h"
     css.header_dir            = "extThree20CSSStyle"
@@ -104,17 +104,19 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'JSON' do |json|
-    json.source_files = "Pod/Classes/extThree20JSON/{Source,Headers}/**/*.{h,m}"
-    json.header_dir = "extThree20JSON"
+    json.source_files = "Pod/Classes/extThree20JSON/{Source,Headers}/*.{h,m}"
     json.public_header_files = "Pod/Classes/extThree20JSON/Headers/*.h"
+    json.header_dir = "extThree20JSON"
     json.dependency 'Three20/Core'
     json.dependency 'Three20/Network'
+    json.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a', 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+    json.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a', 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
   end
 
   s.subspec 'SBJSON' do |sb|
     sb.source_files = "Pod/Classes/extThree20JSON/Vendors/JSON/*.{h,m}",
-    sb.header_dir = "extThree20JSON"
     sb.public_header_files = "Pod/Classes/extThree20JSON/Headers/*.h"
+    sb.header_dir = "extThree20JSON"
     sb.dependency 'Three20/Core'
     sb.dependency 'Three20/Network'
     sb.xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON"}
@@ -135,6 +137,17 @@ Pod::Spec.new do |s|
     yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
     yj.libraries = 'extThree20JSON+YAJL'
   end
+
+  # s.subspec 'YAJL' do |yj|
+  #   yj.source_files = "Pod/Classes/extThree20JSON/Vendors/YAJL/{GHKit,GTM,Headers,Sources}/*.{h,m,c}"
+  #   yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
+  #   yj.header_dir   = "extThree20JSON"
+  #   yj.xcconfig     = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_YAJL" }
+  #   yj.dependency   "Three20/JSON"
+  #   yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+  #   yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+  #   yj.libraries = 'extThree20JSON+YAJL'
+  # end
 
   s.subspec 'XML' do |xml|
     xml.source_files = "Pod/Classes/extThree20XML/{Source,Headers}/*.{h,m}"
