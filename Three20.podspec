@@ -128,15 +128,15 @@ Pod::Spec.new do |s|
   #   # sb.libraries = 'extThree20JSON+SBJSON'
   # end
 
-  s.subspec 'YAJL' do |yj|
-    yj.source_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,Sources,GHKit,GTM}/*.{h,m}"
-    yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
-    yj.header_dir   = "extThree20JSON"
-    yj.dependency           "Three20/JSON"
-    yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-    yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-    yj.libraries = 'extThree20JSON+YAJL'
-  end
+  # s.subspec 'YAJL' do |yj|
+  #   yj.source_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,Sources,GHKit,GTM}/*.{h,m}"
+  #   yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
+  #   yj.header_dir   = "extThree20JSON"
+  #   yj.dependency           "Three20/JSON"
+  #   yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+  #   yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+  #   yj.libraries = 'extThree20JSON+YAJL'
+  # end
 
   # s.subspec 'YAJL' do |yj|
   #   yj.source_files = "Pod/Classes/extThree20JSON/Vendors/YAJL/{GHKit,GTM,Headers,Sources}/*.{h,m,c}"
