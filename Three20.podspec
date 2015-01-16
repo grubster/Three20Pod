@@ -109,7 +109,7 @@ Pod::Spec.new do |s|
     json.header_dir = "extThree20JSON"
     json.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a' 
     json.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a'
-    yj.xcconfig              = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON" }
+    json.xcconfig              = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON" }
     json.libraries = 'extThree20JSON+SBJSON'
     json.dependency 'Three20/Core'
     json.dependency 'Three20/Network'
