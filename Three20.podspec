@@ -128,6 +128,7 @@ Pod::Spec.new do |s|
   # end
 
   s.subspec 'YAJL' do |yj|
+    yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
     yj.header_dir   = "extThree20JSON"
     yj.xcconfig              = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_YAJL" }
     yj.dependency           "Three20/JSON"
