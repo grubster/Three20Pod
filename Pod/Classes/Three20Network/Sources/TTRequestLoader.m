@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-#import "Three20Network/private/TTRequestLoader.h"
+#import "Three20Network/TTRequestLoader.h"
 
 //Global
 #import "Three20Network/TTErrorCodes.h"
@@ -27,7 +27,7 @@
 #import "Three20Network/TTURLResponse.h"
 
 // Network (private)
-#import "Three20Network/private/TTURLRequestQueueInternal.h"
+#import "Three20Network/TTURLRequestQueueInternal.h"
 
 // Core
 #import "Three20Core/NSDataAdditions.h"
