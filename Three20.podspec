@@ -125,7 +125,7 @@ Pod::Spec.new do |s|
   # end
 
   s.subspec 'YAJL' do |yj|
-    yj.source_files = "Pod/Classes/extThree20JSON/Vendors/{**,*.h}/*.{h,m}"
+    yj.source_files = "Pod/Classes/extThree20JSON/Vendors/YAJL/{**,*.h}/*.{h,m}"
     yj.private_header_files = "Pod/Classes/extThree20JSON/Vendors/YAJL/{**,*.h}/*.h"
     yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/Headers/*.h"
     yj.header_dir   = "extThree20JSON"
