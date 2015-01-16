@@ -31,9 +31,9 @@ Pod::Spec.new do |s|
     nt.public_header_files  = "Pod/Classes/Three20Network/Headers"
     nt.header_dir           = 'Three20Network'
     nt.dependency           "Three20/Core"
-    # nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
-    # nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
-    # nt.libraries = 'Three20Network'
+    nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
+    nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
+    nt.libraries = 'Three20Network'
   end
 
   s.subspec 'Style' do |st|
