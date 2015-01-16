@@ -43,9 +43,9 @@ Pod::Spec.new do |s|
     st.header_dir           = "Three20Style"
     st.dependency           "Three20/Core"
     st.dependency           "Three20/Network"
-    # st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
-  # st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
-    # st.libraries = 'Three20Style'
+    st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
+    st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
+    st.libraries = 'Three20Style'
   end
 
   s.subspec 'UICommon' do |uic|
@@ -56,9 +56,9 @@ Pod::Spec.new do |s|
     uic.dependency            'Three20/Core'
     uic.dependency            'Three20/Network'
     uic.frameworks            = 'UIKit', 'CoreGraphics'
-    # uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    # uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    # uic.libraries = 'Three20UICommon'
+    uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    uic.libraries = 'Three20UICommon'
   end
 
   s.subspec 'UINavigator' do |uin|
@@ -68,9 +68,9 @@ Pod::Spec.new do |s|
     uin.header_dir            = "Three20UINavigator"
     uin.dependency            "Three20/Core"
     uin.dependency            "Three20/UICommon"
-    # uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    # uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    # uin.libraries = 'Three20UINavigator'
+    uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    uin.libraries = 'Three20UINavigator'
   end
 
   s.subspec 'UI' do |ui|
