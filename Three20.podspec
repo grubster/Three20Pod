@@ -44,7 +44,7 @@ Pod::Spec.new do |s|
     st.dependency           "Three20/Core"
     st.dependency           "Three20/Network"
     # st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
-    # st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
+  # st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
     # st.libraries = 'Three20Style'
   end
 
@@ -84,9 +84,9 @@ Pod::Spec.new do |s|
       ui.dependency           'Three20/UICommon'
       ui.dependency           'Three20/UINavigator'
       ui.frameworks           = "QuartzCore"
-      # ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
-      # ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
-      # ui.libraries = 'Three20UI'
+      ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
+      ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
+      ui.libraries = 'Three20UI'
   end
 
   s.subspec 'CSSStyle' do |css|
@@ -109,8 +109,8 @@ Pod::Spec.new do |s|
     json.header_dir = "extThree20JSON"
     json.dependency 'Three20/Core'
     json.dependency 'Three20/Network'
-    # json.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a', 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-    # json.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a', 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+    json.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+    json.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
   end
 
   # s.subspec 'SBJSON' do |sb|
