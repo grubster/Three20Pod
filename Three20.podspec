@@ -107,12 +107,10 @@ Pod::Spec.new do |s|
     json.source_files = "Pod/Classes/extThree20JSON/{Source,Headers}/*.{h,m}"
     json.public_header_files = "Pod/Classes/extThree20JSON/Headers/*.h"
     json.header_dir = "extThree20JSON"
-    json.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a' 
-    json.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+SBJSON.a'
     json.xcconfig              = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON" }
-    json.libraries = 'extThree20JSON+SBJSON'
     json.dependency 'Three20/Core'
     json.dependency 'Three20/Network'
+    json.dependency 'SBJson', '~> 3.0'
   end
 
   # s.subspec 'SBJSON' do |sb|
