@@ -20,9 +20,9 @@ Pod::Spec.new do |s|
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/TTExtensionInfoPrivate.h"
     cs.public_header_files  = "Pod/Classes/Three20Core/Headers"
     cs.header_dir           = "Three20Core"
-    # cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
-    # cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
-    # cs.libraries = 'Three20Core'
+    cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
+    cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
+    cs.libraries = 'Three20Core'
   end
 
   s.subspec 'Network' do |nt| 
