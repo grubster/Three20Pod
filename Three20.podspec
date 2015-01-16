@@ -20,9 +20,9 @@ Pod::Spec.new do |s|
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/TTExtensionInfoPrivate.h"
     cs.public_header_files  = "Pod/Classes/Three20Core/Headers"
     cs.header_dir           = "Three20Core"
-    cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
-    cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
-    cs.libraries = 'Three20Core'
+    # cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
+    # cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
+    # cs.libraries = 'Three20Core'
   end
 
   s.subspec 'Network' do |nt| 
@@ -31,9 +31,9 @@ Pod::Spec.new do |s|
     nt.public_header_files  = "Pod/Classes/Three20Network/Headers"
     nt.header_dir           = 'Three20Network'
     nt.dependency           "Three20/Core"
-    nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
-    nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
-    nt.libraries = 'Three20Network'
+    # nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
+    # nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
+    # nt.libraries = 'Three20Network'
   end
 
   s.subspec 'Style' do |st|
@@ -43,9 +43,9 @@ Pod::Spec.new do |s|
     st.header_dir           = "Three20Style"
     st.dependency           "Three20/Core"
     st.dependency           "Three20/Network"
-    st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
-    st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
-    st.libraries = 'Three20Style'
+    # st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
+    # st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
+    # st.libraries = 'Three20Style'
   end
 
   s.subspec 'UICommon' do |uic|
@@ -56,9 +56,9 @@ Pod::Spec.new do |s|
     uic.dependency            'Three20/Core'
     uic.dependency            'Three20/Network'
     uic.frameworks            = 'UIKit', 'CoreGraphics'
-    uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    uic.libraries = 'Three20UICommon'
+    # uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    # uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
+    # uic.libraries = 'Three20UICommon'
   end
 
   s.subspec 'UINavigator' do |uin|
@@ -68,9 +68,9 @@ Pod::Spec.new do |s|
     uin.header_dir            = "Three20UINavigator"
     uin.dependency            "Three20/Core"
     uin.dependency            "Three20/UICommon"
-    uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    uin.libraries = 'Three20UINavigator'
+    # uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    # uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
+    # uin.libraries = 'Three20UINavigator'
   end
 
   s.subspec 'UI' do |ui|
@@ -84,9 +84,9 @@ Pod::Spec.new do |s|
       ui.dependency           'Three20/UICommon'
       ui.dependency           'Three20/UINavigator'
       ui.frameworks           = "QuartzCore"
-      ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
-      ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
-      ui.libraries = 'Three20UI'
+      # ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
+      # ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
+      # ui.libraries = 'Three20UI'
   end
 
   s.subspec 'CSSStyle' do |css|
@@ -133,9 +133,9 @@ Pod::Spec.new do |s|
     yj.header_dir   = "extThree20JSON"
     yj.xcconfig     = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_YAJL" }
     yj.dependency   "Three20/JSON"
-    yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-    yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-    yj.libraries = 'extThree20JSON+YAJL'
+    # yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+    # yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
+    # yj.libraries = 'extThree20JSON+YAJL'
   end
 
   # s.subspec 'YAJL' do |yj|
