@@ -50,8 +50,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTopic:(NSString*)topic strongRef:(id)strongRef weakRef:(id)weakRef {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.topic      = topic;
     self.strongRef  = strongRef;
     self.weakRef    = weakRef;

@@ -16,7 +16,7 @@
 
 #import "extThree20CSSStyle/TTCSSParser.h"
 
-#import "extThree20CSSStyle/CssTokens.h"
+#import "extThree20CSSStyle/private/CssTokens.h"
 
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
@@ -64,8 +64,7 @@ int cssConsume(char* text, int token) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _ruleSets           = [[NSMutableDictionary alloc] init];
     _activeCssSelectors = [[NSMutableArray alloc] init];
   }
@@ -88,8 +87,8 @@ int cssConsume(char* text, int token) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)consumeToken:(int)token text:(char*)text {
-  NSString* string = [NSString stringWithCString: text
-                                         encoding: NSUTF8StringEncoding];
+  NSString* string = [[NSString stringWithCString: text
+                                         encoding: NSUTF8StringEncoding] lowercaseString];
   switch (token) {
     case CSSHASH:
     case CSSIDENT: {

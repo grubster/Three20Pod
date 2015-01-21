@@ -24,7 +24,8 @@
 #import "Three20Network/TTURLResponse.h"
 #import "Three20Network/TTURLCache.h"
 
-#import "Three20Network/TTRequestLoader.h"
+// Network (Private)
+#import "Three20Network/private/TTRequestLoader.h"
 
 // Core
 #import "Three20Core/TTGlobalCore.h"
@@ -49,7 +50,6 @@ static TTURLRequestQueue* gMainQueue = nil;
 @synthesize userAgent               = _userAgent;
 @synthesize suspended               = _suspended;
 @synthesize imageCompressionQuality = _imageCompressionQuality;
-@synthesize defaultTimeout          = _defaultTimeout;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -72,13 +72,11 @@ static TTURLRequestQueue* gMainQueue = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [super init];
-  if (self) {
+  if (self == [super init]) {
     _loaders = [[NSMutableDictionary alloc] init];
     _loaderQueue = [[NSMutableArray alloc] init];
     _maxContentLength = kDefaultMaxContentLength;
     _imageCompressionQuality = 0.75;
-    _defaultTimeout = kTimeout;
   }
   return self;
 }
@@ -495,16 +493,10 @@ static TTURLRequestQueue* gMainQueue = nil;
   if (!URL) {
     URL = [NSURL URLWithString:request.urlPath];
   }
-  
-  NSTimeInterval usedTimeout = request.timeoutInterval;
-  
-  if (usedTimeout < 0.0 || request == nil) {
-    usedTimeout = self.defaultTimeout;
-  }
-  
+
   NSMutableURLRequest* URLRequest = [NSMutableURLRequest requestWithURL:URL
                                     cachePolicy:NSURLRequestReloadIgnoringLocalCacheData
-                                    timeoutInterval:usedTimeout];
+                                    timeoutInterval:kTimeout];
 
   if (self.userAgent) {
       [URLRequest setValue:self.userAgent forHTTPHeaderField:@"User-Agent"];

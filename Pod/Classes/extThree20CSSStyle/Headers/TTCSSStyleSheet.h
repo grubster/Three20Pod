@@ -16,7 +16,6 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "extThree20CSSStyle/TTDataPopulatorDelegate.h"
 
 /**
  * A general purpose CSS style sheet object for accessing a CSS style sheet's properties.
@@ -26,26 +25,17 @@
  *
  * Example apps: three20/samples/Style/TTCSSStyleSheets
  */
-@class TTCSSRuleSet;
-@interface TTCSSStyleSheet : NSObject <TTDataPopulatorDelegate> {
+@interface TTCSSStyleSheet : NSObject {
 @private
-
-  // The "crude" Styles readed from CSS file.
   NSDictionary*         _cssStyles;
 
-  // An collection of loaded TTCSSRuleSet.
-  NSDictionary*			_cssRulesSet;
+  NSMutableDictionary*  _cachedCssStyles;
 
-  // CSS mapped properties.
-  NSDictionary*		    _propertiesMap;
+  NSDictionary*         _colorLookupTable;
 }
 
 @property (nonatomic, readonly) NSDictionary* cssStyles;
 
-/**
- * An collection of loaded TTCSSRuleSet.
- */
-@property (readonly) NSDictionary* cssRulesSet;
 
 /**
  * Load the style sheet into memory from disk.
@@ -61,74 +51,30 @@
 
 
 /**
- * Get (text) color from a specific rule set, also accept an specific state.
+ * Get (text) color from a specific rule set.
  */
 - (UIColor*)colorWithCssSelector:(NSString*)selector forState:(UIControlState)state;
 
 /**
- * Get (text) color from a specific rule set.
- */
-- (UIColor*)colorWithCssSelector:(NSString*)selector;
-
-/**
- * Get background-color from a specific rule set, also accept an specific state.
+ * Get background-color from a specific rule set.
  */
 - (UIColor*)backgroundColorWithCssSelector:(NSString*)selector forState:(UIControlState)state;
 
 /**
- * Get background-color from a specific rule set.
- */
-- (UIColor*)backgroundColorWithCssSelector:(NSString*)selector;
-
-/**
- * Get font from a specific rule set, also accept an specific state.
+ * Get font from a specific rule set.
  */
 - (UIFont*)fontWithCssSelector:(NSString*)selector forState:(UIControlState)state;
 
 /**
- * Get font from a specific rule set and 'normal' state.
- */
-- (UIFont*)fontWithCssSelector:(NSString*)selector;
-
-/**
- * Get text shadow color from a specific rule set, also accept an specific state.
+ * Get text shadow color from a specific rule set.
  */
 - (UIColor*)textShadowColorWithCssSelector:(NSString*)selector forState:(UIControlState)state;
 
 /**
- * Get text shadow color from a specific rule set.
- */
-- (UIColor*)textShadowColorWithCssSelector:(NSString*)selector;
-
-/**
- * Get text shadow offset from a specific rule set, also accept an specific state.
+ * Get text shadow offset from a specific rule set.
  */
 - (CGSize)textShadowOffsetWithCssSelector:(NSString*)selector forState:(UIControlState)state;
 
-/**
- * Get text shadow offset from a specific rule set.
- */
-- (CGSize)textShadowOffsetWithCssSelector:(NSString*)selector;
-
-/**
- * Get text shadow radius from a specific rule set.
- */
-- (CGFloat)textShadowRadiusWithCssSelector:(NSString*)selector;
-
-/**
- * Get text shadow radius from a specific rule set, also accept an specific state.
- */
-- (CGFloat)textShadowRadiusWithCssSelector:(NSString*)selector forState:(UIControlState)state;
-
-/**
- * CSS Rule Set.
- */
--(TTCSSRuleSet*)css:(NSString*)selectorName;
-
-/**
- * CSS Rule Set, also accept an specific state.
- */
--(TTCSSRuleSet*)css:(NSString*)selectorName forState:(UIControlState)state;
 
 /**
  * Release all cached data.

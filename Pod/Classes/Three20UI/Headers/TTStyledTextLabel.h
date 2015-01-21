@@ -68,7 +68,7 @@
 @property (nonatomic, retain) UIColor* highlightedTextColor;
 
 /**
- * The alignment of the text.
+ * The alignment of the text. (NOT YET IMPLEMENTED)
  */
 @property (nonatomic) UITextAlignment textAlignment;
 

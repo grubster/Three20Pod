@@ -16,7 +16,6 @@
 
 #import "Three20Network/TTURLRequest.h"
 
-
 // Network
 #import "Three20Network/TTGlobalNetwork.h"
 #import "Three20Network/TTURLResponse.h"
@@ -29,7 +28,7 @@
 #import "Three20Core/NSStringAdditions.h"
 
 static NSString* kStringBoundary = @"3i2ndDfv2rTHiSisAbouNdArYfORhtTPEefj3q2f";
-const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,15 +58,12 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
 @synthesize totalBytesDownloaded  = _totalBytesDownloaded;
 @synthesize totalContentLength    = _totalContentLength;
 
-@synthesize timeoutInterval       = _timeoutInterval;
-
 @synthesize userInfo              = _userInfo;
 @synthesize isLoading             = _isLoading;
 
 @synthesize shouldHandleCookies   = _shouldHandleCookies;
 @synthesize respondedFromCache    = _respondedFromCache;
 @synthesize filterPasswordLogging = _filterPasswordLogging;
-@synthesize multiPartForm         = _multiPartForm;
 
 @synthesize delegates             = _delegates;
 
@@ -86,8 +82,7 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURL:(NSString*)URL delegate:(id /*<TTURLRequestDelegate>*/)delegate {
-	self = [self init];
-  if (self) {
+  if (self = [self init]) {
     _urlPath = [URL retain];
     if (nil != delegate) {
       [_delegates addObject:delegate];
@@ -99,15 +94,12 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _delegates = TTCreateNonRetainingArray();
     _cachePolicy = TTURLRequestCachePolicyDefault;
     _cacheExpirationAge = TT_DEFAULT_CACHE_EXPIRATION_AGE;
     _shouldHandleCookies = YES;
     _charsetForMultipart = NSUTF8StringEncoding;
-    _multiPartForm = YES;
-    _timeoutInterval = TTURLRequestUseQueueTimeout;
   }
   return self;
 }
@@ -160,27 +152,12 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
   }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSData *)generateNonMultipartPostBody {
-  NSMutableArray *paramsArray = [NSMutableArray array];
-  for (id key in [_parameters keyEnumerator]) {
-    NSString *value = [_parameters valueForKey:key];
-    if ([key isKindOfClass:[NSString class]] && [value isKindOfClass:[NSString class]]) {
-      [paramsArray addObject:[NSString stringWithFormat:@"%@=%@", 
-                              key, 
-                              [[value stringByReplacingOccurrencesOfString:@" " withString:@"+"] urlEncoded]]];
-    }
-  }
-  NSString *stringBody = [paramsArray componentsJoinedByString:@"&"];
-  return [stringBody dataUsingEncoding:NSUTF8StringEncoding];
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)appendImageData:(NSData*)data
                withName:(NSString*)name
                  toBody:(NSMutableData*)body {
-  NSString *beginLine = [NSString stringWithFormat:@"--%@\r\n", kStringBoundary];
-	NSString *endLine = @"\r\n";
+  NSString *beginLine = [NSString stringWithFormat:@"\r\n--%@\r\n", kStringBoundary];
 
   [body appendData:[beginLine dataUsingEncoding:NSUTF8StringEncoding]];
   [body appendData:[[NSString stringWithFormat:
@@ -194,17 +171,17 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
                       stringWithString:@"Content-Type: image/jpeg\r\n\r\n"]
                      dataUsingEncoding:_charsetForMultipart]];
   [body appendData:data];
-		[body appendData:[endLine dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSData*)generatePostBody {
+  NSMutableData* body = [NSMutableData data];
+  NSString* beginLine = [NSString stringWithFormat:@"\r\n--%@\r\n", kStringBoundary];
 
-	NSMutableData* body = [NSMutableData data];
-  NSString* beginLine = [NSString stringWithFormat:@"--%@\r\n", kStringBoundary];
-	NSString *endLine = @"\r\n";
-	
+  [body appendData:[[NSString stringWithFormat:@"--%@\r\n", kStringBoundary]
+    dataUsingEncoding:NSUTF8StringEncoding]];
+
   for (id key in [_parameters keyEnumerator]) {
     NSString* value = [_parameters valueForKey:key];
     // Really, this can only be an NSString. We're cheating here.
@@ -215,7 +192,6 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
         stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"\r\n\r\n", key]
           dataUsingEncoding:_charsetForMultipart]];
       [body appendData:[value dataUsingEncoding:_charsetForMultipart]];
-		[body appendData:[endLine dataUsingEncoding:NSUTF8StringEncoding]];
     }
   }
 
@@ -251,10 +227,9 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
     [body appendData:[[NSString stringWithFormat:@"Content-Type: %@\r\n\r\n", mimeType]
           dataUsingEncoding:_charsetForMultipart]];
     [body appendData:data];
-		[body appendData:[endLine dataUsingEncoding:NSUTF8StringEncoding]];
   }
 
-  [body appendData:[[NSString stringWithFormat:@"--%@--\r\n", kStringBoundary]
+  [body appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", kStringBoundary]
                    dataUsingEncoding:NSUTF8StringEncoding]];
 
   // If an image was found, remove it from the dictionary to save memory while we
@@ -278,25 +253,14 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSMutableDictionary*)headers {
-  if (!_headers) {
-    _headers = [[NSMutableDictionary alloc] init];
-  }
-  return _headers;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSData*)httpBody {
   if (_httpBody) {
     return _httpBody;
-  } else if (([[_httpMethod uppercaseString] isEqualToString:@"POST"]
-              || [[_httpMethod uppercaseString] isEqualToString:@"PUT"])) {
-    if (_multiPartForm) {
-      return [self generatePostBody];      
-    } else {
-      return [self generateNonMultipartPostBody];
-    }
+
+  } else if ([[_httpMethod uppercaseString] isEqualToString:@"POST"]
+             || [[_httpMethod uppercaseString] isEqualToString:@"PUT"]) {
+    return [self generatePostBody];
+
   } else {
     return nil;
   }
@@ -310,12 +274,8 @@ const NSTimeInterval TTURLRequestUseQueueTimeout = -1.0;
 
   } else if ([_httpMethod isEqualToString:@"POST"]
              || [_httpMethod isEqualToString:@"PUT"]) {
-    if (_multiPartForm) {
-      return [NSString stringWithFormat:@"multipart/form-data; boundary=%@", kStringBoundary];      
-    } else {
-      return [NSString stringWithFormat:@"application/x-www-form-urlencoded", kStringBoundary];            
-    }
-    
+    return [NSString stringWithFormat:@"multipart/form-data; boundary=%@", kStringBoundary];
+
   } else {
     return nil;
   }

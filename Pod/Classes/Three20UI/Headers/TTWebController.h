@@ -53,7 +53,7 @@
 @property (nonatomic, retain)   UIView* headerView;
 
 /**
- * The web controller delegate
+ * The web controller delegate, currently does nothing.
  */
 @property (nonatomic, assign)   id<TTWebControllerDelegate> delegate;
 
@@ -71,18 +71,10 @@
 
 @end
 
-/**
- * The web controller delegate, similar to UIWebViewDelegate, but prefixed with controller
- */
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 @protocol TTWebControllerDelegate <NSObject>
-
-@optional
-- (BOOL)webController:(TTWebController *)controller webView:(UIWebView *)webView
-                                 shouldStartLoadWithRequest:(NSURLRequest *)request
-                                             navigationType:(UIWebViewNavigationType)navigationType;
-- (void)webController:(TTWebController *)controller webViewDidStartLoad:(UIWebView *)webView;
-- (void)webController:(TTWebController *)controller webViewDidFinishLoad:(UIWebView *)webView;
-- (void)webController:(TTWebController *)controller webView:(UIWebView *)webView
-                                       didFailLoadWithError:(NSError *)error;
-
+// XXXjoe Need to make this similar to UIWebViewDelegate
 @end

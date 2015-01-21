@@ -37,7 +37,7 @@
 
   UIViewController*           _rootViewController;
   NSMutableArray*             _delayedControllers;
-  id        _popoverController;
+  UIPopoverController*        _popoverController;
 
   NSString*                   _persistenceKey;
   TTNavigatorPersistenceMode  _persistenceMode;

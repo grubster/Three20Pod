@@ -1,108 +1,83 @@
 Pod::Spec.new do |s|
-  s.name             = "Three20"
-  s.version          = "1.0.11"
-  s.summary          = "Three20 is an Objective-C library for iPhone developers."
-  s.homepage         = "https://github.com/facebook/three20.git"
-  s.license          = 'Apache License'
-  s.author           = { "Pedro Souza" => "pedronicholas.souza@gmail.com" }
-  s.source           = { :git => "https://github.com/grubster/Three20Pod.git", :tag => "1.0.11" }
-  s.platform     = :ios
-  s.requires_arc = false
-  s.default_subspec = "UI"
-  s.source_files = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
+  s.name              = "Three20"
+  s.version           = "1.0.11"
+  s.summary           = "Three20 is an Objective-C library for iPhone developers."
+  s.homepage          = "https://github.com/facebook/three20.git"
+  s.license           = 'Apache License'
+  s.author            = { "Pedro Souza" => "pedronicholas.souza@gmail.com" }
+  s.source            = { :git => "https://github.com/grubster/Three20Pod.git", :tag => "1.0.11" }
+  s.platform          = :ios
+  s.requires_arc      = false
+  s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
+  s.preserve_paths    = 'Pod/Classes/Three20/libThree20.a'
+  s.vendored_libraries = 'Pod/Classes/Three20/libThree20.a',
   s.frameworks = 'UIKit'
-  s.preserve_paths = 'Pod/Classes/Three20/libThree20.a'
-  s.vendored_libraries = 'Pod/Classes/Three20/libThree20.a', 'Pod/Assets/Three20.bundle'
   s.libraries = 'Three20'
 
-  s.subspec 'Core' do |cs| 
-    cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.{h,m}"
-    cs.private_header_files = "Pod/Classes/Three20Core/Headers/TTExtensionInfoPrivate.h"
-    cs.public_header_files  = "Pod/Classes/Three20Core/Headers"
+  s.subspec 'Three20Core' do |cs| 
+    cs.header_mappings_dir  = "Pod/Classes/Three20Core/Headers"
+    cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.h"
+    cs.private_header_files = "Pod/Classes/Three20Core/Headers/private/TTExtensionInfoPrivate.h"
     cs.header_dir           = "Three20Core"
-    cs.preserve_paths       = 'Pod/Classes/Three20Core/libThree20Core.a'
-    cs.ios.vendored_library = 'Pod/Classes/Three20Core/libThree20Core.a'
-    cs.libraries = 'Three20Core'
   end
 
-  s.subspec 'Network' do |nt| 
+  s.subspec 'Three20Network' do |nt| 
     nt.source_files         = "Pod/Classes/Three20Network/{Sources,Headers}/**/*.{h,m}"
-    nt.private_header_files = "Pod/Classes/Three20Network/Headers/{TTRequestLoader,TTURLRequestQueueInternal}.h"
-    nt.public_header_files  = "Pod/Classes/Three20Network/Headers"
+    nt.private_header_files = "Pod/Classes/Three20Network/Headers/private/{TTRequestLoader,TTURLRequestQueueInternal}.h"
+    nt.header_mappings_dir  = "Pod/Classes/Three20Network/Headers"
     nt.header_dir           = 'Three20Network'
-    nt.dependency           "Three20/Core"
+    nt.dependency           "Three20/Three20Core"
   end
 
-  s.subspec 'Style' do |st|
+  s.subspec 'Three20Style' do |st|
     st.source_files         = "Pod/Classes/Three20Style/{Sources,Headers}/**/*.{h,m}"
-    st.private_header_files = "Pod/Classes/Three20Style/Headers/{TTShapeInternal,TTStyledNodeInternal,TTStyleInternal}.h"
-    st.public_header_files  = "Pod/Classes/Three20Style/Headers"
+    st.private_header_files = "Pod/Classes/Three20Style/Headers/private/{TTShapeInternal,TTStyledNodeInternal,TTStyleInternal}.h"
+    st.header_mappings_dir  = "Pod/Classes/Three20Style/Headers"
     st.header_dir           = "Three20Style"
-    st.dependency           "Three20/Core"
-    st.dependency           "Three20/Network"
-    st.preserve_paths       = 'Pod/Classes/Three20Style/libThree20Style.a'
-    st.ios.vendored_library = 'Pod/Classes/Three20Style/libThree20Style.a'
-    st.libraries = 'Three20Style'
+    st.dependency           "Three20/Three20Core"
+    st.dependency           "Three20/Three20Network"
   end
 
-  s.subspec 'UICommon' do |uic|
+  s.subspec 'Three20UICommon' do |uic|
     uic.source_files          = "Pod/Classes/Three20UICommon/{Sources,Headers}/**/*.{h,m}"
-    uic.private_header_files  = "Pod/Classes/Three20UICommon/Headers/UIViewControllerGarbageCollection.h"
-    uic.public_header_files   = "Pod/Classes/Three20UICommon/Headers"
+    uic.private_header_files  = "Pod/Classes/Three20UICommon/Headers/private/UIViewControllerGarbageCollection.h"
+    uic.header_mappings_dir   = "Pod/Classes/Three20UICommon/Headers"
     uic.header_dir            = "Three20UICommon"
-    uic.dependency            'Three20/Core'
-    uic.dependency            'Three20/Network'
-    uic.frameworks            = 'UIKit', 'CoreGraphics'
-    uic.preserve_paths        = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    uic.ios.vendored_library  = 'Pod/Classes/Three20UICommon/libThree20UICommon.a'
-    uic.libraries = 'Three20UICommon'
+    uic.dependency            'Three20/Three20Core'
+    uic.frameworks = 'UIKit', 'CoreGraphics'
   end
 
-  s.subspec 'UINavigator' do |uin|
+  s.subspec 'Three20UINavigator' do |uin|
     uin.source_files          = "Pod/Classes/Three20UINavigator/{Sources,Headers}/**/*.{h,m}"
-    uin.private_header_files  = "Pod/Classes/Three20UINavigator/Headers/{TTBaseNavigatorInternal,TTURLArguments,TTURLArgumentType,TTURLLiteral,TTURLPatternInternal,TTURLPatternText,TTURLSelector,TTURLWildcard,UIViewController+TTNavigatorGarbageCollection}.h"
-    uin.public_header_files   = "Pod/Classes/Three20UINavigator/Headers"
+    uin.private_header_files  = "Pod/Classes/Three20UINavigator/Headers/private/{TTBaseNavigatorInternal,TTURLArguments,TTURLArgumentType,TTURLLiteral,TTURLPatternInternal,TTURLPatternText,TTURLSelector,TTURLWildcard,UIViewController+TTNavigatorGarbageCollection}.h"
+    uin.header_mappings_dir   = "Pod/Classes/Three20UINavigator/Headers"
     uin.header_dir            = "Three20UINavigator"
-    uin.dependency            "Three20/Core"
-    uin.dependency            "Three20/UICommon"
-    uin.preserve_paths        = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    uin.ios.vendored_library  = 'Pod/Classes/Three20UINavigator/libThree20UINavigator.a'
-    uin.libraries = 'Three20UINavigator'
+    uin.dependency            "Three20/Three20Core"
+    uin.dependency            "Three20/Three20UICommon"
   end
 
-  s.subspec 'UI' do |ui|
+  s.subspec 'Three20UI' do |ui|
       ui.source_files         = "Pod/Classes/Three20UI/{Sources,Headers}/**/*.{h,m}",
-      ui.private_header_files = "Pod/Classes/Three20UI/Headers/{TTButtonContent,TTImageLayer,TTImageViewInternal,TTLauncherHighlightView,TTLauncherScrollView,TTNavigatorWindow,TTSearchTextFieldInternal,TTTabBarInternal,TTTextEditorInternal,TTTextView}.h",
-      ui.public_header_files  = "Pod/Classes/Three20UI/Headers/*.h"
+      ui.private_header_files = "Pod/Classes/Three20UI/Headers/private/{TTButtonContent,TTImageLayer,TTImageViewInternal,TTLauncherHighlightView,TTLauncherScrollView,TTNavigatorWindow,TTSearchTextFieldInternal,TTTabBarInternal,TTTextEditorInternal,TTTextView}.h"
+      ui.header_mappings_dir  = "Pod/Classes/Three20UI/Headers"
       ui.header_dir           = "Three20UI"
-      ui.dependency           'Three20/Core'
-      ui.dependency           'Three20/Network'
-      ui.dependency           'Three20/Style'
-      ui.dependency           'Three20/UICommon'
-      ui.dependency           'Three20/UINavigator'
+      ui.dependency           'Three20/Three20Core'
+      ui.dependency           'Three20/Three20Network'
+      ui.dependency           'Three20/Three20Style'
+      ui.dependency           'Three20/Three20UICommon'
+      ui.dependency           'Three20/Three20UINavigator'
       ui.frameworks           = "QuartzCore"
-      ui.preserve_paths        = 'Pod/Classes/Three20UI/libThree20UI.a'
-      ui.ios.vendored_library  = 'Pod/Classes/Three20UI/libThree20UI.a'
-      ui.libraries = 'Three20UI'
   end
 
-  s.subspec 'CSSStyle' do |css|
-    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,Grammars,ThirdPart}/*.{h,m}"
-    css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/CssTokens.h"
-    css.public_header_files   = "Pod/Classes/extThree20CSSStyle/Headers/*.h"
+  s.subspec 'Three20CSSStyle' do |css|
+    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers}/**/*.{h,m}"
+    css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/private/CssTokens.h"
+    css.header_mappings_dir   = "Pod/Classes/extThree20CSSStyle/Headers"
     css.header_dir            = "extThree20CSSStyle"
-    css.resources             = "Pod/Classes/extThree20CSSStyle/Resources/extThree20CSSStyle.bundle"   
-    css.dependency 'Three20/Core'
-    css.dependency 'Three20/Network'
-    css.dependency 'Three20/Style'
-  end
-
-  s.subspec 'XML' do |xml|
-    xml.source_files = "Pod/Classes/extThree20XML/{Source,Headers}/*.{h,m}"
-    xml.public_header_files = "Pod/Classes/extThree20XML/Headers/*.h"
-    xml.header_dir = "extThree20XML"
-    xml.dependency 'Three20/Core'
-    xml.dependency 'Three20/Network'
+    css.resources             = "Pod/Classes/extThree20CSSStyle/Resources/extThree20CSSStyle.bundle"
+    css.dependency 'Three20/Three20Core'
+    css.dependency 'Three20/Three20Network'
+    css.dependency 'Three20/Three20Style'
   end
 end
 
