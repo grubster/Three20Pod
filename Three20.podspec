@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.source_files = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
   s.frameworks = 'UIKit'
   s.preserve_paths = 'Pod/Classes/Three20/libThree20.a'
-  s.ios.vendored_library = 'Pod/Classes/Three20/libThree20.a', 'Pod/Assets/Three20.bundle'
+  s.vendored_libraries = 'Pod/Classes/Three20/libThree20.a', 'Pod/Assets/Three20.bundle'
   s.libraries = 'Three20'
 
   s.subspec 'Core' do |cs| 
