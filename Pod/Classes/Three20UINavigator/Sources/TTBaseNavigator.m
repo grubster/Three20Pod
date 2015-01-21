@@ -342,7 +342,7 @@ __attribute__((weak_import));
   }
 
   _popoverController = [[UIPopoverController alloc] initWithContentViewController:controller];
-  _popoverController.delegate = self;
+  [_popoverController setDelegate:self];
   if (nil != sourceButton) {
     [_popoverController presentPopoverFromBarButtonItem: sourceButton
                                permittedArrowDirections: UIPopoverArrowDirectionAny
