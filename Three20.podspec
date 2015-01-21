@@ -5,14 +5,14 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/facebook/three20.git"
   s.license          = 'Apache License'
   s.author           = { "Pedro Souza" => "pedronicholas.souza@gmail.com" }
-  s.source           = { :git => "https://github.com/facebook/three20.git", :tag => "1.0.11" }
+  s.source           = { :git => "https://github.com/grubster/Three20Pod.git", :tag => "1.0.11" }
   s.platform     = :ios
   s.requires_arc = false
   s.default_subspec = "UI"
   s.source_files = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
   s.frameworks = 'UIKit'
   s.preserve_paths = 'Pod/Classes/Three20/libThree20.a'
-  s.ios.vendored_library = 'Pod/Classes/Three20/libThree20.a'
+  s.ios.vendored_library = 'Pod/Classes/Three20/libThree20.a', 'Pod/Assets/Three20.bundle'
   s.libraries = 'Three20'
 
   s.subspec 'Core' do |cs| 
@@ -31,9 +31,6 @@ Pod::Spec.new do |s|
     nt.public_header_files  = "Pod/Classes/Three20Network/Headers"
     nt.header_dir           = 'Three20Network'
     nt.dependency           "Three20/Core"
-    # nt.preserve_paths       = 'Pod/Classes/Three20Network/libThree20Network.a'
-    # nt.ios.vendored_library = 'Pod/Classes/Three20Network/libThree20Network.a'
-    # nt.libraries = 'Three20Network'
   end
 
   s.subspec 'Style' do |st|
@@ -98,50 +95,7 @@ Pod::Spec.new do |s|
     css.dependency 'Three20/Core'
     css.dependency 'Three20/Network'
     css.dependency 'Three20/Style'
-    # css.libraries = 'extThree20CSSStyle'
-    # css.preserve_paths = 'Pod/Classes/extThree20CSSStyle/libextThree20CSSStyle.a'
-    # css.ios.vendored_library = 'Pod/Classes/extThree20CSSStyle/libextThree20CSSStyle.a'
   end
-
-  # s.subspec 'SBJSON' do |sb|
-  #   sb.source_files = "Pod/Classes/extThree20JSON/Vendors/JSON/*.{h,m}",
-  #   sb.public_header_files = "Pod/Classes/extThree20JSON/Headers/*.h"
-  #   sb.header_dir = "extThree20JSON"
-  #   sb.dependency 'Three20/Core'
-  #   sb.dependency 'Three20/Network'
-  #   sb.xcconfig = {"GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON"}
-  # end
-
-  # s.subspec 'JSON' do |json|
-  #   json.source_files = "Pod/Classes/extThree20JSON/{Source,Headers}/*.{h,m}"
-  #   json.public_header_files = "Pod/Classes/extThree20JSON/Headers/*.h"
-  #   json.header_dir = "extThree20JSON"
-  #   json.xcconfig              = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_SBJSON" }
-  #   json.dependency 'Three20/Core'
-  #   json.dependency 'Three20/Network'
-  #   json.dependency 'JUMP/JUMPData', :git => "git@github.com:pedronsouza/JUMP.git"
-  # end
-
-  # s.subspec 'YAJL' do |yj|
-  #   yj.source_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,Sources,GHKit,GTM}/*.{h,m}"
-  #   yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
-  #   yj.header_dir   = "extThree20JSON"
-  #   yj.dependency           "Three20/JSON"
-  #   yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-  #   yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-  #   yj.libraries = 'extThree20JSON+YAJL'
-  # end
-
-  # s.subspec 'YAJL' do |yj|
-  #   yj.source_files = "Pod/Classes/extThree20JSON/Vendors/YAJL/{GHKit,GTM,Headers,Sources}/*.{h,m,c}"
-  #   yj.public_header_files  = "Pod/Classes/extThree20JSON/Vendors/YAJL/{Headers,GHKit,GTM}/*.h"
-  #   yj.header_dir   = "extThree20JSON"
-  #   yj.xcconfig     = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) EXTJSON_YAJL" }
-  #   yj.dependency   "Three20/JSON"
-  #   yj.preserve_paths        = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-  #   yj.ios.vendored_library  = 'Pod/Classes/extThree20JSON/libextThree20JSON+YAJL.a'
-  #   yj.libraries = 'extThree20JSON+YAJL'
-  # end
 
   s.subspec 'XML' do |xml|
     xml.source_files = "Pod/Classes/extThree20XML/{Source,Headers}/*.{h,m}"
@@ -149,9 +103,6 @@ Pod::Spec.new do |s|
     xml.header_dir = "extThree20XML"
     xml.dependency 'Three20/Core'
     xml.dependency 'Three20/Network'
-    # xml.preserve_paths        = 'Pod/Classes/extThree20XML/libextThree20XML.a'
-    # xml.ios.vendored_library  = 'Pod/Classes/extThree20XML/libextThree20XML.a'
-    # xml.libraries = 'extThree20XML'
   end
 end
 
