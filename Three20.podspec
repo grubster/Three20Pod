@@ -13,6 +13,7 @@ Pod::Spec.new do |s|
   s.frameworks = 'UIKit'
 
   s.subspec 'Core' do |cs| 
+    cs.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     cs.header_mappings_dir  = "Pod/Classes/Three20Core/Headers"
     cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.h"
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/private/TTExtensionInfoPrivate.h"
@@ -20,6 +21,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Network' do |nt| 
+    nt.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     nt.source_files         = "Pod/Classes/Three20Network/{Sources,Headers}/**/*.{h,m}"
     nt.private_header_files = "Pod/Classes/Three20Network/Headers/private/{TTRequestLoader,TTURLRequestQueueInternal}.h"
     nt.header_mappings_dir  = "Pod/Classes/Three20Network/Headers"
@@ -28,6 +30,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Style' do |st|
+    st.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     st.source_files         = "Pod/Classes/Three20Style/{Sources,Headers}/**/*.{h,m}"
     st.private_header_files = "Pod/Classes/Three20Style/Headers/private/{TTShapeInternal,TTStyledNodeInternal,TTStyleInternal}.h"
     st.header_mappings_dir  = "Pod/Classes/Three20Style/Headers"
@@ -37,6 +40,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'UICommon' do |uic|
+    uic.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     uic.source_files          = "Pod/Classes/Three20UICommon/{Sources,Headers}/**/*.{h,m}"
     uic.private_header_files  = "Pod/Classes/Three20UICommon/Headers/private/UIViewControllerGarbageCollection.h"
     uic.header_mappings_dir   = "Pod/Classes/Three20UICommon/Headers"
@@ -46,6 +50,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'UINavigator' do |uin|
+    uin.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     uin.source_files          = "Pod/Classes/Three20UINavigator/{Sources,Headers}/**/*.{h,m}"
     uin.private_header_files  = "Pod/Classes/Three20UINavigator/Headers/private/{TTBaseNavigatorInternal,TTURLArguments,TTURLArgumentType,TTURLLiteral,TTURLPatternInternal,TTURLPatternText,TTURLSelector,TTURLWildcard,UIViewController+TTNavigatorGarbageCollection}.h"
     uin.header_mappings_dir   = "Pod/Classes/Three20UINavigator/Headers"
@@ -55,19 +60,21 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'UI' do |ui|
-      ui.source_files         = "Pod/Classes/Three20UI/{Sources,Headers}/**/*.{h,m}",
-      ui.private_header_files = "Pod/Classes/Three20UI/Headers/private/{TTButtonContent,TTImageLayer,TTImageViewInternal,TTLauncherHighlightView,TTLauncherScrollView,TTNavigatorWindow,TTSearchTextFieldInternal,TTTabBarInternal,TTTextEditorInternal,TTTextView}.h"
-      ui.header_mappings_dir  = "Pod/Classes/Three20UI/Headers"
-      ui.header_dir           = "Three20UI"
-      ui.dependency           'Three20/Core'
-      ui.dependency           'Three20/Network'
-      ui.dependency           'Three20/Style'
-      ui.dependency           'Three20/UICommon'
-      ui.dependency           'Three20/UINavigator'
-      ui.frameworks           = "QuartzCore"
+    ui.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
+    ui.source_files         = "Pod/Classes/Three20UI/{Sources,Headers}/**/*.{h,m}",
+    ui.private_header_files = "Pod/Classes/Three20UI/Headers/private/{TTButtonContent,TTImageLayer,TTImageViewInternal,TTLauncherHighlightView,TTLauncherScrollView,TTNavigatorWindow,TTSearchTextFieldInternal,TTTabBarInternal,TTTextEditorInternal,TTTextView}.h"
+    ui.header_mappings_dir  = "Pod/Classes/Three20UI/Headers"
+    ui.header_dir           = "Three20UI"
+    ui.dependency           'Three20/Core'
+    ui.dependency           'Three20/Network'
+    ui.dependency           'Three20/Style'
+    ui.dependency           'Three20/UICommon'
+    ui.dependency           'Three20/UINavigator'
+    ui.frameworks           = "QuartzCore"
   end
 
   s.subspec 'CSSStyle' do |css|
+    css.public_header_files  = "Pod/Classes/Three20Core/Headers/*.h"
     css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,ThirdPart}/**/*.{h,m}"
     css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/private/CssTokens.h"
     css.header_mappings_dir   = "Pod/Classes/extThree20CSSStyle/Headers"
