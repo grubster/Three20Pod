@@ -9,8 +9,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios
   s.requires_arc      = false
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
-  s.public_header_files = "Pods/Classes/Three20/Headers/*.h", 
-                          "Pods/Classes/Three20Core/Headers/*.h",
+  s.public_header_files = "Pods/Classes/Three20Core/Headers/*.h",
                           "Pod/Classes/Three20Network/Headers/*.h",
                           "Pod/Classes/Three20Style/Headers/*.h",
                           "Pod/Classes/Three20UI/Headers/*.h",
