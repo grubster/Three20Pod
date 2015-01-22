@@ -9,10 +9,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios
   s.requires_arc      = false
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
-  s.preserve_paths    = 'Pod/Classes/Three20/libThree20.a'
-  s.vendored_libraries = 'Pod/Classes/Three20/libThree20.a',
   s.frameworks = 'UIKit'
-  s.libraries = 'Three20'
 
   s.subspec 'Three20Core' do |cs| 
     cs.header_mappings_dir  = "Pod/Classes/Three20Core/Headers"
