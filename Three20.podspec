@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios
   s.requires_arc      = false
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
-  s.libraries         = 'Three20/Core','Three20/Network','Three20/Style','Three20/UINavigator','Three20/UI'
+  s.libraries         = 'Three20Core','Three20Network','Three20Style','Three20UINavigator','Three20UI','Three20CSSStyle'
   s.frameworks = 'UIKit'
 
   s.subspec 'Core' do |cs| 
