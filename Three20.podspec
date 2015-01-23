@@ -9,6 +9,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios
   s.requires_arc      = false
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => "$(SRCROOT)/Pods/Three20/Pod/Classes/**/Headers/*.h" }
   s.frameworks = 'UIKit'
 
   s.subspec 'Core' do |cs| 
@@ -16,6 +17,7 @@ Pod::Spec.new do |s|
     cs.header_mappings_dir  = "Pod/Classes/Three20Core/Headers"
     cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.h"
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/private/TTExtensionInfoPrivate.h"
+
     cs.header_dir           = "Three20Core"
   end
 
