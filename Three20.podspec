@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.platform          = :ios
   s.requires_arc      = false
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
-  s.xcconfig = { 'HEADER_SEARCH_PATHS' => "$(SRCROOT)/Pods/Three20/Pod/Classes/**/Headers/*.h" }
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => "$(SRCROOT)/Pods/Headers/**" }
   s.frameworks = 'UIKit'
 
   s.subspec 'Core' do |cs| 
