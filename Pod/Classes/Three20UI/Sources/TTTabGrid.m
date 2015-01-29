@@ -15,7 +15,7 @@
 //
 
 #import "Three20UI/TTTabGrid.h"
-#import "TTTab.m"
+#import "TTTab.h"
 // UI
 #import "Three20UI/TTButton.h"
 #import "Three20UI/UIViewAdditions.h"
