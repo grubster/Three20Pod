@@ -17,6 +17,11 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
+@protocol TTTableItemSelectingClass <NSObject>
+@required
+-(Class)cellClass;
+@end
+
 @interface TTTableItem : NSObject <NSCoding> {
   id _userInfo;
 }
