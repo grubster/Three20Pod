@@ -293,7 +293,7 @@ static NSString* kUniversalURLPattern = @"*";
               forInvocation: (NSInvocation*)invocation
                       query: (NSDictionary*)query {
   NSInteger remainingArgs = _argumentCount;
-  __unsafe_unretained NSMutableDictionary* unmatchedArgs = query ? [query mutableCopy] : nil;
+  NSMutableDictionary* unmatchedArgs = query ? [query mutableCopy] : nil;
 
   NSArray* pathComponents = URL.path.pathComponents;
   for (NSInteger i = 0; i < _path.count; ++i) {
