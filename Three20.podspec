@@ -14,8 +14,8 @@ Pod::Spec.new do |s|
 
   s.subspec 'Core' do |cs| 
     cs.public_header_files  = "Pods/Classes/Three20Core/Headers/*.h"
+    cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.{h,m}"
     cs.header_mappings_dir  = "Pod/Classes/Three20Core/Headers"
-    cs.source_files         = "Pod/Classes/Three20Core/{Sources,Headers}/**/*.h"
     cs.private_header_files = "Pod/Classes/Three20Core/Headers/private/TTExtensionInfoPrivate.h"
 
     cs.header_dir           = "Three20Core"
