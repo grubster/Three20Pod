@@ -34,13 +34,13 @@
   BOOL _autoresizesToText;
   BOOL _showsExtraLine;
 
-  id<TTTextEditorDelegate> __unsafe_unretained _delegate;
+  id<TTTextEditorDelegate> _delegate;
 }
 
 @property (nonatomic, copy)     NSString* text;
 @property (nonatomic, copy)     NSString* placeholder;
-@property (nonatomic, strong)   UIFont*   font;
-@property (nonatomic, strong)   UIColor*  textColor;
+@property (nonatomic, retain)   UIFont*   font;
+@property (nonatomic, retain)   UIColor*  textColor;
 
 @property (nonatomic)           NSInteger minNumberOfLines;
 @property (nonatomic)           NSInteger maxNumberOfLines;
@@ -49,7 +49,7 @@
 @property (nonatomic)           BOOL autoresizesToText;
 @property (nonatomic)           BOOL showsExtraLine;
 
-@property (nonatomic, unsafe_unretained) id<TTTextEditorDelegate> delegate;
+@property (nonatomic, assign) id<TTTextEditorDelegate> delegate;
 
 - (void)scrollContainerToCursor:(UIScrollView*)scrollView;
 

@@ -25,7 +25,7 @@
 }
 
 @property (nonatomic, copy)   NSString* name;
-@property (nonatomic, strong) TTStyle*  style;
+@property (nonatomic, retain) TTStyle*  style;
 
 + (TTPartStyle*)styleWithName:(NSString*)name style:(TTStyle*)style next:(TTStyle*)next;
 

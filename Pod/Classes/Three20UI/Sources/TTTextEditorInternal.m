@@ -21,7 +21,7 @@
 
 // UI
 #import "Three20UI/TTTextEditorDelegate.h"
-#import "TTTextEditor.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +36,8 @@ TT_FIX_CATEGORY_BUG(TTTextEditorInternal)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTextEditor:(TTTextEditor*)textEditor {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _textEditor = textEditor;
   }
 
@@ -214,7 +215,7 @@ TT_FIX_CATEGORY_BUG(TTTextEditorInternal)
     }
   }
 
-  [_textEditor performSelector:@selector(didChangeText:) withObject:[NSNumber numberWithBool:YES]];
+  [_textEditor performSelector:@selector(didChangeText:) withObject:(id)YES];
 
   if ([_delegate respondsToSelector:@selector(textEditorDidChange:)]) {
     [_delegate textEditorDidChange:_textEditor];

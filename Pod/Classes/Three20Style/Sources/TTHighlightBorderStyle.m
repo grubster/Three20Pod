@@ -36,11 +36,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _width = 1;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_color);
+  TT_RELEASE_SAFELY(_highlightColor);
+
+  [super dealloc];
 }
 
 
@@ -53,7 +63,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTHighlightBorderStyle*)styleWithColor:(UIColor*)color highlightColor:(UIColor*)highlightColor
                                     width:(CGFloat)width next:(TTStyle*)next {
-  TTHighlightBorderStyle* style = [[self alloc] initWithNext:next];
+  TTHighlightBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.color = color;
   style.highlightColor = highlightColor;
   style.width = width;

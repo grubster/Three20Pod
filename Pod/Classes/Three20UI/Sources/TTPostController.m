@@ -40,8 +40,8 @@
 #import "Three20Core/NSStringAdditions.h"
 #import "Three20Core/TTGlobalCore.h"
 
-static const CGFloat kMarginX = 5;
-static const CGFloat kMarginY = 6;
+static const CGFloat kMarginX = 5.0f;
+static const CGFloat kMarginY = 6.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -58,16 +58,17 @@ static const CGFloat kMarginY = 6;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
     self.navigationItem.leftBarButtonItem =
-      [[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
+      [[[UIBarButtonItem alloc] initWithBarButtonSystemItem: UIBarButtonSystemItemCancel
                                                      target: self
-                                                     action: @selector(cancel)];
+                                                     action: @selector(cancel)] autorelease];
     self.navigationItem.rightBarButtonItem =
-      [[UIBarButtonItem alloc] initWithTitle: TTLocalizedString(@"Done", @"")
+      [[[UIBarButtonItem alloc] initWithTitle: TTLocalizedString(@"Done", @"")
                                         style: UIBarButtonItemStyleDone
                                        target: self
-                                       action: @selector(post)];
+                                       action: @selector(post)] autorelease];
   }
 
   return self;
@@ -76,7 +77,8 @@ static const CGFloat kMarginY = 6;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query {
-  if (self = [self initWithNibName:nil bundle:nil]) {
+	self = [self initWithNibName:nil bundle:nil];
+  if (self) {
     if (nil != query) {
       _delegate = [query objectForKey:@"delegate"];
       _defaultText = [[query objectForKey:@"text"] copy];
@@ -92,6 +94,20 @@ static const CGFloat kMarginY = 6;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_result);
+  TT_RELEASE_SAFELY(_defaultText);
+  TT_RELEASE_SAFELY(_originView);
+  TT_RELEASE_SAFELY(_textView);
+  TT_RELEASE_SAFELY(_navigationBar);
+  TT_RELEASE_SAFELY(_innerView);
+  TT_RELEASE_SAFELY(_activityView);
+
+  [super dealloc];
 }
 
 
@@ -201,7 +217,7 @@ static const CGFloat kMarginY = 6;
     [_delegate postController:self didPostText:_textView.text withResult:_result];
   }
 
-    _originView = nil;
+  TT_RELEASE_SAFELY(_originView);
   [self dismissPopupViewControllerAnimated:NO];
 }
 
@@ -209,7 +225,7 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)fadeOut {
   _originView.hidden = NO;
-    _originView = nil;
+  TT_RELEASE_SAFELY(_originView);
 
   [UIView beginAnimations:nil context:nil];
   [UIView setAnimationDelegate:self];
@@ -346,7 +362,7 @@ static const CGFloat kMarginY = 6;
   if (title) {
     self.navigationItem.title = title;
   }
-  _defaultText = [state objectForKey:@"text"];
+  _defaultText = [[state objectForKey:@"text"] retain];
 }
 
 
@@ -358,6 +374,7 @@ static const CGFloat kMarginY = 6;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showInView:(UIView*)view animated:(BOOL)animated {
+  [self retain];
 
   [self.superController viewWillDisappear:animated];
 
@@ -371,7 +388,7 @@ static const CGFloat kMarginY = 6;
     _textView.text = _defaultText;
 
   } else {
-    _defaultText = _textView.text;
+    _defaultText = [_textView.text retain];
   }
 
   _innerView.frame = self.view.bounds;
@@ -432,6 +449,7 @@ static const CGFloat kMarginY = 6;
   } else {
     UIViewController* superController = self.superController;
     [self.view removeFromSuperview];
+    [self release];
     superController.popupViewController = nil;
     [superController viewDidAppear:animated];
   }
@@ -460,7 +478,7 @@ static const CGFloat kMarginY = 6;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UITextView*)textView {
-  self.view;
+  [self view];
   return _textView;
 }
 
@@ -468,7 +486,7 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UINavigationBar*)navigatorBar {
   if (!_navigationBar) {
-    self.view;
+    [self view];
   }
   return _navigationBar;
 }
@@ -477,7 +495,8 @@ static const CGFloat kMarginY = 6;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setOriginView:(UIView*)view {
   if (view != _originView) {
-    _originView = view;
+    [_originView release];
+    _originView = [view retain];
     _originRect = CGRectZero;
   }
 }
@@ -504,11 +523,11 @@ static const CGFloat kMarginY = 6;
   if (TTIsStringWithAnyText(_textView.text)
       && !_textView.text.isWhitespaceAndNewlines
       && !(_defaultText && [_defaultText isEqualToString:_textView.text])) {
-    UIAlertView* cancelAlertView = [[UIAlertView alloc] initWithTitle:
+    UIAlertView* cancelAlertView = [[[UIAlertView alloc] initWithTitle:
       TTLocalizedString(@"Cancel", @"")
       message:TTLocalizedString(@"Are you sure you want to cancel?", @"")
       delegate:self cancelButtonTitle:TTLocalizedString(@"Yes", @"")
-      otherButtonTitles:TTLocalizedString(@"No", @""), nil];
+      otherButtonTitles:TTLocalizedString(@"No", @""), nil] autorelease];
     [cancelAlertView show];
 
   } else {
@@ -519,7 +538,8 @@ static const CGFloat kMarginY = 6;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dismissWithResult:(id)result animated:(BOOL)animated {
-  _result = result;
+  [_result release];
+  _result = [result retain];
 
   [self.superController viewWillAppear:animated];
 
@@ -572,9 +592,9 @@ static const CGFloat kMarginY = 6;
 
   NSString* title = [self titleForError:error];
   if (title.length) {
-    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:TTLocalizedString(@"Error", @"")
+    UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:TTLocalizedString(@"Error", @"")
       message:title delegate:nil cancelButtonTitle:TTLocalizedString(@"Ok", @"")
-      otherButtonTitles:nil];
+      otherButtonTitles:nil] autorelease];
     [alertView show];
   }
 }

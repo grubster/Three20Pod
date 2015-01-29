@@ -16,11 +16,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "TTLauncherView.h"
+
 @class TTLauncherView;
 
 @interface TTLauncherItem : NSObject <NSCoding> {
-  TTLauncherView* __unsafe_unretained _launcher;
+  TTLauncherView* _launcher;
 
   NSString*       _title;
   NSString*       _image;
@@ -30,9 +30,10 @@
   NSString*       _badgeValue;
 
   BOOL            _canDelete;
+  id              _userInfo;
 }
 
-@property (nonatomic, unsafe_unretained) TTLauncherView* launcher;
+@property (nonatomic, assign) TTLauncherView* launcher;
 @property (nonatomic, copy)   NSString*       title;
 @property (nonatomic, copy)   NSString*       image;
 @property (nonatomic, copy)   NSString*       URL;
@@ -40,6 +41,7 @@
 @property (nonatomic)         NSInteger       badgeNumber;
 @property (nonatomic, copy)   NSString*       badgeValue;
 @property (nonatomic)         BOOL            canDelete;
+@property (nonatomic, retain) id              userInfo;
 
 - (id)initWithTitle:(NSString*)title image:(NSString*)image URL:(NSString*)URL;
 - (id)initWithTitle:(NSString*)title image:(NSString*)image URL:(NSString*)URL

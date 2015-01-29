@@ -22,6 +22,6 @@
   UIViewController* _popupViewController;
 }
 
-@property (nonatomic, strong) UIViewController* popupViewController;
+@property (nonatomic, retain) UIViewController* popupViewController;
 
 @end

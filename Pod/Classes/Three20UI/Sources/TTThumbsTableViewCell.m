@@ -26,8 +26,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kSpacing = 4;
-static const CGFloat kDefaultThumbSize = 75;
+static const CGFloat kSpacing = 4.0f;
+static const CGFloat kDefaultThumbSize = 75.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,7 +44,8 @@ static const CGFloat kDefaultThumbSize = 75;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
+	self = [super initWithStyle:style reuseIdentifier:identifier];
+  if (self) {
     _thumbViews = [[NSMutableArray alloc] init];
     _thumbSize = kDefaultThumbSize;
     _thumbOrigin = CGPointMake(kSpacing, 0);
@@ -54,6 +55,15 @@ static const CGFloat kDefaultThumbSize = 75;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_photo);
+  TT_RELEASE_SAFELY(_thumbViews);
+
+  [super dealloc];
 }
 
 
@@ -161,7 +171,7 @@ static const CGFloat kDefaultThumbSize = 75;
     _columnCount = columnCount;
 
     for (NSInteger i = _thumbViews.count; i < _columnCount; ++i) {
-      TTThumbView* thumbView = [[TTThumbView alloc] init];
+      TTThumbView* thumbView = [[[TTThumbView alloc] init] autorelease];
       [thumbView addTarget:self action:@selector(thumbTouched:)
                  forControlEvents:UIControlEventTouchUpInside];
       [self.contentView addSubview:thumbView];
@@ -177,7 +187,8 @@ static const CGFloat kDefaultThumbSize = 75;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setPhoto:(id<TTPhoto>)photo {
   if (_photo != photo) {
-    _photo = photo;
+    [_photo release];
+    _photo = [photo retain];
 
     if (!_photo) {
       for (TTThumbView* thumbView in _thumbViews) {

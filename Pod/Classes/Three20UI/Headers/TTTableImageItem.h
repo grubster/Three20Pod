@@ -26,8 +26,8 @@
 }
 
 @property (nonatomic, copy)   NSString* imageURL;
-@property (nonatomic, strong) UIImage*  defaultImage;
-@property (nonatomic, strong) TTStyle*  imageStyle;
+@property (nonatomic, retain) UIImage*  defaultImage;
+@property (nonatomic, retain) TTStyle*  imageStyle;
 
 + (id)itemWithText:(NSString*)text imageURL:(NSString*)imageURL;
 + (id)itemWithText:(NSString*)text imageURL:(NSString*)imageURL URL:(NSString*)URL;

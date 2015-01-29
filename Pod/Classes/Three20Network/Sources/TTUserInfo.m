@@ -25,32 +25,46 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation TTUserInfo
 
+@synthesize topic     = _topic;
+@synthesize strongRef = _strongRef;
+@synthesize weakRef   = _weakRef;
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)topic:(NSString*)topic strongRef:(id)strongRef weakRef:(id)weakRef {
-  return [[TTUserInfo alloc] initWithTopic:topic strongRef:strongRef weakRef:weakRef];
+  return [[[TTUserInfo alloc] initWithTopic:topic strongRef:strongRef weakRef:weakRef] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)topic:(NSString*)topic {
-  return [[TTUserInfo alloc] initWithTopic:topic strongRef:nil weakRef:nil];
+  return [[[TTUserInfo alloc] initWithTopic:topic strongRef:nil weakRef:nil] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)weakRef:(id)weakRef {
-  return [[TTUserInfo alloc] initWithTopic:nil strongRef:nil weakRef:weakRef];
+  return [[[TTUserInfo alloc] initWithTopic:nil strongRef:nil weakRef:weakRef] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTopic:(NSString*)topic strongRef:(id)strongRef weakRef:(id)weakRef {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     self.topic      = topic;
     self.strongRef  = strongRef;
     self.weakRef    = weakRef;
   }
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_topic);
+  TT_RELEASE_SAFELY(_strongRef);
+  [super dealloc];
 }
 
 

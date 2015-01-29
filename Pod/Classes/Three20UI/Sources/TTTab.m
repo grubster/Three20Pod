@@ -42,12 +42,23 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithItem:(TTTabItem*)tabItem tabBar:(TTTabBar*)tabBar {
-  if (self = [self init]) {
+	self = [self init];
+  if (self) {
     self.tabItem = tabItem;
   }
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_tabItem);
+  TT_RELEASE_SAFELY(_badge);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +110,8 @@
 - (void)setTabItem:(TTTabItem*)tabItem {
   if (tabItem != _tabItem) {
     [_tabItem performSelector:@selector(setTabBar:) withObject:nil];
-    _tabItem = tabItem;
+    [_tabItem release];
+    _tabItem = [tabItem retain];
     [_tabItem performSelector:@selector(setTabBar:) withObject:self];
 
     [self setTitle:_tabItem.title forState:UIControlStateNormal];

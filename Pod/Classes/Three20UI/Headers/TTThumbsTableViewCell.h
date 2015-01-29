@@ -30,15 +30,15 @@
   CGPoint         _thumbOrigin;
   NSInteger       _columnCount;
 
-  id<TTThumbsTableViewCellDelegate> __unsafe_unretained _delegate;
+  id<TTThumbsTableViewCellDelegate> _delegate;
 }
 
-@property (nonatomic, strong) id<TTPhoto> photo;
+@property (nonatomic, retain) id<TTPhoto> photo;
 @property (nonatomic)         CGFloat     thumbSize;
 @property (nonatomic)         CGPoint     thumbOrigin;
 @property (nonatomic)         NSInteger   columnCount;
 
-@property (nonatomic, unsafe_unretained) id<TTThumbsTableViewCellDelegate> delegate;
+@property (nonatomic, assign) id<TTThumbsTableViewCellDelegate> delegate;
 
 - (void)suspendLoading:(BOOL)suspended;
 

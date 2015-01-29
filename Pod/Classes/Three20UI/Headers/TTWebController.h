@@ -38,24 +38,24 @@
 
   UIActionSheet*    _actionSheet;
 
-  id<TTWebControllerDelegate> __unsafe_unretained _delegate;
+  id<TTWebControllerDelegate> _delegate;
 }
 
 /**
  * The current web view URL. If the web view is currently loading a URL, then the loading URL is
  * returned instead.
  */
-@property (unsafe_unretained, nonatomic, readonly) NSURL*  URL;
+@property (nonatomic, readonly) NSURL*  URL;
 
 /**
  * A view that is inserted at the top of the web view, within the scroller.
  */
-@property (nonatomic, strong)   UIView* headerView;
+@property (nonatomic, retain)   UIView* headerView;
 
 /**
- * The web controller delegate, currently does nothing.
+ * The web controller delegate
  */
-@property (nonatomic, unsafe_unretained)   id<TTWebControllerDelegate> delegate;
+@property (nonatomic, assign)   id<TTWebControllerDelegate> delegate;
 
 /**
  * Navigate to the given URL.
@@ -71,10 +71,18 @@
 
 @end
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/**
+ * The web controller delegate, similar to UIWebViewDelegate, but prefixed with controller
+ */
 @protocol TTWebControllerDelegate <NSObject>
-// XXXjoe Need to make this similar to UIWebViewDelegate
+
+@optional
+- (BOOL)webController:(TTWebController *)controller webView:(UIWebView *)webView
+                                 shouldStartLoadWithRequest:(NSURLRequest *)request
+                                             navigationType:(UIWebViewNavigationType)navigationType;
+- (void)webController:(TTWebController *)controller webViewDidStartLoad:(UIWebView *)webView;
+- (void)webController:(TTWebController *)controller webViewDidFinishLoad:(UIWebView *)webView;
+- (void)webController:(TTWebController *)controller webView:(UIWebView *)webView
+                                       didFailLoadWithError:(NSError *)error;
+
 @end

@@ -31,7 +31,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)initWithShadowColor:(id)anColor andShadowOffset:(CGSize)anOffset {
-	TTCSSTextShadowModel *instance = [TTCSSTextShadowModel new];
+	TTCSSTextShadowModel *instance = [[TTCSSTextShadowModel new] autorelease];
 	instance.shadowColor		   = anColor;
 	instance.shadowOffset		   = anOffset;
 	return instance;
@@ -54,10 +54,17 @@
 		// Default values.
 		self.shadowOffset   = CGSizeMake(0, -1);
 		self.shadowColor	= [UIColor clearColor];
-		self.shadowBlur		= [NSNumber numberWithInt:3];
+		self.shadowBlur		= [[NSNumber numberWithInt:3] retain];
 
 	}
 	return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)dealloc {
+	TT_RELEASE_SAFELY( shadowColor );
+	TT_RELEASE_SAFELY( shadowBlur );
+	[super dealloc];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +84,7 @@
 	if ( [anValue isKindOfClass:[NSArray class]] ) {
 
 		// Set.
-        shadowColor = TTColorFromCssValues(anValue);
+        shadowColor = [TTColorFromCssValues(anValue) retain];
 
 	}
 
@@ -86,7 +93,7 @@
     else if ( [anValue isKindOfClass:[NSString class]] ) {
 
         // Set.
-        shadowColor = TTColorFromCssValues([NSArray arrayWithObject:anValue]);
+        shadowColor = [TTColorFromCssValues([NSArray arrayWithObject:anValue]) retain];
     }
 
     ///////////////////////////////////////
@@ -94,7 +101,7 @@
     else if ( [anValue isKindOfClass:[UIColor class]] ) {
 
 		// Set.
-        shadowColor = anValue;
+        shadowColor = [anValue retain];
     }
 }
 

@@ -25,6 +25,6 @@
 }
 
 @property (nonatomic)         BOOL        isLoading;
-@property (nonatomic, strong) id<TTModel> model;
+@property (nonatomic, retain) id<TTModel> model;
 
 @end

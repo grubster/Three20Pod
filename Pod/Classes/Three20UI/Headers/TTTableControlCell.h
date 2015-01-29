@@ -24,7 +24,7 @@
   UIControl*          _control;
 }
 
-@property (nonatomic, readonly, strong) TTTableControlItem* item;
-@property (nonatomic, readonly, strong) UIControl*          control;
+@property (nonatomic, readonly, retain) TTTableControlItem* item;
+@property (nonatomic, readonly, retain) UIControl*          control;
 
 @end

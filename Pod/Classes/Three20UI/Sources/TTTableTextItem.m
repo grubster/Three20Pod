@@ -29,6 +29,14 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_text);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Class public
@@ -36,7 +44,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(NSString*)text {
-  TTTableTextItem* item = [[self alloc] init];
+  TTTableTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   return item;
 }
@@ -44,7 +52,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(NSString*)text URL:(NSString*)URL {
-  TTTableTextItem* item = [[self alloc] init];
+  TTTableTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   item.URL = URL;
   return item;
@@ -53,7 +61,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(NSString*)text URL:(NSString*)URL accessoryURL:(NSString*)accessoryURL {
-  TTTableTextItem* item = [[self alloc] init];
+  TTTableTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   item.URL = URL;
   item.accessoryURL = accessoryURL;
@@ -63,7 +71,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(NSString*)text delegate:(id)delegate selector:(SEL)selector {
-  TTTableTextItem* item = [[self alloc] init];
+  TTTableTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   item.delegate = delegate;
   item.selector = selector;
@@ -79,7 +87,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-  if (self = [super initWithCoder:decoder]) {
+	self = [super initWithCoder:decoder];
+  if (self) {
     self.text = [decoder decodeObjectForKey:@"text"];
   }
   return self;

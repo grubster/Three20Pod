@@ -22,7 +22,7 @@
   BOOL                      _animating;
 }
 
-@property (nonatomic, readonly, strong) UIActivityIndicatorView*  activityIndicatorView;
+@property (nonatomic, readonly, retain) UIActivityIndicatorView*  activityIndicatorView;
 @property (nonatomic)                   BOOL                      animating;
 
 @end

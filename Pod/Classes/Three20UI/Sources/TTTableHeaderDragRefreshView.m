@@ -139,6 +139,18 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_activityView);
+  TT_RELEASE_SAFELY(_statusLabel);
+  TT_RELEASE_SAFELY(_arrowImage);
+  TT_RELEASE_SAFELY(_lastUpdatedLabel);
+  TT_RELEASE_SAFELY(_lastUpdatedDate);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Public
@@ -147,8 +159,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setUpdateDate:(NSDate*)newDate {
   if (newDate) {
+    if (_lastUpdatedDate != newDate) {
+      [_lastUpdatedDate release];
+    }
 
-    _lastUpdatedDate = newDate;
+    _lastUpdatedDate = [newDate retain];
 
     NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterShortStyle];
@@ -157,6 +172,7 @@
                               TTLocalizedString(@"Last updated: %@",
                                                 @"The last time the table view was updated."),
                               [formatter stringFromDate:_lastUpdatedDate]];
+    [formatter release];
 
   } else {
     _lastUpdatedDate = nil;

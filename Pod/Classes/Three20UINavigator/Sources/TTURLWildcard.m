@@ -37,12 +37,23 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _argIndex = NSNotFound;
     _argType  = TTURLArgumentTypeNone;
   }
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_name);
+  TT_RELEASE_SAFELY(_selector);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)match:(NSString*)text {
@@ -67,7 +78,7 @@
   if (names.count > 1) {
     TTURLSelector* selector = nil;
     for (NSString* name in names) {
-      TTURLSelector* newSelector = [[TTURLSelector alloc] initWithName:name];
+      TTURLSelector* newSelector = [[[TTURLSelector alloc] initWithName:name] autorelease];
       if (selector) {
         selector.next = newSelector;
 
@@ -79,7 +90,7 @@
 
   } else {
     self.argType = TTURLArgumentTypeForProperty(cls, _name);
-    self.selector = [[TTURLSelector alloc] initWithName:_name];
+    self.selector = [[[TTURLSelector alloc] initWithName:_name] autorelease];
   }
 }
 

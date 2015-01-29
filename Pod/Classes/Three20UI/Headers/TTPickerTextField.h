@@ -21,14 +21,14 @@
 
 @interface TTPickerTextField : TTSearchTextField {
   NSMutableArray*   _cellViews;
-  TTPickerViewCell* __unsafe_unretained _selectedCell;
+  TTPickerViewCell* _selectedCell;
   int               _lineCount;
   CGPoint           _cursorOrigin;
 }
 
 @property (nonatomic, readonly) NSArray*          cellViews;
-@property (unsafe_unretained, nonatomic, readonly) NSArray*          cells;
-@property (nonatomic, unsafe_unretained)   TTPickerViewCell* selectedCell;
+@property (nonatomic, readonly) NSArray*          cells;
+@property (nonatomic, assign)   TTPickerViewCell* selectedCell;
 @property (nonatomic, readonly) int               lineCount;
 
 - (void)addCellWithObject:(id)object;

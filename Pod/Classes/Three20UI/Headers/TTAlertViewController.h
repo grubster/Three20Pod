@@ -30,13 +30,13 @@
   id              _userInfo;
   NSMutableArray* _URLs;
 
-  id<TTAlertViewControllerDelegate> __unsafe_unretained _delegate;
+  id<TTAlertViewControllerDelegate> _delegate;
 }
 
-@property (unsafe_unretained, nonatomic, readonly) UIAlertView*  alertView;
-@property (nonatomic, strong)   id            userInfo;
+@property (nonatomic, readonly) UIAlertView*  alertView;
+@property (nonatomic, retain)   id            userInfo;
 
-@property (nonatomic, unsafe_unretained)   id<TTAlertViewControllerDelegate> delegate;
+@property (nonatomic, assign)   id<TTAlertViewControllerDelegate> delegate;
 
 
 - (id)initWithTitle:(NSString*)title message:(NSString*)message;

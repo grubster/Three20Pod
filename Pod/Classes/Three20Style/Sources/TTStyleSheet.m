@@ -33,7 +33,8 @@ static TTStyleSheet* gStyleSheet = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     [[NSNotificationCenter defaultCenter]
      addObserver: self
         selector: @selector(didReceiveMemoryWarning:)
@@ -43,6 +44,19 @@ static TTStyleSheet* gStyleSheet = nil;
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter]
+   removeObserver: self
+             name: UIApplicationDidReceiveMemoryWarningNotification
+           object: nil];
+  TT_RELEASE_SAFELY(_styles);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -61,7 +75,8 @@ static TTStyleSheet* gStyleSheet = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)setGlobalStyleSheet:(TTStyleSheet*)styleSheet {
-  gStyleSheet = styleSheet;
+  [gStyleSheet release];
+  gStyleSheet = [styleSheet retain];
 }
 
 
@@ -98,7 +113,7 @@ static TTStyleSheet* gStyleSheet = nil;
   if (!style) {
     SEL sel = NSSelectorFromString(selector);
     if ([self respondsToSelector:sel]) {
-      style = [self performSelector:sel withObject:[NSNumber numberWithInt:state]];
+      style = [self performSelector:sel withObject:(id)state];
       if (style) {
         if (!_styles) {
           _styles = [[NSMutableDictionary alloc] init];
@@ -113,7 +128,7 @@ static TTStyleSheet* gStyleSheet = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)freeMemory {
-  _styles = nil;
+  TT_RELEASE_SAFELY(_styles);
 }
 
 

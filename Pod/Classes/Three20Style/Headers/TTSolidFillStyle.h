@@ -21,7 +21,7 @@
   UIColor* _color;
 }
 
-@property (nonatomic, strong) UIColor* color;
+@property (nonatomic, retain) UIColor* color;
 
 + (TTSolidFillStyle*)styleWithColor:(UIColor*)color next:(TTStyle*)next;
 

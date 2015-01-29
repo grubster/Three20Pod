@@ -25,6 +25,7 @@
 
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
+#import "Three20Core/TTGlobalCoreRects.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -41,11 +42,23 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _width = 1;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_top);
+  TT_RELEASE_SAFELY(_right);
+  TT_RELEASE_SAFELY(_bottom);
+  TT_RELEASE_SAFELY(_left);
+
+  [super dealloc];
 }
 
 
@@ -58,7 +71,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTFourBorderStyle*)styleWithTop:(UIColor*)top right:(UIColor*)right bottom:(UIColor*)bottom
                               left:(UIColor*)left width:(CGFloat)width next:(TTStyle*)next {
-  TTFourBorderStyle* style = [[self alloc] initWithNext:next];
+  TTFourBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.top = top;
   style.right = right;
   style.bottom = bottom;
@@ -70,7 +83,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTFourBorderStyle*)styleWithTop:(UIColor*)top width:(CGFloat)width next:(TTStyle*)next {
-  TTFourBorderStyle* style = [[self alloc] initWithNext:next];
+  TTFourBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.top = top;
   style.width = width;
   return style;
@@ -79,7 +92,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTFourBorderStyle*)styleWithRight:(UIColor*)right width:(CGFloat)width next:(TTStyle*)next {
-  TTFourBorderStyle* style = [[self alloc] initWithNext:next];
+  TTFourBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.right = right;
   style.width = width;
   return style;
@@ -88,7 +101,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTFourBorderStyle*)styleWithBottom:(UIColor*)bottom width:(CGFloat)width next:(TTStyle*)next {
-  TTFourBorderStyle* style = [[self alloc] initWithNext:next];
+  TTFourBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.bottom = bottom;
   style.width = width;
   return style;
@@ -97,7 +110,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTFourBorderStyle*)styleWithLeft:(UIColor*)left width:(CGFloat)width next:(TTStyle*)next {
-  TTFourBorderStyle* style = [[self alloc] initWithNext:next];
+  TTFourBorderStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.left = left;
   style.width = width;
   return style;
@@ -113,7 +126,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)draw:(TTStyleContext*)context {
   CGRect rect = context.frame;
-  CGRect strokeRect = CGRectInset(rect, _width/2, _width/2);
+  UIEdgeInsets insets = UIEdgeInsetsMake(_top ? _width/2. : 0,
+                                         _left ? _width/2 : 0,
+                                         _bottom ? _width/2 : 0,
+                                         _right ? _width/2 : 0);
+  CGRect strokeRect = TTRectInset(rect, insets);
   [context.shape openPath:strokeRect];
 
   CGContextRef ctx = UIGraphicsGetCurrentContext();

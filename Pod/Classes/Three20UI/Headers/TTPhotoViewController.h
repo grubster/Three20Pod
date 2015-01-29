@@ -60,14 +60,14 @@
 /**
  * The source of a sequential photo collection that will be displayed.
  */
-@property (nonatomic, strong) id<TTPhotoSource> photoSource;
+@property (nonatomic, retain) id<TTPhotoSource> photoSource;
 
 /**
  * The photo that is currently visible and centered.
  *
  * You can assign this directly to change the photoSource to the one that contains the photo.
  */
-@property (nonatomic, strong) id<TTPhoto> centerPhoto;
+@property (nonatomic, retain) id<TTPhoto> centerPhoto;
 
 /**
  * The index of the currently visible photo.
@@ -80,12 +80,12 @@
 /**
  * The default image to show before a photo has been loaded.
  */
-@property (nonatomic, strong) UIImage* defaultImage;
+@property (nonatomic, retain) UIImage* defaultImage;
 
 /**
  * The style to use for the caption label.
  */
-@property (nonatomic, strong) TTStyle* captionStyle;
+@property (nonatomic, retain) TTStyle* captionStyle;
 
 - (id)initWithPhoto:(id<TTPhoto>)photo;
 - (id)initWithPhotoSource:(id<TTPhotoSource>)photoSource;

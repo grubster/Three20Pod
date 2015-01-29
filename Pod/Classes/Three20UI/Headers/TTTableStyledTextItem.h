@@ -25,7 +25,7 @@
   UIEdgeInsets  _padding;
 }
 
-@property (nonatomic, strong) TTStyledText* text;
+@property (nonatomic, retain) TTStyledText* text;
 @property (nonatomic)         UIEdgeInsets  margin;
 @property (nonatomic)         UIEdgeInsets  padding;
 

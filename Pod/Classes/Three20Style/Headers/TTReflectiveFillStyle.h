@@ -22,7 +22,7 @@
   BOOL      _withBottomHighlight;
 }
 
-@property (nonatomic, strong) UIColor* color;
+@property (nonatomic, retain) UIColor* color;
 @property (nonatomic, assign) BOOL     withBottomHighlight;
 
 + (TTReflectiveFillStyle*)styleWithColor:(UIColor*)color next:(TTStyle*)next;

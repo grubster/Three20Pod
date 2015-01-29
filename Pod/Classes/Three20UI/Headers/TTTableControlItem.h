@@ -24,7 +24,7 @@
 }
 
 @property (nonatomic, copy)   NSString*   caption;
-@property (nonatomic, strong) UIControl*  control;
+@property (nonatomic, retain) UIControl*  control;
 
 + (id)itemWithCaption:(NSString*)caption control:(UIControl*)control;
 

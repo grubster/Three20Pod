@@ -45,6 +45,8 @@
   UIFont* _boldFont;
   UIFont* _italicFont;
 
+  UITextAlignment _textAlignment;
+
   TTStyle*      _linkStyle;
   TTStyledNode* _rootNode;
   TTStyledNode* _lastNode;
@@ -54,9 +56,10 @@
 
 @property (nonatomic)           CGFloat         width;
 @property (nonatomic)           CGFloat         height;
-@property (nonatomic, strong)   UIFont*         font;
+@property (nonatomic, retain)   UIFont*         font;
+@property (nonatomic)           UITextAlignment textAlignment;
 @property (nonatomic, readonly) TTStyledFrame*  rootFrame;
-@property (nonatomic, strong)   NSMutableArray* invalidImages;
+@property (nonatomic, retain)   NSMutableArray* invalidImages;
 
 - (id)initWithRootNode:(TTStyledNode*)rootNode;
 - (id)initWithX:(CGFloat)x width:(CGFloat)width height:(CGFloat)height;

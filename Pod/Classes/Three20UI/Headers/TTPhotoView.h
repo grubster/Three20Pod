@@ -36,8 +36,8 @@
   BOOL _hidesCaption;
 }
 
-@property (nonatomic, strong) id<TTPhoto> photo;
-@property (nonatomic, strong) TTStyle*    captionStyle;
+@property (nonatomic, retain) id<TTPhoto> photo;
+@property (nonatomic, retain) TTStyle*    captionStyle;
 @property (nonatomic)         BOOL        hidesExtras;
 @property (nonatomic)         BOOL        hidesCaption;
 

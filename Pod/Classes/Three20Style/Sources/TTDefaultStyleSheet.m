@@ -741,6 +741,11 @@
   return [UIColor whiteColor];
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UIColor*)backgroundTextColor {
+	return [UIColor clearColor];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIFont*)font {
@@ -783,10 +788,30 @@
   return nil;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UIColor*)tablePlainCellSeparatorColor {
+	return nil;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITableViewCellSeparatorStyle)tablePlainCellSeparatorStyle {
+	return UITableViewCellSeparatorStyleSingleLine;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIColor*)tableGroupedBackgroundColor {
   return [UIColor groupTableViewBackgroundColor];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UIColor*)tableGroupedCellSeparatorColor {
+	return nil;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (UITableViewCellSeparatorStyle)tableGroupedCellSeparatorStyle {
+	return [self tablePlainCellSeparatorStyle];
 }
 
 
@@ -799,6 +824,24 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIColor*)searchTableSeparatorColor {
   return [UIColor colorWithWhite:0.85 alpha:1];
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (TTStyle*)tableReloadButton:(UIControlState)state {
+  if (state == UIControlStateHighlighted) {
+    return
+    [TTImageStyle styleWithImageURL:@"bundle://Three20.bundle/images/reloadButtonActive.png"
+                       defaultImage:nil
+                        contentMode:UIViewContentModeCenter
+                               size:CGSizeMake(50,50) next:nil];
+
+  } else {
+  return
+   [TTImageStyle styleWithImageURL:@"bundle://Three20.bundle/images/reloadButton.png"
+                      defaultImage:nil
+                       contentMode:UIViewContentModeCenter
+                              size:CGSizeMake(50,50) next:nil];
+  }
 }
 
 

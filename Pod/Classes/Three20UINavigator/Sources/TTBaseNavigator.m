@@ -39,6 +39,7 @@
 #import "Three20Core/TTDebug.h"
 #import "Three20Core/TTDebugFlags.h"
 #import "Three20Core/NSDateAdditions.h"
+#import "Three20Core/TTAvailability.h"
 
 static TTBaseNavigator* gNavigator = nil;
 
@@ -73,7 +74,8 @@ __attribute__((weak_import));
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _URLMap = [[TTURLMap alloc] init];
     _persistenceMode = TTNavigatorPersistenceModeNone;
 
@@ -96,6 +98,21 @@ __attribute__((weak_import));
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter] removeObserver:self];
+  _delegate = nil;
+  TT_RELEASE_SAFELY(_window);
+  TT_RELEASE_SAFELY(_rootViewController);
+  TT_RELEASE_SAFELY(_popoverController);
+  TT_RELEASE_SAFELY(_delayedControllers);
+  TT_RELEASE_SAFELY(_URLMap);
+  TT_RELEASE_SAFELY(_persistenceKey);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBaseNavigator*)globalNavigator {
   return gNavigator;
 }
@@ -104,7 +121,8 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)setGlobalNavigator:(TTBaseNavigator*)navigator {
   if (gNavigator != navigator) {
-    gNavigator = navigator;
+    [gNavigator release];
+    gNavigator = [navigator retain];
   }
 }
 
@@ -225,7 +243,8 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setRootViewController:(UIViewController*)controller {
   if (controller != _rootViewController) {
-    _rootViewController = controller;
+    [_rootViewController release];
+    _rootViewController = [controller retain];
 
     if (nil != _rootContainer) {
       [_rootContainer navigator:self setRootViewController:_rootViewController];
@@ -255,7 +274,7 @@ __attribute__((weak_import));
     // If this is the first controller, and it is not a "container", forcibly put
     // a navigation controller at the root of the controller hierarchy.
     if (nil == _rootViewController && !isContainer) {
-      [self setRootViewController:[[[self navigationControllerClass] alloc] init]];
+      [self setRootViewController:[[[[self navigationControllerClass] alloc] init] autorelease]];
     }
 
     if (nil != parentURLPath) {
@@ -297,7 +316,10 @@ __attribute__((weak_import));
                                         animated: animated];
 
   } else {
-    UINavigationController* navController = [[[self navigationControllerClass] alloc] init];
+    UINavigationController* navController = [[[[self navigationControllerClass] alloc] init]
+                                             autorelease];
+    navController.modalTransitionStyle = transition;
+    navController.modalPresentationStyle = controller.modalPresentationStyle;
     [navController pushViewController: controller
                              animated: NO];
     [parentController presentModalViewController: navController
@@ -320,11 +342,15 @@ __attribute__((weak_import));
 
   if (nil != _popoverController) {
     [_popoverController dismissPopoverAnimated:animated];
-      _popoverController = nil;
+    TT_RELEASE_SAFELY(_popoverController);
   }
 
-  _popoverController = [[UIPopoverController alloc] initWithContentViewController:controller];
-  _popoverController.delegate = self;
+  _popoverController =  [[TTUIPopoverControllerClass() alloc] init];
+  if (_popoverController != nil) {
+    [_popoverController setContentViewController:controller];
+    [_popoverController setDelegate:self];
+  }
+
   if (nil != sourceButton) {
     [_popoverController presentPopoverFromBarButtonItem: sourceButton
                                permittedArrowDirections: UIPopoverArrowDirectionAny
@@ -555,7 +581,7 @@ __attribute__((weak_import));
   if (nil == _window) {
     UIWindow* keyWindow = [UIApplication sharedApplication].keyWindow;
     if (nil != keyWindow) {
-      _window = keyWindow;
+      _window = [keyWindow retain];
 
     } else {
       _window = [[[self windowClass] alloc] initWithFrame:TTScreenBounds()];
@@ -657,7 +683,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIViewController*)viewControllerForURL: (NSString*)URL
                                     query: (NSDictionary*)query
-                                  pattern: (TTURLNavigatorPattern**)pattern {
+                                  pattern: (TTURLPattern**)pattern {
   NSRange fragmentRange = [URL rangeOfString:@"#" options:NSBackwardsSearch];
   if (fragmentRange.location != NSNotFound) {
     NSString* baseURL = [URL substringToIndex:fragmentRange.location];
@@ -672,7 +698,7 @@ __attribute__((weak_import));
       }
 
     } else {
-      id object = [_URLMap objectForURL:baseURL query:nil pattern:pattern];
+      id object = [_URLMap objectForURL:baseURL query:nil pattern:(TTURLNavigatorPattern**)pattern];
       if (object) {
         id result = [_URLMap dispatchURL:URL toTarget:object query:query];
         if ([result isKindOfClass:[UIViewController class]]) {
@@ -688,7 +714,7 @@ __attribute__((weak_import));
     }
   }
 
-  id object = [_URLMap objectForURL:URL query:query pattern:pattern];
+  id object = [_URLMap objectForURL:URL query:query pattern:(TTURLNavigatorPattern**)pattern];
   if (object) {
     UIViewController* controller = object;
     controller.originalNavigatorURL = URL;
@@ -729,7 +755,7 @@ __attribute__((weak_import));
       [controller delayDidEnd];
     }
 
-      _delayedControllers = nil;
+    TT_RELEASE_SAFELY(_delayedControllers);
   }
 }
 
@@ -737,7 +763,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)cancelDelay {
   if (_delayCount && !--_delayCount) {
-      _delayedControllers = nil;
+    TT_RELEASE_SAFELY(_delayedControllers);
   }
 }
 
@@ -870,7 +896,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeAllViewControllers {
   [_rootViewController.view removeFromSuperview];
-    _rootViewController = nil;
+  TT_RELEASE_SAFELY(_rootViewController);
   [_URLMap removeAllObjects];
 }
 
@@ -933,7 +959,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
   if (popoverController == _popoverController) {
-      _popoverController = nil;
+    TT_RELEASE_SAFELY(_popoverController);
   }
 }
 

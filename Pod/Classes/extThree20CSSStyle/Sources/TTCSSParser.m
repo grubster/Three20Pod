@@ -75,6 +75,18 @@ int cssConsume(char* text, int token) {
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_ruleSets);
+  TT_RELEASE_SAFELY(_activeCssSelectors);
+  TT_RELEASE_SAFELY(_activeRuleSet);
+  TT_RELEASE_SAFELY(_activePropertyName);
+  TT_RELEASE_SAFELY(_lastTokenText);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)consumeToken:(int)token text:(char*)text {
   NSString* string = [NSString stringWithCString: text
                                          encoding: NSUTF8StringEncoding];
@@ -86,7 +98,7 @@ int cssConsume(char* text, int token) {
         // If we're inside a definition then we ignore hashes.
         if (CSSHASH != token && !_state.Flags.InsideProperty) {
           TT_RELEASE_SAFELY(_activePropertyName);
-          _activePropertyName = string;
+          _activePropertyName = [string retain];
 
           NSMutableArray* values = [[NSMutableArray alloc] init];
           [_activeRuleSet setObject:values forKey:_activePropertyName];
@@ -208,8 +220,8 @@ int cssConsume(char* text, int token) {
     }
   }
 
-  _lastTokenText = nil;
-  _lastTokenText = string;
+  [_lastTokenText release];
+  _lastTokenText = [string retain];
   _lastToken = token;
 }
 
@@ -236,7 +248,7 @@ int cssConsume(char* text, int token) {
 
   fclose(cssin);
 
-  NSDictionary* result = [_ruleSets copy];
+  NSDictionary* result = [[_ruleSets copy] autorelease];
   TT_RELEASE_SAFELY(_ruleSets);
   return result;
 }

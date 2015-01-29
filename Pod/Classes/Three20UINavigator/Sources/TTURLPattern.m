@@ -39,11 +39,25 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _path = [[NSMutableArray alloc] init];
   }
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_URL);
+  TT_RELEASE_SAFELY(_scheme);
+  TT_RELEASE_SAFELY(_path);
+  TT_RELEASE_SAFELY(_query);
+  TT_RELEASE_SAFELY(_fragment);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,7 +77,7 @@
 
     NSString* name = len > 2 ? [text substringWithRange:NSMakeRange(1, endRange)] : nil;
 
-    TTURLWildcard* wildcard = [[TTURLWildcard alloc] init];
+    TTURLWildcard* wildcard = [[[TTURLWildcard alloc] init] autorelease];
     wildcard.name = name;
 
     ++_specificity;
@@ -71,7 +85,7 @@
     return wildcard;
 
   } else {
-    TTURLLiteral* literal = [[TTURLLiteral alloc] init];
+    TTURLLiteral* literal = [[[TTURLLiteral alloc] init] autorelease];
     literal.name = text;
     _specificity += 2;
     return literal;
@@ -145,7 +159,7 @@
   }
 
   if (URL.fragment) {
-    _fragment = [self parseText:URL.fragment];
+    _fragment = [[self parseText:URL.fragment] retain];
   }
 }
 

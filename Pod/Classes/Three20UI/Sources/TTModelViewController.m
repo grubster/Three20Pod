@@ -40,7 +40,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
     _flags.isViewInvalid = YES;
   }
 
@@ -50,11 +51,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithNibName:nil bundle:nil]) {
+	self = [self initWithNibName:nil bundle:nil];
+  if (self) {
   }
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  [_model.delegates removeObject:self];
+  TT_RELEASE_SAFELY(_model);
+  TT_RELEASE_SAFELY(_modelError);
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -173,7 +185,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)createInterstitialModel {
-  self.model = [[TTModel alloc] init];
+  self.model = [[[TTModel alloc] init] autorelease];
 }
 
 
@@ -198,6 +210,7 @@
 - (void)didReceiveMemoryWarning {
   if (_hasViewAppeared && !_isViewAppearing) {
     [super didReceiveMemoryWarning];
+    [self resetViewStates];
     [self refresh];
 
   } else {
@@ -237,7 +250,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)modelDidFinishLoad:(id<TTModel>)model {
   if (model == _model) {
-      _modelError = nil;
+    TT_RELEASE_SAFELY(_modelError);
     _flags.isModelDidLoadInvalid = YES;
     [self invalidateView];
   }
@@ -324,10 +337,10 @@
 - (void)setModel:(id<TTModel>)model {
   if (_model != model) {
     [_model.delegates removeObject:self];
-      _model = nil;
-    _model = model;
+    [_model release];
+    _model = [model retain];
     [_model.delegates addObject:self];
-      _modelError = nil;
+    TT_RELEASE_SAFELY(_modelError);
 
     if (_model) {
       _flags.isModelWillLoadInvalid = NO;
@@ -344,8 +357,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setModelError:(NSError*)error {
   if (error != _modelError) {
-      _modelError = nil;
-    _modelError = error;
+    [_modelError release];
+    _modelError = [error retain];
 
     [self invalidateView];
   }
@@ -362,9 +375,9 @@
   BOOL wasModelCreated = self.isModelCreated;
   [self resetViewStates];
   [_model.delegates removeObject:self];
-    _model = nil;
+  TT_RELEASE_SAFELY(_model);
   if (wasModelCreated) {
-    self.model;
+    [self model];
   }
 }
 
@@ -467,15 +480,15 @@
     _flags.isUpdatingView = YES;
 
     // Ensure the model is created
-    self.model;
+    [self model];
     // Ensure the view is created
-    self.view;
+    [self view];
 
     [self updateViewStates];
 
     if (_frozenState && _flags.isShowingModel) {
       [self restoreView:_frozenState];
-        _frozenState = nil;
+      TT_RELEASE_SAFELY(_frozenState);
     }
 
     _flags.isViewInvalid = NO;

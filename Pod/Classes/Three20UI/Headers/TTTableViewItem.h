@@ -23,7 +23,7 @@
 }
 
 @property (nonatomic, copy) NSString* caption;
-@property (nonatomic, strong) UIView* view;
+@property (nonatomic, retain) UIView* view;
 
 + (id)itemWithCaption:(NSString*)caption view:(UIView*)view;
 

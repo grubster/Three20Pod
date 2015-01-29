@@ -33,10 +33,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)authorWithName:(NSString*)name {
-  return [[self alloc] initWithName: name
+  return [[[self alloc] initWithName: name
                               github: nil
                              twitter: nil
-                             website: nil];
+                             website: nil] autorelease];
 }
 
 
@@ -45,10 +45,10 @@
               github: (NSString*)github
              twitter: (NSString*)twitter
              website: (NSString*)website {
-  return [[self alloc] initWithName: name
+  return [[[self alloc] initWithName: name
                               github: github
                              twitter: twitter
-                             website: website];
+                             website: website] autorelease];
 }
 
 
@@ -57,7 +57,8 @@
             github: (NSString*)github
            twitter: (NSString*)twitter
            website: (NSString*)website {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     self.name     = name;
     self.github   = github;
     self.twitter  = twitter;
@@ -70,6 +71,17 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
   return [self initWithName:@"Unknown" github:nil twitter:nil website:nil];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_name);
+  TT_RELEASE_SAFELY(_github);
+  TT_RELEASE_SAFELY(_twitter);
+  TT_RELEASE_SAFELY(_website);
+
+  [super dealloc];
 }
 
 

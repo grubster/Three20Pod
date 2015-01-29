@@ -33,8 +33,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kKeySpacing = 12;
-static const CGFloat kDefaultImageSize = 50;
+static const CGFloat kKeySpacing = 12.0f;
+static const CGFloat kDefaultImageSize = 50.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,13 +47,23 @@ static const CGFloat kDefaultImageSize = 50;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
+	self = [super initWithStyle:style reuseIdentifier:identifier];
+  if (self) {
     _imageView2 = [[TTImageView alloc] init];
     [self.contentView addSubview:_imageView2];
   }
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_imageView2);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,7 +148,7 @@ static const CGFloat kDefaultImageSize = 50;
     ? image.size.height
     : (item.imageURL ? kDefaultImageSize : 0);
 
-    if (_imageView2.urlPath) {
+    if (_imageView2.urlPath || image) {
       CGFloat innerWidth = self.contentView.width - (kTableCellHPadding*2
                                                      + imageWidth + kKeySpacing);
       CGFloat innerHeight = self.contentView.height - kTableCellVPadding*2;
@@ -156,7 +166,7 @@ static const CGFloat kDefaultImageSize = 50;
     }
 
   } else {
-    if (_imageView2.urlPath) {
+    if (_imageView2.urlPath || image) {
       CGFloat iconWidth = image
       ? image.size.width
       : (item.imageURL ? kDefaultImageSize : 0);

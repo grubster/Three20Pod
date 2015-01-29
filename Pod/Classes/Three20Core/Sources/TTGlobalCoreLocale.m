@@ -22,11 +22,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 NSLocale* TTCurrentLocale() {
-  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-  NSArray* languages = [defaults objectForKey:@"AppleLanguages"];
+  NSArray* languages = [NSLocale preferredLanguages];
   if (languages.count > 0) {
     NSString* currentLanguage = [languages objectAtIndex:0];
-    return [[NSLocale alloc] initWithLocaleIdentifier:currentLanguage];
+    return [[[NSLocale alloc] initWithLocaleIdentifier:currentLanguage] autorelease];
 
   } else {
     return [NSLocale currentLocale];
@@ -40,7 +39,7 @@ NSString* TTLocalizedString(NSString* key, NSString* comment) {
   if (nil == bundle) {
     NSString* path = [[[NSBundle mainBundle] resourcePath]
           stringByAppendingPathComponent:@"Three20.bundle"];
-    bundle = [NSBundle bundleWithPath:path];
+    bundle = [[NSBundle bundleWithPath:path] retain];
   }
 
   return [bundle localizedStringForKey:key value:key table:nil];
@@ -73,6 +72,6 @@ NSString* TTFormatInteger(NSInteger num) {
   NSNumberFormatter* formatter = [[NSNumberFormatter alloc] init];
   [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
   NSString* formatted = [formatter stringFromNumber:number];
-    formatted = nil;
+  [formatter release];
   return formatted;
 }

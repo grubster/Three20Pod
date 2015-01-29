@@ -48,7 +48,7 @@
                        [TTExtensionAuthor authorWithName:@"Jeff Verkoeyen"],
                        nil];
 
-  return extension;
+  return [extension autorelease];
 }
 
 

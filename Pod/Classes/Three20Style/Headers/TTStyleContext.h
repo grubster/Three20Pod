@@ -30,15 +30,15 @@
 
   BOOL      _didDrawContent;
 
-  id<TTStyleDelegate> __unsafe_unretained _delegate;
+  id<TTStyleDelegate> _delegate;
 }
 
 @property (nonatomic)         CGRect    frame;
 @property (nonatomic)         CGRect    contentFrame;
-@property (nonatomic, strong) TTShape*  shape;
-@property (nonatomic, strong) UIFont*   font;
+@property (nonatomic, retain) TTShape*  shape;
+@property (nonatomic, retain) UIFont*   font;
 @property (nonatomic)         BOOL      didDrawContent;
 
-@property (nonatomic, unsafe_unretained) id<TTStyleDelegate> delegate;
+@property (nonatomic, assign) id<TTStyleDelegate> delegate;
 
 @end

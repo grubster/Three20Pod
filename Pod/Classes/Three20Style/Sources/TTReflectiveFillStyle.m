@@ -34,6 +34,16 @@
 
 @synthesize color               = _color;
 @synthesize withBottomHighlight = _withBottomHighlight;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_color);
+
+  [super dealloc];
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -42,7 +52,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTReflectiveFillStyle*)styleWithColor:(UIColor*)color next:(TTStyle*)next {
-  TTReflectiveFillStyle* style = [[self alloc] initWithNext:next];
+  TTReflectiveFillStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.color = color;
   style.withBottomHighlight = NO;
   return style;
@@ -52,7 +62,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTReflectiveFillStyle*)styleWithColor:(UIColor*)color
                      withBottomHighlight:(BOOL)withBottomHighlight next:(TTStyle*)next {
-  TTReflectiveFillStyle* style = [[self alloc] initWithNext:next];
+  TTReflectiveFillStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.color = color;
   style.withBottomHighlight = withBottomHighlight;
   return style;

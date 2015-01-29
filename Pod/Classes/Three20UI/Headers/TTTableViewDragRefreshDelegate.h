@@ -38,6 +38,6 @@
   id<TTModel>                   _model;
 }
 
-@property (nonatomic, strong) TTTableHeaderDragRefreshView* headerView;
+@property (nonatomic, retain) TTTableHeaderDragRefreshView* headerView;
 
 @end

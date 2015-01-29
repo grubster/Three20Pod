@@ -23,8 +23,8 @@
   CGFloat   _width;
 }
 
-@property (nonatomic, strong) UIColor*  color;
-@property (nonatomic, strong) UIColor*  highlightColor;
+@property (nonatomic, retain) UIColor*  color;
+@property (nonatomic, retain) UIColor*  highlightColor;
 @property (nonatomic)         CGFloat   width;
 
 + (TTHighlightBorderStyle*)styleWithColor:(UIColor*)color highlightColor:(UIColor*)highlightColor

@@ -21,7 +21,7 @@
   NSMutableArray* _items;
 }
 
-@property (nonatomic, strong) NSMutableArray* items;
+@property (nonatomic, retain) NSMutableArray* items;
 
 + (TTListDataSource*)dataSourceWithObjects:(id)object,...;
 + (TTListDataSource*)dataSourceWithItems:(NSMutableArray*)items;

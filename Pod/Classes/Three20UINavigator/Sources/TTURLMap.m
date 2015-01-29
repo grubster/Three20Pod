@@ -37,6 +37,18 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_objectMappings);
+  TT_RELEASE_SAFELY(_objectPatterns);
+  TT_RELEASE_SAFELY(_fragmentPatterns);
+  TT_RELEASE_SAFELY(_stringPatterns);
+  TT_RELEASE_SAFELY(_schemes);
+  TT_RELEASE_SAFELY(_defaultObjectPattern);
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Private
@@ -82,7 +94,8 @@
   [self registerScheme:pattern.scheme];
 
   if (pattern.isUniversal) {
-    _defaultObjectPattern = pattern;
+    [_defaultObjectPattern release];
+    _defaultObjectPattern = [pattern retain];
 
   } else if (pattern.isFragment) {
     if (!_fragmentPatterns) {
@@ -171,6 +184,7 @@
 - (void)from:(NSString*)URL toObject:(id)target {
   TTURLNavigatorPattern* pattern = [[TTURLNavigatorPattern alloc] initWithTarget:target];
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -179,6 +193,7 @@
   TTURLNavigatorPattern* pattern = [[TTURLNavigatorPattern alloc] initWithTarget:target];
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -187,6 +202,7 @@
   TTURLNavigatorPattern* pattern = [[TTURLNavigatorPattern alloc] initWithTarget:target
                                                                   mode:TTNavigationModeCreate];
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -196,6 +212,7 @@
                                                                   mode:TTNavigationModeCreate];
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -205,6 +222,7 @@
                                                                   mode:TTNavigationModeCreate];
   pattern.transition = transition;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -217,6 +235,7 @@
   pattern.selector = selector;
   pattern.transition = transition;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -225,6 +244,7 @@
   TTURLNavigatorPattern* pattern = [[TTURLNavigatorPattern alloc] initWithTarget:target
                                                                   mode:TTNavigationModeShare];
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -234,6 +254,7 @@
                                                                   mode:TTNavigationModeShare];
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -244,6 +265,7 @@
                                                                   mode:TTNavigationModeShare];
   pattern.parentURL = parentURL;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -255,6 +277,7 @@
   pattern.parentURL = parentURL;
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -263,6 +286,7 @@
   TTURLNavigatorPattern* pattern = [[TTURLNavigatorPattern alloc] initWithTarget:target
                                                                   mode:TTNavigationModeModal];
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -272,6 +296,7 @@
                                                                   mode:TTNavigationModeModal];
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -281,6 +306,7 @@
                                                                   mode:TTNavigationModeModal];
   pattern.transition = transition;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -293,6 +319,7 @@
   pattern.selector = selector;
   pattern.transition = transition;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -302,6 +329,7 @@
     [[TTURLNavigatorPattern alloc] initWithTarget: target
                                              mode: TTNavigationModePopover];
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -312,6 +340,7 @@
                                              mode:TTNavigationModePopover];
   pattern.selector = selector;
   [self addObjectPattern:pattern forURL:URL];
+  [pattern release];
 }
 
 
@@ -319,6 +348,7 @@
 - (void)from:(Class)cls toURL:(NSString*)URL {
   TTURLGeneratorPattern* pattern = [[TTURLGeneratorPattern alloc] initWithTargetClass:cls];
   [self addStringPattern:pattern forURL:URL withName:nil];
+  [pattern release];
 }
 
 
@@ -326,6 +356,7 @@
 - (void)from:(Class)cls name:(NSString*)name toURL:(NSString*)URL {
   TTURLGeneratorPattern* pattern = [[TTURLGeneratorPattern alloc] initWithTargetClass:cls];
   [self addStringPattern:pattern forURL:URL withName:name];
+  [pattern release];
 }
 
 
@@ -376,7 +407,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeAllObjects {
-    _objectMappings = nil;
+  TT_RELEASE_SAFELY(_objectMappings);
 }
 
 

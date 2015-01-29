@@ -40,7 +40,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
     self.title = @"Extensions";
     self.variableHeightRows = YES;
 
@@ -85,15 +86,15 @@
   NSMutableDictionary* availableExtensions = [NSMutableDictionary dictionaryWithDictionary:
                                               [TTExtensionLoader availableExtensions]];
 
-  NSMutableArray* loadedItems = [[NSMutableArray alloc]
-                                  initWithCapacity:[loadedExtensions count]];
-  NSMutableArray* failedItems = [[NSMutableArray alloc]
-                                  initWithCapacity:[failedExtensions count]];
-  NSMutableArray* availableItems = [[NSMutableArray alloc]
-                                     initWithCapacity:[availableExtensions count]];
+  NSMutableArray* loadedItems = [[[NSMutableArray alloc]
+                                  initWithCapacity:[loadedExtensions count]] autorelease];
+  NSMutableArray* failedItems = [[[NSMutableArray alloc]
+                                  initWithCapacity:[failedExtensions count]] autorelease];
+  NSMutableArray* availableItems = [[[NSMutableArray alloc]
+                                     initWithCapacity:[availableExtensions count]] autorelease];
 
-  NSMutableArray* sectionTitles = [[NSMutableArray alloc] initWithCapacity:3];
-  NSMutableArray* sectionItems = [[NSMutableArray alloc] initWithCapacity:3];
+  NSMutableArray* sectionTitles = [[[NSMutableArray alloc] initWithCapacity:3] autorelease];
+  NSMutableArray* sectionItems = [[[NSMutableArray alloc] initWithCapacity:3] autorelease];
 
   if ([loadedExtensions count] > 0) {
     [sectionTitles addObject:@"Loaded extensions"];

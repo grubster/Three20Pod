@@ -33,6 +33,14 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_recipients);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)description {
   return [NSString stringWithFormat:@"%@ %@", _title, _recipients];
 }
@@ -46,7 +54,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTPickerTextField*)createViewForController:(TTMessageController*)controller {
-  TTPickerTextField* textField = [[TTPickerTextField alloc] init];
+  TTPickerTextField* textField = [[[TTPickerTextField alloc] init] autorelease];
   textField.dataSource = controller.dataSource;
   textField.autocorrectionType = UITextAutocorrectionTypeNo;
   textField.autocapitalizationType = UITextAutocapitalizationTypeNone;

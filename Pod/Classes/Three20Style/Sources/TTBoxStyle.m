@@ -36,7 +36,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _margin = UIEdgeInsetsZero;
     _padding = UIEdgeInsetsZero;
     _minSize = CGSizeZero;
@@ -55,7 +56,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin next:(TTStyle*)next {
-  TTBoxStyle* style = [[self alloc] initWithNext:next];
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.margin = margin;
   return style;
 }
@@ -63,7 +64,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBoxStyle*)styleWithPadding:(UIEdgeInsets)padding next:(TTStyle*)next {
-  TTBoxStyle* style = [[self alloc] initWithNext:next];
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.padding = padding;
   return style;
 }
@@ -71,7 +72,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBoxStyle*)styleWithFloats:(TTPosition)position next:(TTStyle*)next {
-  TTBoxStyle* style = [[self alloc] initWithNext:next];
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.position = position;
   return style;
 }
@@ -80,7 +81,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin padding:(UIEdgeInsets)padding
                           next:(TTStyle*)next {
-  TTBoxStyle* style = [[self alloc] initWithNext:next];
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.margin = margin;
   style.padding = padding;
   return style;
@@ -90,7 +91,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBoxStyle*)styleWithMargin:(UIEdgeInsets)margin padding:(UIEdgeInsets)padding
                        minSize:(CGSize)minSize position:(TTPosition)position next:(TTStyle*)next {
-  TTBoxStyle* style = [[self alloc] initWithNext:next];
+  TTBoxStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.margin = margin;
   style.padding = padding;
   style.minSize = minSize;

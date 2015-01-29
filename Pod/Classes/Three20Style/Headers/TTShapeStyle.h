@@ -26,7 +26,7 @@
   TTShape* _shape;
 }
 
-@property (nonatomic, strong) TTShape* shape;
+@property (nonatomic, retain) TTShape* shape;
 
 + (TTShapeStyle*)styleWithShape:(TTShape*)shape next:(TTStyle*)next;
 

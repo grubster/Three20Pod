@@ -40,19 +40,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)action {
-  return [[self alloc] init];
+  return [[[self alloc] init] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)actionWithURLPath:(NSString*)urlPath {
-  return [[self alloc] initWithURLPath:urlPath];
+  return [[[self alloc] initWithURLPath:urlPath] autorelease];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURLPath:(NSString*)urlPath {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     self.urlPath = urlPath;
     self.animated = NO;
     self.withDelay = NO;
@@ -65,11 +66,26 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithURLPath:nil]) {
+	self = [self initWithURLPath:nil];
+  if (self) {
   }
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_urlPath);
+  TT_RELEASE_SAFELY(_parentURLPath);
+  TT_RELEASE_SAFELY(_query);
+  TT_RELEASE_SAFELY(_state);
+  TT_RELEASE_SAFELY(_sourceView);
+  TT_RELEASE_SAFELY(_sourceButton);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTURLAction*)applyParentURLPath:(NSString*)parentURLPath {

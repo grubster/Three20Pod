@@ -35,8 +35,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kHPadding = 8;
-static const CGFloat kVPadding = 7;
+static const CGFloat kHPadding = 8.0f;
+static const CGFloat kVPadding = 7.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,11 +51,22 @@ static const CGFloat kVPadding = 7;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-  if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+  if (self) {
     self.backgroundColor = [UIColor clearColor];
     self.contentMode = UIViewContentModeRedraw;
   }
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_content);
+  TT_RELEASE_SAFELY(_font);
+  self.imageDelegate = nil;
+
+  [super dealloc];
 }
 
 
@@ -67,7 +78,7 @@ static const CGFloat kVPadding = 7;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTButton*)buttonWithStyle:(NSString*)selector {
-  TTButton* button = [[self alloc] init];
+  TTButton* button = [[[self alloc] init] autorelease];
   [button setStylesWithSelector:selector];
   return button;
 }
@@ -75,7 +86,7 @@ static const CGFloat kVPadding = 7;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTButton*)buttonWithStyle:(NSString*)selector title:(NSString*)title {
-  TTButton* button = [[self alloc] init];
+  TTButton* button = [[[self alloc] init] autorelease];
   [button setTitle:title forState:UIControlStateNormal];
   [button setStylesWithSelector:selector];
   return button;
@@ -118,7 +129,7 @@ static const CGFloat kVPadding = 7;
   id key = [self keyForState:state];
   TTButtonContent* content = [_content objectForKey:key];
   if (!content) {
-    content = [[TTButtonContent alloc] initWithButton:self];
+    content = [[[TTButtonContent alloc] initWithButton:self] autorelease];
     [_content setObject:content forKey:key];
   }
 
@@ -194,7 +205,7 @@ static const CGFloat kVPadding = 7;
   if (style) {
     CGRect textFrame = self.bounds;
 
-    TTStyleContext* context = [[TTStyleContext alloc] init];
+    TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
     context.delegate = self;
 
     TTPartStyle* imageStyle = [style styleForPart:@"image"];
@@ -246,7 +257,7 @@ static const CGFloat kVPadding = 7;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)sizeThatFits:(CGSize)size {
-  TTStyleContext* context = [[TTStyleContext alloc] init];
+  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
   context.delegate = self;
   context.font = [self fontForCurrentState];
 
@@ -350,7 +361,7 @@ static const CGFloat kVPadding = 7;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIFont*)font {
   if (!_font) {
-    _font = TTSTYLEVAR(buttonFont);
+    _font = [TTSTYLEVAR(buttonFont) retain];
   }
   return _font;
 }
@@ -359,7 +370,8 @@ static const CGFloat kVPadding = 7;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFont:(UIFont*)font {
   if (font != _font) {
-    _font = font;
+    [_font release];
+    _font = [font retain];
     [self setNeedsDisplay];
   }
 }
@@ -442,7 +454,7 @@ static const CGFloat kVPadding = 7;
 - (CGRect)rectForImage {
   TTStyle* style = [self styleForCurrentState];
   if (style) {
-    TTStyleContext* context = [[TTStyleContext alloc] init];
+    TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
     context.delegate = self;
 
     TTPartStyle* imagePartStyle = [style styleForPart:@"image"];

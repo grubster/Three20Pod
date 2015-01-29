@@ -38,7 +38,7 @@
   CAGradientLayer* _bottomShadow;
 }
 
-@property (nonatomic, strong) TTStyledTextLabel*  highlightedLabel;
+@property (nonatomic, retain) TTStyledTextLabel*  highlightedLabel;
 @property (nonatomic)         CGFloat             contentOrigin;
 @property (nonatomic)         BOOL                showShadows;
 
@@ -48,5 +48,8 @@
 
 - (void)tableView:(UITableView*)tableView touchesBegan:(NSSet*)touches withEvent:(UIEvent*)event;
 - (void)tableView:(UITableView*)tableView touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event;
+
+@optional
+- (void)tableView:(UITableView*)tableView touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event;
 
 @end

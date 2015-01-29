@@ -22,6 +22,7 @@
 #import "Three20Style/UIFontAdditions.h"
 
 // Core
+#import "Three20Core/NSStringAdditions.h"
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
 
@@ -43,7 +44,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _shadowOffset = CGSizeZero;
     _numberOfLines = 1;
     _textAlignment = UITextAlignmentCenter;
@@ -54,6 +56,17 @@
   return self;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_font);
+  TT_RELEASE_SAFELY(_color);
+  TT_RELEASE_SAFELY(_shadowColor);
+
+  [super dealloc];
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -62,7 +75,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTTextStyle*)styleWithFont:(UIFont*)font next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   return style;
 }
@@ -70,7 +83,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTTextStyle*)styleWithColor:(UIColor*)color next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.color = color;
   return style;
 }
@@ -78,7 +91,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTTextStyle*)styleWithFont:(UIFont*)font color:(UIColor*)color next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   style.color = color;
   return style;
@@ -88,7 +101,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTTextStyle*)styleWithFont:(UIFont*)font color:(UIColor*)color
                 textAlignment:(UITextAlignment)textAlignment next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   style.color = color;
   style.textAlignment = textAlignment;
@@ -100,7 +113,7 @@
 + (TTTextStyle*)styleWithFont:(UIFont*)font color:(UIColor*)color
                   shadowColor:(UIColor*)shadowColor shadowOffset:(CGSize)shadowOffset
                          next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   style.color = color;
   style.shadowColor = shadowColor;
@@ -114,7 +127,7 @@
               minimumFontSize:(CGFloat)minimumFontSize
                   shadowColor:(UIColor*)shadowColor shadowOffset:(CGSize)shadowOffset
                          next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   style.color = color;
   style.minimumFontSize = minimumFontSize;
@@ -132,7 +145,7 @@
             verticalAlignment:(UIControlContentVerticalAlignment)verticalAlignment
                 lineBreakMode:(UILineBreakMode)lineBreakMode numberOfLines:(NSInteger)numberOfLines
                          next:(TTStyle*)next {
-  TTTextStyle* style = [[self alloc] initWithNext:next];
+  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.font = font;
   style.color = color;
   style.minimumFontSize = minimumFontSize;
@@ -218,7 +231,16 @@
   }
 
   if (_shadowColor) {
-    CGSize offset = CGSizeMake(_shadowOffset.width, -_shadowOffset.height);
+    // Due to a bug in OS versions 3.2 and 4.0, the shadow appears upside-down. It pains me to
+    // write this, but a lot of research has failed to turn up a way to detect the flipped shadow
+    // programmatically
+    float shadowYOffset = -_shadowOffset.height;
+    NSString *osVersion = [UIDevice currentDevice].systemVersion;
+    if ([osVersion versionStringCompare:@"3.2"] != NSOrderedAscending) {
+      shadowYOffset = _shadowOffset.height;
+    }
+
+    CGSize offset = CGSizeMake(_shadowOffset.width, shadowYOffset);
     CGContextSetShadowWithColor(ctx, offset, 0, _shadowColor.CGColor);
   }
 

@@ -28,6 +28,16 @@
 @synthesize caption = _caption;
 @synthesize view    = _view;
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_caption);
+  TT_RELEASE_SAFELY(_view);
+
+  [super dealloc];
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -36,7 +46,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithCaption:(NSString*)caption view:(UIControl*)view {
-  TTTableViewItem* item = [[self alloc] init];
+  TTTableViewItem* item = [[[self alloc] init] autorelease];
   item.caption = caption;
   item.view = view;
   return item;
@@ -51,7 +61,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-  if (self = [super initWithCoder:decoder]) {
+	self = [super initWithCoder:decoder];
+  if (self) {
     self.caption = [decoder decodeObjectForKey:@"caption"];
     self.view = [decoder decodeObjectForKey:@"view"];
   }

@@ -43,6 +43,15 @@
 @synthesize parseURLs       = _parseURLs;
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_rootNode);
+  TT_RELEASE_SAFELY(_chars);
+  TT_RELEASE_SAFELY(_stack);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -53,7 +62,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addNode:(TTStyledNode*)node {
   if (!_rootNode) {
-    _rootNode = node;
+    _rootNode = [node retain];
     _lastNode = node;
 
   } else if (_topElement) {
@@ -95,7 +104,7 @@
     [self parseText:_chars];
   }
 
-  _chars = nil;
+  TT_RELEASE_SAFELY(_chars);
 }
 
 
@@ -105,11 +114,25 @@
 
   while (stringIndex < string.length) {
     NSRange searchRange = NSMakeRange(stringIndex, string.length - stringIndex);
-    NSRange startRange = [string rangeOfString:@"http://" options:NSCaseInsensitiveSearch
+    NSRange httpRange = [string rangeOfString:@"http://" options:NSCaseInsensitiveSearch
+                                range:searchRange];
+    NSRange httpsRange = [string rangeOfString:@"https://" options:NSCaseInsensitiveSearch
                                  range:searchRange];
+
+    NSRange startRange;
+    if (httpRange.location == NSNotFound) {
+        startRange = httpsRange;
+
+    } else if (httpsRange.location == NSNotFound) {
+        startRange = httpRange;
+
+    } else {
+        startRange = (httpRange.location < httpsRange.location) ? httpRange : httpsRange;
+    }
+
     if (startRange.location == NSNotFound) {
       NSString* text = [string substringWithRange:searchRange];
-      TTStyledTextNode* node = [[TTStyledTextNode alloc] initWithText:text];
+      TTStyledTextNode* node = [[[TTStyledTextNode alloc] initWithText:text] autorelease];
       [self addNode:node];
       break;
 
@@ -118,7 +141,7 @@
         startRange.location - searchRange.location);
       if (beforeRange.length) {
         NSString* text = [string substringWithRange:beforeRange];
-        TTStyledTextNode* node = [[TTStyledTextNode alloc] initWithText:text];
+        TTStyledTextNode* node = [[[TTStyledTextNode alloc] initWithText:text] autorelease];
         [self addNode:node];
       }
 
@@ -128,7 +151,7 @@
                                  range:subSearchRange];
       if (endRange.location == NSNotFound) {
         NSString* URL = [string substringWithRange:subSearchRange];
-        TTStyledLinkNode* node = [[TTStyledLinkNode alloc] initWithText:URL];
+        TTStyledLinkNode* node = [[[TTStyledLinkNode alloc] initWithText:URL] autorelease];
         node.URL = URL;
         [self addNode:node];
         break;
@@ -137,7 +160,7 @@
         NSRange URLRange = NSMakeRange(startRange.location,
                                              endRange.location - startRange.location);
         NSString* URL = [string substringWithRange:URLRange];
-        TTStyledLinkNode* node = [[TTStyledLinkNode alloc] initWithText:URL];
+        TTStyledLinkNode* node = [[[TTStyledLinkNode alloc] initWithText:URL] autorelease];
         node.URL = URL;
         [self addNode:node];
         stringIndex = endRange.location;
@@ -161,40 +184,41 @@
 
   NSString* tag = [elementName lowercaseString];
   if ([tag isEqualToString:@"span"]) {
-    TTStyledInline* node = [[TTStyledInline alloc] init];
+    TTStyledInline* node = [[[TTStyledInline alloc] init] autorelease];
     node.className =  [attributeDict objectForKey:@"class"];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"br"]) {
-    TTStyledLineBreakNode* node = [[TTStyledLineBreakNode alloc] init];
+    TTStyledLineBreakNode* node = [[[TTStyledLineBreakNode alloc] init] autorelease];
     node.className =  [attributeDict objectForKey:@"class"];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"div"] || [tag isEqualToString:@"p"]) {
-    TTStyledBlock* node = [[TTStyledBlock alloc] init];
+    TTStyledBlock* node = [[[TTStyledBlock alloc] init] autorelease];
     node.className =  [attributeDict objectForKey:@"class"];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"b"] || [tag isEqualToString:@"strong"]) {
-    TTStyledBoldNode* node = [[TTStyledBoldNode alloc] init];
+    TTStyledBoldNode* node = [[[TTStyledBoldNode alloc] init] autorelease];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"i"] || [tag isEqualToString:@"em"]) {
-    TTStyledItalicNode* node = [[TTStyledItalicNode alloc] init];
+    TTStyledItalicNode* node = [[[TTStyledItalicNode alloc] init] autorelease];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"a"]) {
-    TTStyledLinkNode* node = [[TTStyledLinkNode alloc] init];
+    TTStyledLinkNode* node = [[[TTStyledLinkNode alloc] init] autorelease];
     node.URL =  [attributeDict objectForKey:@"href"];
+    node.className =  [attributeDict objectForKey:@"class"];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"button"]) {
-    TTStyledButtonNode* node = [[TTStyledButtonNode alloc] init];
+    TTStyledButtonNode* node = [[[TTStyledButtonNode alloc] init] autorelease];
     node.URL =  [attributeDict objectForKey:@"href"];
     [self pushNode:node];
 
   } else if ([tag isEqualToString:@"img"]) {
-    TTStyledImageNode* node = [[TTStyledImageNode alloc] init];
+    TTStyledImageNode* node = [[[TTStyledImageNode alloc] init] autorelease];
     node.className =  [attributeDict objectForKey:@"class"];
     node.URL =  [attributeDict objectForKey:@"src"];
     NSString* width = [attributeDict objectForKey:@"width"];
@@ -248,6 +272,18 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)parseText:(NSString*)string URLs:(BOOL)shouldParseURLs {
+  if (shouldParseURLs) {
+    [self parseURLs:string];
+  }
+  else {
+    TTStyledTextNode* node = [[[TTStyledTextNode alloc] initWithText:string] autorelease];
+    [self addNode:node];
+  }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Public
@@ -257,7 +293,7 @@
 - (void)parseXHTML:(NSString*)html {
   NSString* document = [NSString stringWithFormat:@"<x>%@</x>", html];
   NSData* data = [document dataUsingEncoding:html.fastestEncoding];
-  NSXMLParser* parser = [[NSXMLParser alloc] initWithData:data];
+  NSXMLParser* parser = [[[NSXMLParser alloc] initWithData:data] autorelease];
   parser.delegate = self;
   [parser parse];
 }
@@ -277,28 +313,26 @@
         // Find all text before the line break and parse it
         NSRange textRange = NSMakeRange(stringIndex, range.location - stringIndex);
         NSString* substr = [string substringWithRange:textRange];
-        [self parseURLs:substr];
+        [self parseText:substr URLs:_parseURLs];
 
         // Add a line break node after the text
-        TTStyledLineBreakNode* br = [[TTStyledLineBreakNode alloc] init];
+        TTStyledLineBreakNode* br = [[[TTStyledLineBreakNode alloc] init] autorelease];
         [self addNode:br];
 
         stringIndex = stringIndex + substr.length + 1;
 
-      } else {
+      }
+      else {
         // Find all text until the end of hte string and parse it
         NSString* substr = [string substringFromIndex:stringIndex];
-        [self parseURLs:substr];
+        [self parseText:substr URLs:_parseURLs];
         break;
       }
     }
 
-  } else if (_parseURLs) {
-    [self parseURLs:string];
-
-  } else {
-    TTStyledTextNode* node = [[TTStyledTextNode alloc] initWithText:string];
-    [self addNode:node];
+  }
+  else {
+    [self parseText:string URLs:_parseURLs];
   }
 }
 

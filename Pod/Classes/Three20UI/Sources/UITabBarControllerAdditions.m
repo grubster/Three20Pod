@@ -50,7 +50,7 @@ TT_FIX_CATEGORY_BUG(UITabBarControllerAdditions)
     return controller;
 
   } else {
-    TTNavigationController* navController = [[TTNavigationController alloc] init];
+    TTNavigationController* navController = [[[TTNavigationController alloc] init] autorelease];
     [navController pushViewController:controller animated:NO];
     return navController;
   }
@@ -71,7 +71,12 @@ TT_FIX_CATEGORY_BUG(UITabBarControllerAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIViewController*)topSubcontroller {
-  return self.selectedViewController;
+  if (self.tabBar.selectedItem == self.moreNavigationController.tabBarItem) {
+    return self.moreNavigationController;
+  }
+  else {
+    return self.selectedViewController;
+  }
 }
 
 

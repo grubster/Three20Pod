@@ -16,8 +16,6 @@
 
 // UI
 #import "Three20UI/TTButton.h"
-#import "Three20UI/TTTabItem.h"
-#import "Three20UI/TTLabel.h"
 
 @class TTTabItem;
 @class TTLabel;
@@ -28,7 +26,7 @@
   TTLabel*    _badge;
 }
 
-@property (nonatomic, strong) TTTabItem* tabItem;
+@property (nonatomic, retain) TTTabItem* tabItem;
 
 - (id)initWithItem:(TTTabItem*)item tabBar:(TTTabBar*)tabBar;
 

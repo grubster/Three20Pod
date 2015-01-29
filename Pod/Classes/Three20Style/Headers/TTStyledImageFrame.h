@@ -21,19 +21,19 @@
 @class TTStyledImageNode;
 
 @interface TTStyledImageFrame : TTStyledFrame <TTStyleDelegate> {
-  TTStyledImageNode*  __unsafe_unretained _imageNode;
+  TTStyledImageNode*  _imageNode;
   TTStyle*            _style;
 }
 
 /**
  * The node represented by the frame.
  */
-@property (unsafe_unretained, nonatomic, readonly) TTStyledImageNode* imageNode;
+@property (nonatomic, readonly) TTStyledImageNode* imageNode;
 
 /**
  * The style used to render the frame;
  */
-@property (nonatomic, strong) TTStyle* style;
+@property (nonatomic, retain) TTStyle* style;
 
 - (id)initWithElement:(TTStyledElement*)element node:(TTStyledImageNode*)node;
 

@@ -36,11 +36,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-  if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+  if (self) {
     self.contentMode = UIViewContentModeRedraw;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_style);
+  TT_RELEASE_SAFELY(_layout);
+
+  [super dealloc];
 }
 
 
@@ -54,7 +64,7 @@
 - (void)drawRect:(CGRect)rect {
   TTStyle* style = self.style;
   if (nil != style) {
-    TTStyleContext* context = [[TTStyleContext alloc] init];
+    TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
     context.delegate = self;
     context.frame = self.bounds;
     context.contentFrame = context.frame;
@@ -81,7 +91,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)sizeThatFits:(CGSize)size {
-  TTStyleContext* context = [[TTStyleContext alloc] init];
+  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
   context.delegate = self;
   context.font = nil;
   return [_style addToSize:CGSizeZero context:context];
@@ -91,7 +101,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setStyle:(TTStyle*)style {
   if (style != _style) {
-    _style = style;
+    [_style release];
+    _style = [style retain];
 
     [self setNeedsDisplay];
   }

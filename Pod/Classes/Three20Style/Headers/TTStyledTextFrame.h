@@ -20,7 +20,7 @@
 @class TTStyledTextNode;
 
 @interface TTStyledTextFrame : TTStyledFrame {
-  TTStyledTextNode* __unsafe_unretained _node;
+  TTStyledTextNode* _node;
   NSString*         _text;
   UIFont*           _font;
 }
@@ -28,7 +28,7 @@
 /**
  * The node represented by the frame.
  */
-@property (unsafe_unretained, nonatomic, readonly) TTStyledTextNode* node;
+@property (nonatomic, readonly) TTStyledTextNode* node;
 
 /**
  * The text that is displayed by this frame.
@@ -38,7 +38,7 @@
 /**
  * The font that is used to measure and display the text of this frame.
  */
-@property (nonatomic, strong) UIFont* font;
+@property (nonatomic, retain) UIFont* font;
 
 - (id)initWithText:(NSString*)text element:(TTStyledElement*)element node:(TTStyledTextNode*)node;
 

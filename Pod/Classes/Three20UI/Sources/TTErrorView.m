@@ -26,9 +26,10 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kVPadding1 = 30;
-static const CGFloat kVPadding2 = 20;
-static const CGFloat kHPadding  = 10;
+static const CGFloat kVPadding1 = 30.0f;
+static const CGFloat kVPadding2 = 10.0f;
+static const CGFloat kVPadding3 = 15.0f;
+static const CGFloat kHPadding  = 10.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -36,10 +37,25 @@ static const CGFloat kHPadding  = 10;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 @implementation TTErrorView
 
+@synthesize reloadButton = _reloadButton;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)addReloadButton {
+  _reloadButton = [[TTButton buttonWithStyle:@"tableReloadButton:"] retain];
+  [_reloadButton setImage:@"bundle://Three20.bundle/images/reloadButton.png"
+                 forState:UIControlStateNormal];
+  [_reloadButton sizeToFit];
+  [self addSubview:_reloadButton];
+
+  [self layoutSubviews];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title subtitle:(NSString*)subtitle image:(UIImage*)image {
-  if (self = [self init]) {
+	self = [self init];
+  if (self) {
     self.title = title;
     self.subtitle = subtitle;
     self.image = image;
@@ -51,7 +67,8 @@ static const CGFloat kHPadding  = 10;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-  if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+  if (self) {
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;
     [self addSubview:_imageView];
@@ -77,6 +94,17 @@ static const CGFloat kHPadding  = 10;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_imageView);
+  TT_RELEASE_SAFELY(_titleView);
+  TT_RELEASE_SAFELY(_subtitleView);
+  TT_RELEASE_SAFELY(_reloadButton);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark UIView
@@ -92,7 +120,7 @@ static const CGFloat kHPadding  = 10;
                       + kVPadding1 + kVPadding2;
   BOOL canShowImage = _imageView.image && self.height > maxHeight;
 
-  CGFloat totalHeight = 0;
+  CGFloat totalHeight = 0.0f;
 
   if (canShowImage) {
     totalHeight += _imageView.height;
@@ -103,6 +131,8 @@ static const CGFloat kHPadding  = 10;
   if (_subtitleView.text.length) {
     totalHeight += (totalHeight ? kVPadding2 : 0) + _subtitleView.height;
   }
+
+  totalHeight += (totalHeight ? kVPadding3 : 0) + _reloadButton.height;
 
   CGFloat top = floor(self.height/2 - totalHeight/2);
 
@@ -120,6 +150,11 @@ static const CGFloat kHPadding  = 10;
   }
   if (_subtitleView.text.length) {
     _subtitleView.origin = CGPointMake(floor(self.width/2 - _subtitleView.width/2), top);
+    top += _subtitleView.height + kVPadding3;
+  }
+
+  if (_reloadButton!=nil) {
+    _reloadButton.origin = CGPointMake(floor(self.width/2 - _reloadButton.width/2), top);
   }
 }
 
@@ -164,6 +199,8 @@ static const CGFloat kHPadding  = 10;
 - (void)setImage:(UIImage*)image {
   _imageView.image = image;
 }
+
+
 
 
 @end

@@ -23,6 +23,11 @@
 float TTOSVersion();
 
 /**
+ * Checks if the run-time version of the OS is at least a certain version.
+ */
+BOOL TTRuntimeOSVersionIsAtLeast(float version);
+
+/**
  * Checks if the link-time version of the OS is at least a certain version.
  */
 BOOL TTOSVersionIsAtLeast(float version);
@@ -38,6 +43,11 @@ BOOL TTIsKeyboardVisible();
 BOOL TTIsPhoneSupported();
 
 /**
+ * @return TRUE if the device supports backgrounding
+ */
+BOOL TTIsMultiTaskingSupported();
+
+/**
  * @return TRUE if the device is iPad.
  */
 BOOL TTIsPad();
@@ -46,6 +56,21 @@ BOOL TTIsPad();
  * @return the current device orientation.
  */
 UIDeviceOrientation TTDeviceOrientation();
+
+/**
+ * @return TRUE if the current device orientation is portrait or portrait upside down.
+ */
+BOOL TTDeviceOrientationIsPortrait();
+
+/**
+ * @return TRUE if the current device orientation is landscape left, or landscape right.
+ */
+BOOL TTDeviceOrientationIsLandscape();
+
+/**
+ * @return device full model name in human readable strings
+ */
+NSString* TTDeviceModelName();
 
 /**
  * On iPhone/iPod touch

@@ -32,7 +32,7 @@
 @property (nonatomic, copy)     NSString* URL;
 @property (nonatomic, readonly) NSString* scheme;
 @property (nonatomic, readonly) NSInteger specificity;
-@property (unsafe_unretained, nonatomic, readonly) Class     classForInvocation;
+@property (nonatomic, readonly) Class     classForInvocation;
 @property (nonatomic)           SEL       selector;
 
 - (void)setSelectorIfPossible:(SEL)selector;

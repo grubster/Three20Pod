@@ -41,7 +41,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 +(id)initWithSelectorName:(NSString*)anRuleSetName {
-    TTCSSRuleSet *instance = [TTCSSRuleSet new];
+    TTCSSRuleSet *instance = [[TTCSSRuleSet new] autorelease];
     instance.selector = anRuleSetName;
     return instance;
 }
@@ -75,6 +75,32 @@
         self.vertical_align = @"top";
     }
     return self;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)dealloc {
+    TT_RELEASE_SAFELY( font_family );
+    TT_RELEASE_SAFELY( selector );
+    TT_RELEASE_SAFELY( font_size );
+    TT_RELEASE_SAFELY( font_weight );
+    TT_RELEASE_SAFELY( font_style );
+    TT_RELEASE_SAFELY( text_shadow );
+    TT_RELEASE_SAFELY( color );
+    TT_RELEASE_SAFELY( width );
+    TT_RELEASE_SAFELY( height );
+    TT_RELEASE_SAFELY( top );
+    TT_RELEASE_SAFELY( left );
+    TT_RELEASE_SAFELY( right );
+    TT_RELEASE_SAFELY( bottom );
+    TT_RELEASE_SAFELY( background_color );
+    TT_RELEASE_SAFELY( background_image );
+    TT_RELEASE_SAFELY( text_shadow_opacity );
+    TT_RELEASE_SAFELY( text_decoration );
+    TT_RELEASE_SAFELY( visibility );
+    TT_RELEASE_SAFELY( vertical_align );
+    TT_RELEASE_SAFELY( margin_right );
+    TT_RELEASE_SAFELY( margin_left );
+    [super dealloc];
 }
 
 
@@ -282,7 +308,7 @@
 #pragma mark -
 #pragma mark Set Methods.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
--(void)setUIColorProperty:(UIColor * __autoreleasing *)anColor withValue:(id)anValue {
+-(void)setUIColorProperty:(UIColor**)anColor withValue:(id)anValue {
 
 	/////////////////////////////////
 	// Release.
@@ -294,7 +320,7 @@
 	if ( [anValue isKindOfClass:[NSArray class]] ) {
 
 		// Set.
-        *anColor = TTColorFromCssValues(anValue);
+        *anColor = [TTColorFromCssValues(anValue) retain];
 
 	}
 
@@ -303,7 +329,7 @@
     else if ( [anValue isKindOfClass:[NSString class]] ) {
 
         // Set.
-        *anColor = TTColorFromCssValues([NSArray arrayWithObject:anValue]);
+        *anColor = [TTColorFromCssValues([NSArray arrayWithObject:anValue]) retain];
     }
 
     ///////////////////////////////////////
@@ -311,20 +337,18 @@
     else if ( [anValue isKindOfClass:[UIColor class]] ) {
 
 		// Set.
-        *anColor = anValue;
+        *anColor = [anValue retain];
     }
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setColor:(id)anColor {
-    UIColor *cColor = [color copy];
-	[self setUIColorProperty:&cColor withValue:anColor];
+	[self setUIColorProperty:&color withValue:anColor];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setBackground_color:(id)anColor {
-    UIColor *cBackgroundColor = [background_color copy];
-	[self setUIColorProperty:&cBackgroundColor withValue:anColor];
+	[self setUIColorProperty:&background_color withValue:anColor];
 }
 
 

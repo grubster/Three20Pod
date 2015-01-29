@@ -39,7 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTRoundedRectangleShape*)shapeWithRadius:(CGFloat)radius {
-  TTRoundedRectangleShape* shape = [[TTRoundedRectangleShape alloc] init];
+  TTRoundedRectangleShape* shape = [[[TTRoundedRectangleShape alloc] init] autorelease];
   shape.topLeftRadius = shape.topRightRadius = shape.bottomRightRadius = shape.bottomLeftRadius
   = radius;
   return shape;
@@ -49,7 +49,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTRoundedRectangleShape*)shapeWithTopLeft:(CGFloat)topLeft topRight:(CGFloat)topRight
                                  bottomRight:(CGFloat)bottomRight bottomLeft:(CGFloat)bottomLeft {
-  TTRoundedRectangleShape* shape = [[TTRoundedRectangleShape alloc] init];
+  TTRoundedRectangleShape* shape = [[[TTRoundedRectangleShape alloc] init] autorelease];
   shape.topLeftRadius = topLeft;
   shape.topRightRadius = topRight;
   shape.bottomRightRadius = bottomRight;
@@ -89,7 +89,7 @@
   CGFloat fw = rect.size.width;
   CGFloat fh = rect.size.height;
 
-  CGFloat width = 5;
+  CGFloat width = 5.0f;
   CGRect shadowRect = CGRectMake(-width, -width, fw+width*2, fh+width*2);
   CGMutablePathRef path = CGPathCreateMutable();
   CGPathAddRect(path, nil, shadowRect);

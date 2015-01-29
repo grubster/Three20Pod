@@ -41,15 +41,15 @@
   BOOL              _originalStatusBarHidden;
   UIStatusBarStyle  _originalStatusBarStyle;
 
-  id<TTPostControllerDelegate> __unsafe_unretained _delegate;
+  id<TTPostControllerDelegate> _delegate;
 }
 
-@property (nonatomic, strong)   id                result;
+@property (nonatomic, retain)   id                result;
 @property (nonatomic, readonly) UITextView*       textView;
-@property (unsafe_unretained, nonatomic, readonly) UINavigationBar*  navigatorBar;
-@property (nonatomic, strong)   UIView*           originView;
+@property (nonatomic, readonly) UINavigationBar*  navigatorBar;
+@property (nonatomic, retain)   UIView*           originView;
 
-@property (nonatomic, unsafe_unretained)   id<TTPostControllerDelegate> delegate;
+@property (nonatomic, assign)   id<TTPostControllerDelegate> delegate;
 
 /**
  * Posts the text to delegates, who have to actually do something with it.

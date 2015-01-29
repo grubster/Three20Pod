@@ -38,12 +38,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _frame = CGRectZero;
     _contentFrame = CGRectZero;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_shape);
+  TT_RELEASE_SAFELY(_font);
+
+  [super dealloc];
 }
 
 
@@ -56,7 +66,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTShape*)shape {
   if (!_shape) {
-    _shape = [TTRectangleShape shape];
+    _shape = [[TTRectangleShape shape] retain];
   }
 
   return _shape;

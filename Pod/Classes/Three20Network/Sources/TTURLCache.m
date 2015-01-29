@@ -26,7 +26,7 @@
 #import "Three20Core/TTDebugFlags.h"
 #import "Three20Core/NSStringAdditions.h"
 
-static const  CGFloat   kLargeImageSize = 600 * 400;
+static const  CGFloat   kLargeImageSize = 600.0f * 400.0f;
 
 static        NSString* kDefaultCacheName       = @"Three20";
 static        NSString* kEtagCacheDirectoryName = @"etag";
@@ -62,9 +62,10 @@ static NSMutableDictionary* gNamedCaches = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithName:(NSString*)name {
-  if (self == [super init]) {
+	self = [super init];
+  if (self) {
     _name             = [name copy];
-    _cachePath        = [TTURLCache cachePathWithName:name];
+    _cachePath        = [[TTURLCache cachePathWithName:name] retain];
     _invalidationAge  = TT_DEFAULT_CACHE_INVALIDATION_AGE;
 
     // XXXjoe Disabling the built-in cache may save memory but it also makes UIWebView slow
@@ -85,13 +86,28 @@ static NSMutableDictionary* gNamedCaches = nil;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithName:kDefaultCacheName]) {
+	self = [self initWithName:kDefaultCacheName];
+  if (self) {
   }
 
   return self;
 }
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter]
+   removeObserver: self
+             name: UIApplicationDidReceiveMemoryWarningNotification
+           object: nil];
+
+  TT_RELEASE_SAFELY(_name);
+  TT_RELEASE_SAFELY(_imageCache);
+  TT_RELEASE_SAFELY(_imageSortedList);
+  TT_RELEASE_SAFELY(_cachePath);
+
+  [super dealloc];
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -107,7 +123,7 @@ static NSMutableDictionary* gNamedCaches = nil;
   }
   TTURLCache* cache = [gNamedCaches objectForKey:name];
   if (nil == cache) {
-    cache = [[TTURLCache alloc] initWithName:name];
+    cache = [[[TTURLCache alloc] initWithName:name] autorelease];
     [gNamedCaches setObject:cache forKey:name];
   }
   return cache;
@@ -126,8 +142,8 @@ static NSMutableDictionary* gNamedCaches = nil;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)setSharedCache:(TTURLCache*)cache {
   if (gSharedCache != cache) {
-    gSharedCache = nil;
-    gSharedCache = cache;
+    [gSharedCache release];
+    gSharedCache = [cache retain];
   }
 }
 
@@ -248,8 +264,7 @@ static NSMutableDictionary* gNamedCaches = nil;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIImage*)loadImageFromDocuments:(NSString*)URL {
   NSString* path = TTPathForDocumentsResource([URL substringFromIndex:12]);
-  NSData* data = [NSData dataWithContentsOfFile:path];
-  return [UIImage imageWithData:data];
+  return [UIImage imageWithContentsOfFile:path];
 }
 
 
@@ -257,7 +272,7 @@ static NSMutableDictionary* gNamedCaches = nil;
 - (NSString*)loadEtagFromCacheWithKey:(NSString*)key {
   NSString* path = [self etagCachePathForKey:key];
   NSData* data = [NSData dataWithContentsOfFile:path];
-  return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+  return [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease];
 }
 
 

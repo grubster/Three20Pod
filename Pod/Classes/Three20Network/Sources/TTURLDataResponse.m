@@ -27,6 +27,16 @@
 @implementation TTURLDataResponse
 
 @synthesize data = _data;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_data);
+
+  [super dealloc];
+}
+
+
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark TTURLResponse
 
@@ -40,7 +50,7 @@
   TTDASSERT(nil == _data);
 
   if ([data isKindOfClass:[NSData class]]) {
-    _data = data;
+    _data = [data retain];
   }
 
   return nil;

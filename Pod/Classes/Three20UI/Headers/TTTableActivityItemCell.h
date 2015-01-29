@@ -25,6 +25,6 @@
   TTActivityLabel*      _activityLabel;
 }
 
-@property (nonatomic, readonly, strong) TTActivityLabel* activityLabel;
+@property (nonatomic, readonly, retain) TTActivityLabel* activityLabel;
 
 @end

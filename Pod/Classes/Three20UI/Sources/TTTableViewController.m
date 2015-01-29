@@ -61,14 +61,17 @@
 @synthesize tableViewStyle      = _tableViewStyle;
 @synthesize variableHeightRows  = _variableHeightRows;
 @synthesize showTableShadows    = _showTableShadows;
+@synthesize clearsSelectionOnViewWillAppear = _clearsSelectionOnViewWillAppear;
 @synthesize dataSource          = _dataSource;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
     _lastInterfaceOrientation = self.interfaceOrientation;
     _tableViewStyle = UITableViewStylePlain;
+    _clearsSelectionOnViewWillAppear = YES;
   }
 
   return self;
@@ -77,11 +80,29 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewStyle)style {
-  if (self = [self initWithNibName:nil bundle:nil]) {
+	self = [self initWithNibName:nil bundle:nil];
+  if (self) {
     _tableViewStyle = style;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  _tableView.delegate = nil;
+  _tableView.dataSource = nil;
+  TT_RELEASE_SAFELY(_tableDelegate);
+  TT_RELEASE_SAFELY(_dataSource);
+  TT_RELEASE_SAFELY(_tableView);
+  TT_RELEASE_SAFELY(_loadingView);
+  TT_RELEASE_SAFELY(_errorView);
+  TT_RELEASE_SAFELY(_emptyView);
+  TT_RELEASE_SAFELY(_tableOverlayView);
+  TT_RELEASE_SAFELY(_tableBannerView);
+
+  [super dealloc];
 }
 
 
@@ -93,7 +114,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)createInterstitialModel {
-  self.dataSource = [[TTTableViewInterstitialDataSource alloc] init];
+  self.dataSource = [[[TTTableViewInterstitialDataSource alloc] init] autorelease];
 }
 
 
@@ -106,7 +127,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)updateTableDelegate {
   if (!_tableView.delegate) {
-    _tableDelegate = [self createDelegate];
+    [_tableDelegate release];
+    _tableDelegate = [[self createDelegate] retain];
 
     // You need to set it to nil before changing it or it won't have any effect
     _tableView.delegate = nil;
@@ -122,7 +144,7 @@
     _tableOverlayView = [[UIView alloc] initWithFrame:frame];
     _tableOverlayView.autoresizesSubviews = YES;
     _tableOverlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth
-    | UIViewAutoresizingFlexibleBottomMargin;
+    | UIViewAutoresizingFlexibleHeight;
     NSInteger tableIndex = [_tableView.superview.subviews indexOfObject:_tableView];
     if (tableIndex != NSNotFound) {
       [_tableView.superview addSubview:_tableOverlayView];
@@ -139,7 +161,7 @@
 - (void)resetOverlayView {
   if (_tableOverlayView && !_tableOverlayView.subviews.count) {
     [_tableOverlayView removeFromSuperview];
-      _tableOverlayView = nil;
+    TT_RELEASE_SAFELY(_tableOverlayView);
   }
 }
 
@@ -170,7 +192,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)fadeOutView:(UIView*)view {
-  [UIView beginAnimations:nil context:(__bridge void *)(view)];
+  [view retain];
+  [UIView beginAnimations:nil context:view];
   [UIView setAnimationDuration:TT_TRANSITION_DURATION];
   [UIView setAnimationDelegate:self];
   [UIView setAnimationDidStopSelector:@selector(fadingOutViewDidStop:finished:context:)];
@@ -182,15 +205,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)fadingOutViewDidStop:(NSString*)animationID finished:(NSNumber*)finished
                      context:(void*)context {
-  UIView* view = (__bridge UIView*)context;
+  UIView* view = (UIView*)context;
   [view removeFromSuperview];
+  [view release];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)hideMenuAnimationDidStop:(NSString*)animationID finished:(NSNumber*)finished
                          context:(void*)context {
-  UIView* menuView = (__bridge UIView*)context;
+  UIView* menuView = (UIView*)context;
   [menuView removeFromSuperview];
 }
 
@@ -204,7 +228,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
   [super loadView];
-  self.tableView;
+  [self tableView];
+
+  // If this view was unloaded and is now being reloaded, and it was previously
+  // showing a table banner, then redisplay that banner now.
+  if (_tableBannerView) {
+    UIView* savedTableBannerView = [_tableBannerView retain];
+    [self setTableBannerView:nil animated:NO];
+    [self setTableBannerView:savedTableBannerView animated:NO];
+    [savedTableBannerView release];
+  }
 }
 
 
@@ -213,22 +246,23 @@
   [super viewDidUnload];
   _tableView.delegate = nil;
   _tableView.dataSource = nil;
-    _tableDelegate = nil;
-    _tableView = nil;
-  [_tableBannerView removeFromSuperview];
-    _tableBannerView = nil;
+  TT_RELEASE_SAFELY(_tableDelegate);
+  TT_RELEASE_SAFELY(_tableView);
   [_tableOverlayView removeFromSuperview];
-    _tableOverlayView = nil;
+  TT_RELEASE_SAFELY(_tableOverlayView);
   [_loadingView removeFromSuperview];
-    _loadingView = nil;
+  TT_RELEASE_SAFELY(_loadingView);
   [_errorView removeFromSuperview];
-    _errorView = nil;
+  TT_RELEASE_SAFELY(_errorView);
   [_emptyView removeFromSuperview];
-    _emptyView = nil;
+  TT_RELEASE_SAFELY(_emptyView);
   [_menuView removeFromSuperview];
-    _menuView = nil;
+  TT_RELEASE_SAFELY(_menuView);
   [_menuCell removeFromSuperview];
-    _menuCell = nil;
+  TT_RELEASE_SAFELY(_menuCell);
+
+  // Do not release _tableBannerView, because we have no way to recreate it on demand if
+  // this view gets reloaded.
 }
 
 
@@ -246,7 +280,9 @@
     tableView.showShadows = _showTableShadows;
   }
 
-  [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
+  if (_clearsSelectionOnViewWillAppear) {
+    [_tableView deselectRowAtIndexPath:[_tableView indexPathForSelectedRow] animated:animated];
+  }
 }
 
 
@@ -291,7 +327,8 @@
 - (void)restoreView:(NSDictionary*)state {
   CGFloat scrollY = [[state objectForKey:@"scrollOffsetY"] floatValue];
   if (scrollY) {
-    CGFloat maxY = _tableView.contentSize.height - _tableView.height;
+    //set to 0 if contentSize is smaller than the tableView.height
+    CGFloat maxY = MAX(0, _tableView.contentSize.height - _tableView.height);
     if (scrollY <= maxY) {
       _tableView.contentOffset = CGPointMake(0, scrollY);
 
@@ -429,7 +466,8 @@
       : [self defaultTitleForLoading];
       if (title.length) {
         TTActivityLabel* label =
-          [[TTActivityLabel alloc] initWithStyle:TTActivityLabelStyleWhiteBox];
+          [[[TTActivityLabel alloc] initWithStyle:TTActivityLabelStyleWhiteBox]
+           autorelease];
         label.text = title;
         label.backgroundColor = _tableView.backgroundColor;
         self.loadingView = label;
@@ -450,10 +488,17 @@
       NSString* subtitle = [_dataSource subtitleForError:_modelError];
       UIImage* image = [_dataSource imageForError:_modelError];
       if (title.length || subtitle.length || image) {
-        TTErrorView* errorView = [[TTErrorView alloc] initWithTitle:title
+        TTErrorView* errorView = [[[TTErrorView alloc] initWithTitle:title
                                                             subtitle:subtitle
-                                                               image:image];
+                                                               image:image] autorelease];
+        if ([_dataSource reloadButtonForEmpty]) {
+          [errorView addReloadButton];
+          [errorView.reloadButton addTarget:self
+                                     action:@selector(reload)
+                           forControlEvents:UIControlEventTouchUpInside];
+        }
         errorView.backgroundColor = _tableView.backgroundColor;
+
         self.errorView = errorView;
 
       } else {
@@ -476,9 +521,9 @@
     NSString* subtitle = [_dataSource subtitleForEmpty];
     UIImage* image = [_dataSource imageForEmpty];
     if (title.length || subtitle.length || image) {
-      TTErrorView* errorView = [[TTErrorView alloc] initWithTitle:title
+      TTErrorView* errorView = [[[TTErrorView alloc] initWithTitle:title
                                                           subtitle:subtitle
-                                                             image:image];
+                                                             image:image] autorelease];
       errorView.backgroundColor = _tableView.backgroundColor;
       self.emptyView = errorView;
 
@@ -553,9 +598,6 @@
             TTDCONDITIONLOG(TTDFLAG_TABLEVIEWMODIFICATIONS, @"INSERTING ROW AT %@", newIndexPath);
             [_tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:newIndexPath]
                               withRowAnimation:UITableViewRowAnimationTop];
-
-            [_tableView scrollToRowAtIndexPath:newIndexPath
-                              atScrollPosition:UITableViewScrollPositionNone animated:NO];
           }
           [self invalidateView];
 
@@ -618,6 +660,17 @@
     _tableView.autoresizingMask =  UIViewAutoresizingFlexibleWidth
     | UIViewAutoresizingFlexibleHeight;
 
+	UIColor* separatorColor = _tableViewStyle == UITableViewStyleGrouped
+	? TTSTYLEVAR(tableGroupedCellSeparatorColor)
+	: TTSTYLEVAR(tablePlainCellSeparatorColor);
+	if (separatorColor) {
+		_tableView.separatorColor = separatorColor;
+	}
+
+	_tableView.separatorStyle = _tableViewStyle == UITableViewStyleGrouped
+	? TTSTYLEVAR(tableGroupedCellSeparatorStyle)
+	: TTSTYLEVAR(tablePlainCellSeparatorStyle);
+
     UIColor* backgroundColor = _tableViewStyle == UITableViewStyleGrouped
     ? TTSTYLEVAR(tableGroupedBackgroundColor)
     : TTSTYLEVAR(tablePlainBackgroundColor);
@@ -634,7 +687,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTableView:(UITableView*)tableView {
   if (tableView != _tableView) {
-    _tableView = tableView;
+    [_tableView release];
+    _tableView = [tableView retain];
     if (!_tableView) {
       self.tableBannerView = nil;
       self.tableOverlayView = nil;
@@ -651,7 +705,6 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTableBannerView:(UIView*)tableBannerView animated:(BOOL)animated {
-  TT_INVALIDATE_TIMER(_bannerTimer);
   if (tableBannerView != _tableBannerView) {
     if (_tableBannerView) {
       if (animated) {
@@ -662,13 +715,13 @@
       }
     }
 
-    _tableBannerView = tableBannerView;
+    [_tableBannerView release];
+    _tableBannerView = [tableBannerView retain];
 
     if (_tableBannerView) {
       self.tableView.contentInset = UIEdgeInsetsMake(0, 0, TTSTYLEVAR(tableBannerViewHeight), 0);
       self.tableView.scrollIndicatorInsets = self.tableView.contentInset;
       _tableBannerView.frame = [self rectForBannerView];
-      _tableBannerView.userInteractionEnabled = NO;
       _tableBannerView.autoresizingMask = (UIViewAutoresizingFlexibleWidth
                                            | UIViewAutoresizingFlexibleTopMargin);
       [self addSubviewOverTableView:_tableBannerView];
@@ -703,7 +756,8 @@
       }
     }
 
-    _tableOverlayView = tableOverlayView;
+    [_tableOverlayView release];
+    _tableOverlayView = [tableOverlayView retain];
 
     if (_tableOverlayView) {
       _tableOverlayView.frame = [self rectForOverlayView];
@@ -719,7 +773,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setDataSource:(id<TTTableViewDataSource>)dataSource {
   if (dataSource != _dataSource) {
-    _dataSource = dataSource;
+    [_dataSource release];
+    _dataSource = [dataSource retain];
     _tableView.dataSource = nil;
 
     self.model = dataSource.model;
@@ -743,9 +798,9 @@
   if (view != _loadingView) {
     if (_loadingView) {
       [_loadingView removeFromSuperview];
-        _loadingView = nil;
+      TT_RELEASE_SAFELY(_loadingView);
     }
-    _loadingView = view;
+    _loadingView = [view retain];
     if (_loadingView) {
       [self addToOverlayView:_loadingView];
 
@@ -761,9 +816,9 @@
   if (view != _errorView) {
     if (_errorView) {
       [_errorView removeFromSuperview];
-        _errorView = nil;
+      TT_RELEASE_SAFELY(_errorView);
     }
-    _errorView = view;
+    _errorView = [view retain];
 
     if (_errorView) {
       [self addToOverlayView:_errorView];
@@ -780,9 +835,9 @@
   if (view != _emptyView) {
     if (_emptyView) {
       [_emptyView removeFromSuperview];
-        _emptyView = nil;
+      TT_RELEASE_SAFELY(_emptyView);
     }
-    _emptyView = view;
+    _emptyView = [view retain];
     if (_emptyView) {
       [self addToOverlayView:_emptyView];
 
@@ -796,10 +851,10 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id<UITableViewDelegate>)createDelegate {
   if (_variableHeightRows) {
-    return [[TTTableViewVarHeightDelegate alloc] initWithController:self];
+    return [[[TTTableViewVarHeightDelegate alloc] initWithController:self] autorelease];
 
   } else {
-    return [[TTTableViewDelegate alloc] initWithController:self];
+    return [[[TTTableViewDelegate alloc] initWithController:self] autorelease];
   }
 }
 
@@ -808,8 +863,8 @@
 - (void)showMenu:(UIView*)view forCell:(UITableViewCell*)cell animated:(BOOL)animated {
   [self hideMenu:YES];
 
-  _menuView = view;
-  _menuCell = cell;
+  _menuView = [view retain];
+  _menuCell = [cell retain];
 
   // Insert the cell below all content subviews
   [_menuCell.contentView insertSubview:_menuView atIndex:0];
@@ -837,7 +892,7 @@
 - (void)hideMenu:(BOOL)animated {
   if (_menuView) {
     if (animated) {
-      [UIView beginAnimations:nil context:(__bridge void *)(_menuView)];
+      [UIView beginAnimations:nil context:_menuView];
       [UIView setAnimationDuration:TT_FAST_TRANSITION_DURATION];
       [UIView setAnimationDelegate:self];
       [UIView setAnimationDidStopSelector:@selector(hideMenuAnimationDidStop:finished:context:)];
@@ -856,8 +911,8 @@
       [_menuView removeFromSuperview];
     }
 
-      _menuView = nil;
-      _menuCell = nil;
+    TT_RELEASE_SAFELY(_menuView);
+    TT_RELEASE_SAFELY(_menuCell);
   }
 }
 
@@ -905,5 +960,17 @@
                     tableFrame.size.width, bannerViewHeight);
 }
 
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)invalidateModel {
+  [super invalidateModel];
+
+  // Renew the tableView delegate when the model is refreshed.
+  // Otherwise the delegate will be retained the model.
+
+  // You need to set it to nil before changing it or it won't have any effect
+  _tableView.delegate = nil;
+  [self updateTableDelegate];
+}
 
 @end

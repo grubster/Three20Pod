@@ -29,8 +29,8 @@
   TTLayout* _layout;
 }
 
-@property (nonatomic, strong) TTStyle*  style;
-@property (nonatomic, strong) TTLayout* layout;
+@property (nonatomic, retain) TTStyle*  style;
+@property (nonatomic, retain) TTLayout* layout;
 
 - (void)drawContent:(CGRect)rect;
 

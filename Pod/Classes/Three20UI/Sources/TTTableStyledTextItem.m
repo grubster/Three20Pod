@@ -32,12 +32,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _margin = UIEdgeInsetsZero;
     _padding = UIEdgeInsetsMake(6, 6, 6, 6);
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_text);
+
+  [super dealloc];
 }
 
 
@@ -49,7 +58,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(TTStyledText*)text {
-  TTTableStyledTextItem* item = [[self alloc] init];
+  TTTableStyledTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   return item;
 }
@@ -57,7 +66,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(TTStyledText*)text URL:(NSString*)URL {
-  TTTableStyledTextItem* item = [[self alloc] init];
+  TTTableStyledTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   item.URL = URL;
   return item;
@@ -66,7 +75,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithText:(TTStyledText*)text URL:(NSString*)URL accessoryURL:(NSString*)accessoryURL {
-  TTTableStyledTextItem* item = [[self alloc] init];
+  TTTableStyledTextItem* item = [[[self alloc] init] autorelease];
   item.text = text;
   item.URL = URL;
   item.accessoryURL = accessoryURL;
@@ -82,7 +91,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-  if (self = [super initWithCoder:decoder]) {
+	self = [super initWithCoder:decoder];
+  if (self) {
     self.text = [decoder decodeObjectForKey:@"text"];
   }
   return self;

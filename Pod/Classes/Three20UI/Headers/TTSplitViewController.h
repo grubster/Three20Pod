@@ -37,8 +37,8 @@
 
 @property (nonatomic, readonly) TTNavigator*          leftNavigator;
 @property (nonatomic, readonly) TTNavigator*          rightNavigator;
-@property (nonatomic, strong)   UIBarButtonItem*      splitViewButton;
-@property (nonatomic, strong)   UIPopoverController*  popoverSplitController;
+@property (nonatomic, retain)   UIBarButtonItem*      splitViewButton;
+@property (nonatomic, retain)   UIPopoverController*  popoverSplitController;
 
 
 /**

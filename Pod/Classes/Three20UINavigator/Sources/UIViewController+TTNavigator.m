@@ -53,7 +53,8 @@ TT_FIX_CATEGORY_BUG(UIViewController_TTNavigator)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query {
-  if (self = [self initWithNibName:nil bundle:nil]) {
+  self = [self initWithNibName:nil bundle:nil];
+  if (self) {
   }
 
   return self;
@@ -86,8 +87,8 @@ TT_FIX_CATEGORY_BUG(UIViewController_TTNavigator)
     TTDCONDITIONLOG(TTDFLAG_CONTROLLERGARBAGECOLLECTION,
                     @"Killing the navigator garbage collector.");
     [gsGarbageCollectorTimer invalidate];
-      gsGarbageCollectorTimer = nil;
-      gsNavigatorControllers = nil;
+    TT_RELEASE_SAFELY(gsGarbageCollectorTimer);
+    TT_RELEASE_SAFELY(gsNavigatorControllers);
   }
 }
 
@@ -106,11 +107,11 @@ TT_FIX_CATEGORY_BUG(UIViewController_TTNavigator)
 
     if (nil == gsGarbageCollectorTimer) {
       gsGarbageCollectorTimer =
-        [NSTimer scheduledTimerWithTimeInterval: kGarbageCollectionInterval
+        [[NSTimer scheduledTimerWithTimeInterval: kGarbageCollectionInterval
                                           target: [UIViewController class]
                                         selector: @selector(doNavigatorGarbageCollection)
                                         userInfo: nil
-                                         repeats: YES];
+                                         repeats: YES] retain];
     }
 #if TTDFLAG_CONTROLLERGARBAGECOLLECTION
 

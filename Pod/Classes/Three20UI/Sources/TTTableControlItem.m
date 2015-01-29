@@ -30,6 +30,15 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_caption);
+  TT_RELEASE_SAFELY(_control);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Class public
@@ -37,7 +46,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithCaption:(NSString*)caption control:(UIControl*)control {
-  TTTableControlItem* item = [[self alloc] init];
+  TTTableControlItem* item = [[[self alloc] init] autorelease];
   item.caption = caption;
   item.control = control;
   return item;
@@ -52,7 +61,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-  if (self = [super initWithCoder:decoder]) {
+	self = [super initWithCoder:decoder];
+  if (self) {
     self.caption = [decoder decodeObjectForKey:@"caption"];
     self.control = [decoder decodeObjectForKey:@"control"];
   }

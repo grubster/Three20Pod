@@ -38,11 +38,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _offset = CGSizeZero;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_color);
+
+  [super dealloc];
 }
 
 
@@ -55,7 +64,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTShadowStyle*)styleWithColor:(UIColor*)color blur:(CGFloat)blur offset:(CGSize)offset
                             next:(TTStyle*)next {
-  TTShadowStyle* style = [[self alloc] initWithNext:next];
+  TTShadowStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.color = color;
   style.blur = blur;
   style.offset = offset;

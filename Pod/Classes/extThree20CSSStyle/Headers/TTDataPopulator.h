@@ -26,7 +26,7 @@
  * use with 'TTCSS' Classes. See JUMP Framework to retrieve the full version.
  */
 @interface TTDataPopulator : NSObject {
-	__unsafe_unretained id<TTDataPopulatorDelegate> delegate;
+	id<TTDataPopulatorDelegate> delegate;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

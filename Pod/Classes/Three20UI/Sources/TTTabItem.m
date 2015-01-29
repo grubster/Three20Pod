@@ -18,7 +18,7 @@
 
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
-#import "TTTabBar.h"
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,11 +33,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title {
-  if (self = [self init]) {
+	self = [self init];
+  if (self) {
     self.title = title;
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_title);
+  TT_RELEASE_SAFELY(_icon);
+  TT_RELEASE_SAFELY(_object);
+
+  [super dealloc];
 }
 
 
@@ -59,7 +70,7 @@
   value = value < 0 ? 0 : value;
   _badgeNumber = value;
   [_tabBar performSelector:@selector(tabItem:badgeNumberChangedTo:) withObject:self
-                withObject:[NSNumber numberWithInt:value]];
+                withObject:(id)value];
 }
 
 

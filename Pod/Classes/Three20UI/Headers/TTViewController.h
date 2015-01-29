@@ -35,7 +35,7 @@
  * property.  You can then take the searchBar from that controller and add it to your views. The
  * search bar will then search the data source of the view controller that you assigned here.
  */
-@property (nonatomic, strong) TTTableViewController* searchViewController;
+@property (nonatomic, retain) TTTableViewController* searchViewController;
 
 /**
  * Forcefully initiates garbage collection. You may call this in your didReceiveMemoryWarning

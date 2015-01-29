@@ -27,7 +27,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-  if (self = [super initWithNext:next]) {
+	self = [super initWithNext:next];
+  if (self) {
     _blendMode = kCGBlendModeNormal;
   }
 
@@ -43,7 +44,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBlendStyle*)styleWithBlend:(CGBlendMode)blendMode next:(TTStyle*)next {
-  TTBlendStyle* style = [[self alloc] initWithNext:next];
+  TTBlendStyle* style = [[[self alloc] initWithNext:next] autorelease];
   style.blendMode = blendMode;
   return style;
 }

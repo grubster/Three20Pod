@@ -71,6 +71,20 @@ NSString* kKeyTextShadowColor   = @"color";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  [[NSNotificationCenter defaultCenter]
+   removeObserver: self
+   name: UIApplicationDidReceiveMemoryWarningNotification
+   object: nil];
+
+  TT_RELEASE_SAFELY(_cssRulesSet);
+  TT_RELEASE_SAFELY(_cssStyles);
+  TT_RELEASE_SAFELY(_propertiesMap);
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark NSNotifications
@@ -101,7 +115,7 @@ NSString* kKeyTextShadowColor   = @"color";
     NSDictionary* results = [parser parseFilename:filename];
     TT_RELEASE_SAFELY(parser);
 
-    _cssStyles	 = results;
+    _cssStyles	 = [results retain];
     _cssRulesSet = [[NSMutableDictionary alloc] initWithCapacity:[_cssStyles count]];
 
     didLoadSuccessfully = YES;
@@ -160,7 +174,7 @@ NSString* kKeyTextShadowColor   = @"color";
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(NSDictionary*)propertiesMap {
 	if ( !_propertiesMap ) {
-		_propertiesMap = [NSDictionary dictionaryWithObjectsAndKeys:
+		_propertiesMap = [[NSDictionary dictionaryWithObjectsAndKeys:
 								@"color",				@"color",
 								@"font_family",			@"font",
 								@"font_family",			@"font-family",
@@ -184,7 +198,7 @@ NSString* kKeyTextShadowColor   = @"color";
                                 @"margin_right",        @"margin-right",
                                 @"vertical_align",      @"vertical-align",
 
-						  nil];
+						  nil] retain];
 	}
 	return _propertiesMap;
 }

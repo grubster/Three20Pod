@@ -35,6 +35,15 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_firstChildFrame);
+  TT_RELEASE_SAFELY(_style);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Private
@@ -62,18 +71,22 @@
     TTTextStyle* textStyle = (TTTextStyle*)style;
     UIFont* font = context.font;
     context.font = textStyle.font;
+
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(ctx);
+
     if (textStyle.color) {
-      CGContextRef ctx = UIGraphicsGetCurrentContext();
-      CGContextSaveGState(ctx);
       [textStyle.color setFill];
-
-      [self drawSubframes];
-
-      CGContextRestoreGState(ctx);
-
-    } else {
-      [self drawSubframes];
     }
+
+    if (textStyle.shadowColor) {
+      CGSize offset = CGSizeMake(textStyle.shadowOffset.width, -textStyle.shadowOffset.height);
+      CGContextSetShadowWithColor(ctx, offset, 0, textStyle.shadowColor.CGColor);
+    }
+
+    [self drawSubframes];
+
+    CGContextRestoreGState(ctx);
 
     context.font = font;
 
@@ -98,7 +111,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawInRect:(CGRect)rect {
   if (_style && !CGRectIsEmpty(_bounds)) {
-    TTStyleContext* context = [[TTStyleContext alloc] init];
+    TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
     context.delegate = self;
     context.frame = rect;
     context.contentFrame = rect;

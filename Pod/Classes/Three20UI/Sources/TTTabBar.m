@@ -47,7 +47,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame  {
-  if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+  if (self) {
     _selectedTabIndex = NSIntegerMax;
     _tabViews = [[NSMutableArray alloc] init];
 
@@ -57,6 +58,17 @@
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_tabStyle);
+  TT_RELEASE_SAFELY(_tabItems);
+  TT_RELEASE_SAFELY(_tabViews);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -147,7 +159,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTabItems:(NSArray*)tabItems {
-  _tabItems =  tabItems;
+  [_tabItems release];
+  _tabItems =  [tabItems retain];
 
   for (int i = 0; i < _tabViews.count; ++i) {
     TTTab* tab = [_tabViews objectAtIndex:i];
@@ -162,7 +175,7 @@
 
   for (int i = 0; i < _tabItems.count; ++i) {
     TTTabItem* tabItem = [_tabItems objectAtIndex:i];
-    TTTab* tab = [[TTTab alloc] initWithItem:tabItem tabBar:self];
+    TTTab* tab = [[[TTTab alloc] initWithItem:tabItem tabBar:self] autorelease];
     [tab setStylesWithSelector:self.tabStyle];
     [tab        addTarget: self
                    action: @selector(tabTouchedUp:)

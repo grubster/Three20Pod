@@ -32,13 +32,13 @@
   id              _userInfo;
   NSMutableArray* _URLs;
 
-  id<TTActionSheetControllerDelegate> __unsafe_unretained _delegate;
+  id<TTActionSheetControllerDelegate> _delegate;
 }
 
-@property (unsafe_unretained, nonatomic, readonly) UIActionSheet*  actionSheet;
-@property (nonatomic, strong)   id              userInfo;
+@property (nonatomic, readonly) UIActionSheet*  actionSheet;
+@property (nonatomic, retain)   id              userInfo;
 
-@property (nonatomic, unsafe_unretained)   id<TTActionSheetControllerDelegate> delegate;
+@property (nonatomic, assign)   id<TTActionSheetControllerDelegate> delegate;
 
 /**
  * Create an action sheet controller without a delegate.

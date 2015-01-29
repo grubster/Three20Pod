@@ -44,7 +44,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
+	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+  if (self) {
     _navigationBarStyle = UIBarStyleDefault;
     _statusBarStyle = [[UIApplication sharedApplication] statusBarStyle];
   }
@@ -55,11 +56,34 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithNibName:nil bundle:nil]) {
+	self = [self initWithNibName:nil bundle:nil];
+  if (self) {
   }
 
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TTDCONDITIONLOG(TTDFLAG_VIEWCONTROLLERS, @"DEALLOC %@", self);
+
+  [self unsetCommonProperties];
+
+  TT_RELEASE_SAFELY(_navigationBarTintColor);
+  TT_RELEASE_SAFELY(_frozenState);
+
+  // Removes keyboard notification observers for
+  self.autoresizesForKeyboard = NO;
+
+  // You would think UIViewController would call this in dealloc, but it doesn't!
+  // I would prefer not to have to redundantly put all view releases in dealloc and
+  // viewDidUnload, so my solution is just to call viewDidUnload here.
+  [self viewDidUnload];
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,7 +135,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFrozenState:(NSDictionary*)frozenState {
-  _frozenState = frozenState;
+  [_frozenState release];
+  _frozenState = [frozenState retain];
 }
 
 
@@ -156,6 +181,7 @@
     NSMutableDictionary* state = [[NSMutableDictionary alloc] init];
     [self persistView:state];
     self.frozenState = state;
+    TT_RELEASE_SAFELY(state);
 
     // This will come around to calling viewDidUnload
     [super didReceiveMemoryWarning];

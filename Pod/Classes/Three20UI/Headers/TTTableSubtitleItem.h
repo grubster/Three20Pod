@@ -25,7 +25,7 @@
 
 @property (nonatomic, copy)   NSString* subtitle;
 @property (nonatomic, copy)   NSString* imageURL;
-@property (nonatomic, strong) UIImage*  defaultImage;
+@property (nonatomic, retain) UIImage*  defaultImage;
 
 + (id)itemWithText:(NSString*)text subtitle:(NSString*)subtitle;
 + (id)itemWithText:(NSString*)text subtitle:(NSString*)subtitle URL:(NSString*)URL;

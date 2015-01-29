@@ -47,7 +47,8 @@ static NSString* kUniversalURLPattern = @"*";
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTarget: (id)target
                 mode: (TTNavigationMode)navigationMode {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _navigationMode = navigationMode;
 
     if ([target class] == target && navigationMode) {
@@ -64,7 +65,8 @@ static NSString* kUniversalURLPattern = @"*";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTarget:(id)target {
-  if (self = [self initWithTarget:target mode:TTNavigationModeNone]) {
+	self = [self initWithTarget:target mode:TTNavigationModeNone];
+  if (self) {
   }
 
   return self;
@@ -73,10 +75,19 @@ static NSString* kUniversalURLPattern = @"*";
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithTarget:nil]) {
+	self = [self initWithTarget:nil];
+  if (self) {
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_parentURL);
+
+  [super dealloc];
 }
 
 
@@ -214,6 +225,7 @@ static NSString* kUniversalURLPattern = @"*";
       [self analyzeArgument:_fragment method:method argNames:argNames];
     }
 
+    [selectorName release];
   }
 }
 
@@ -251,33 +263,32 @@ static NSString* kUniversalURLPattern = @"*";
           break;
         }
         case TTURLArgumentTypeInteger: {
-          __unsafe_unretained int val = [text intValue];
+          int val = [text intValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeLongLong: {
-          __unsafe_unretained long long val = [text longLongValue];
+          long long val = [text longLongValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeFloat: {
-          __unsafe_unretained float val = [text floatValue];
+          float val = [text floatValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeDouble: {
-          __unsafe_unretained double val = [text doubleValue];
+          double val = [text doubleValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeBool: {
-          __unsafe_unretained BOOL val = [text boolValue];
+          BOOL val = [text boolValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         default: {
-            __unsafe_unretained NSString *unsafeText = text;
-          [invocation setArgument:&unsafeText atIndex:argIndex+2];
+          [invocation setArgument:&text atIndex:argIndex+2];
           break;
         }
       }
@@ -293,7 +304,7 @@ static NSString* kUniversalURLPattern = @"*";
               forInvocation: (NSInvocation*)invocation
                       query: (NSDictionary*)query {
   NSInteger remainingArgs = _argumentCount;
-  NSMutableDictionary* unmatchedArgs = query ? [query mutableCopy] : nil;
+  NSMutableDictionary* unmatchedArgs = query ? [[query mutableCopy] autorelease] : nil;
 
   NSArray* pathComponents = URL.path.pathComponents;
   for (NSInteger i = 0; i < _path.count; ++i) {
@@ -423,16 +434,16 @@ static NSString* kUniversalURLPattern = @"*";
      withURL: (NSURL*)URL
        query: (NSDictionary*)query {
   id returnValue = nil;
-    __unsafe_unretained NSURL* unsafeURL = URL;
+
   NSMethodSignature *sig = [target methodSignatureForSelector:self.selector];
   if (sig) {
     NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:sig];
     [invocation setTarget:target];
     [invocation setSelector:self.selector];
     if (self.isUniversal) {
-      [invocation setArgument:&unsafeURL atIndex:2];
+      [invocation setArgument:&URL atIndex:2];
       if (query) {
-        [invocation setArgument:&unsafeURL atIndex:3];
+        [invocation setArgument:&query atIndex:3];
       }
 
     } else {
@@ -441,7 +452,7 @@ static NSString* kUniversalURLPattern = @"*";
     [invocation invoke];
 
     if (sig.methodReturnLength) {
-      [invocation getReturnValue:&unsafeURL];
+      [invocation getReturnValue:&returnValue];
     }
   }
 
@@ -467,17 +478,18 @@ static NSString* kUniversalURLPattern = @"*";
     } else {
       returnValue = [returnValue init];
     }
-      returnValue;
+    [returnValue autorelease];
 #endif
 
   } else {
-    id target = _targetObject;
+    id target = [_targetObject retain];
     if (_selector) {
       returnValue = [self invoke:target withURL:URL query:query];
 
     } else {
-      TTDWARNING(@"No object created from URL:'%@' URL");
+      TTDWARNING(@"No object created from URL:'%@'", URL);
     }
+    [target release];
   }
   return returnValue;
 }

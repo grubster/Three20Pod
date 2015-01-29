@@ -34,6 +34,7 @@
 - (void) dealloc {
   [self unsetNavigatorProperties];
 
+  [super dealloc];
 }
 
 

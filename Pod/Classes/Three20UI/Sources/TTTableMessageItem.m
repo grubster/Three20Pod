@@ -32,6 +32,17 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_title);
+  TT_RELEASE_SAFELY(_caption);
+  TT_RELEASE_SAFELY(_timestamp);
+  TT_RELEASE_SAFELY(_imageURL);
+
+  [super dealloc];
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Class public
@@ -40,7 +51,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithTitle:(NSString*)title caption:(NSString*)caption text:(NSString*)text
           timestamp:(NSDate*)timestamp URL:(NSString*)URL {
-  TTTableMessageItem* item = [[self alloc] init];
+  TTTableMessageItem* item = [[[self alloc] init] autorelease];
   item.title = title;
   item.caption = caption;
   item.text = text;
@@ -53,7 +64,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)itemWithTitle:(NSString*)title caption:(NSString*)caption text:(NSString*)text
           timestamp:(NSDate*)timestamp imageURL:(NSString*)imageURL URL:(NSString*)URL {
-  TTTableMessageItem* item = [[self alloc] init];
+  TTTableMessageItem* item = [[[self alloc] init] autorelease];
   item.title = title;
   item.caption = caption;
   item.text = text;
@@ -72,7 +83,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-  if (self = [super initWithCoder:decoder]) {
+	self = [super initWithCoder:decoder];
+  if (self) {
     self.title = [decoder decodeObjectForKey:@"title"];
     self.caption = [decoder decodeObjectForKey:@"caption"];
     self.timestamp = [decoder decodeObjectForKey:@"timestamp"];

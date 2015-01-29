@@ -38,7 +38,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text {
-  if (self = [self initWithText:text next:nil]) {
+	self = [self initWithText:text next:nil];
+  if (self) {
   }
 
   return self;
@@ -47,9 +48,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text next:(TTStyledNode*)nextSibling {
-  if (self = [super initWithNextSibling:nextSibling]) {
+	self = [super initWithNextSibling:nextSibling];
+  if (self) {
     if (nil != text) {
-      [self addChild:[[TTStyledTextNode alloc] initWithText:text]];
+      [self addChild:[[[TTStyledTextNode alloc] initWithText:text] autorelease]];
     }
   }
 
@@ -59,10 +61,20 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [self initWithText:nil next:nil]) {
+	self = [self initWithText:nil next:nil];
+  if (self) {
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_firstChild);
+  TT_RELEASE_SAFELY(_className);
+
+  [super dealloc];
 }
 
 
@@ -120,7 +132,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addChild:(TTStyledNode*)child {
   if (!_firstChild) {
-    _firstChild = child;
+    _firstChild = [child retain];
     _lastChild = [self findLastSibling:child];
 
   } else {
@@ -133,7 +145,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addText:(NSString*)text {
-  [self addChild:[[TTStyledTextNode alloc] initWithText:text]];
+  [self addChild:[[[TTStyledTextNode alloc] initWithText:text] autorelease]];
 }
 
 
@@ -146,12 +158,14 @@
     if (oldChild == _lastChild) {
       _lastChild = newChild;
     }
-    _firstChild = newChild;
+    [_firstChild release];
+    _firstChild = [newChild retain];
 
   } else {
     TTStyledNode* node = _firstChild;
     while (node) {
       if (node.nextSibling == oldChild) {
+        [oldChild retain];
         if (newChild) {
           newChild.nextSibling = oldChild.nextSibling;
           node.nextSibling = newChild;
@@ -164,6 +178,7 @@
         if (oldChild == _lastChild) {
           _lastChild = newChild ? newChild : node;
         }
+        [oldChild release];
         break;
       }
       node = node.nextSibling;

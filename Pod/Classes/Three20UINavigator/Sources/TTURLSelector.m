@@ -34,12 +34,22 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithName:(NSString*)name {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _name     = [name copy];
     _selector = NSSelectorFromString(_name);
   }
 
   return self;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_name);
+  TT_RELEASE_SAFELY(_next);
+
+  [super dealloc];
 }
 
 
@@ -65,7 +75,7 @@
         return @"";
       }
       case TTURLArgumentTypeInteger: {
-        __unsafe_unretained int val;
+        int val;
         [invocation getReturnValue:&val];
         return [NSString stringWithFormat:@"%d", val];
       }
@@ -90,7 +100,7 @@
         return [NSString stringWithFormat:@"%d", val];
       }
       default: {
-        __unsafe_unretained id val;
+        id val;
         [invocation getReturnValue:&val];
         return [NSString stringWithFormat:@"%@", val];
       }

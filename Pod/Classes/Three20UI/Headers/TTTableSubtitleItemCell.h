@@ -23,7 +23,7 @@
   TTImageView* _imageView2;
 }
 
-@property (nonatomic, readonly, strong) UILabel*      subtitleLabel;
-@property (nonatomic, readonly, strong) TTImageView*  imageView2;
+@property (nonatomic, readonly, retain) UILabel*      subtitleLabel;
+@property (nonatomic, readonly, retain) TTImageView*  imageView2;
 
 @end

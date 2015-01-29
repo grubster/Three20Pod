@@ -34,16 +34,16 @@
 #import "Three20Core/TTCorePreprocessorMacros.h"
 #import "Three20Core/TTGlobalCoreLocale.h"
 
-static const CGFloat kMarginX   = 5;
-static const CGFloat kMarginY   = 7;
-static const CGFloat kPaddingX  = 10;
-static const CGFloat kPaddingY  = 10;
-static const CGFloat kSpacingX  = 4;
+static const CGFloat kMarginX   = 5.0f;
+static const CGFloat kMarginY   = 7.0f;
+static const CGFloat kPaddingX  = 10.0f;
+static const CGFloat kPaddingY  = 10.0f;
+static const CGFloat kSpacingX  = 4.0f;
 
-static const CGFloat kButtonSpacing = 12;
-static const CGFloat kButtonHeight  = 30;
+static const CGFloat kButtonSpacing = 12.0f;
+static const CGFloat kButtonHeight  = 30.0f;
 
-static const CGFloat kIndexViewMargin = 4;
+static const CGFloat kIndexViewMargin = 4.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,8 @@ static const CGFloat kIndexViewMargin = 4;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-  if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+  if (self) {
     _boxView = [[TTView alloc] init];
     _boxView.backgroundColor = [UIColor clearColor];
     [self addSubview:_boxView];
@@ -82,6 +83,19 @@ static const CGFloat kIndexViewMargin = 4;
   }
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_searchField);
+  TT_RELEASE_SAFELY(_boxView);
+  TT_RELEASE_SAFELY(_textFieldStyle);
+  TT_RELEASE_SAFELY(_tintColor);
+  TT_RELEASE_SAFELY(_cancelButton);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,15 +301,15 @@ static const CGFloat kIndexViewMargin = 4;
     _showsCancelButton = showsCancelButton;
 
     if (_showsCancelButton) {
-      _cancelButton = [TTButton buttonWithStyle:@"blackToolbarButton:"
-                                 title:TTLocalizedString(@"Cancel", @"")];
+      _cancelButton = [[TTButton buttonWithStyle:@"blackToolbarButton:"
+                                 title:TTLocalizedString(@"Cancel", @"")] retain];
       [_cancelButton addTarget:_searchField action:@selector(resignFirstResponder)
                      forControlEvents:UIControlEventTouchUpInside];
       [self addSubview:_cancelButton];
 
     } else {
       [_cancelButton removeFromSuperview];
-        _cancelButton = nil;
+      TT_RELEASE_SAFELY(_cancelButton);
     }
   }
 }
@@ -307,8 +321,8 @@ static const CGFloat kIndexViewMargin = 4;
     _showsSearchIcon = showsSearchIcon;
 
     if (_showsSearchIcon) {
-      UIImageView* iconView = [[UIImageView alloc] initWithImage:
-        [UIImage imageNamed:@"Three20.bundle/images/searchIcon.png"]];
+      UIImageView* iconView = [[[UIImageView alloc] initWithImage:
+        [UIImage imageNamed:@"Three20.bundle/images/searchIcon.png"]] autorelease];
       [iconView sizeToFit];
       iconView.contentMode = UIViewContentModeLeft;
       iconView.frame = CGRectInset(iconView.frame, -floor(kMarginX/2), 0);
@@ -368,7 +382,8 @@ static const CGFloat kIndexViewMargin = 4;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTintColor:(UIColor*)tintColor {
   if (tintColor != _tintColor) {
-    _tintColor = tintColor;
+    [_tintColor release];
+    _tintColor = [tintColor retain];
   }
 }
 
@@ -376,8 +391,8 @@ static const CGFloat kIndexViewMargin = 4;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTextFieldStyle:(TTStyle*)textFieldStyle {
   if (textFieldStyle != _textFieldStyle) {
-      _textFieldStyle = nil;
-      _textFieldStyle = textFieldStyle;
+    [_textFieldStyle release];
+    _textFieldStyle = [textFieldStyle retain];
     _boxView.style = _textFieldStyle;
   }
 }

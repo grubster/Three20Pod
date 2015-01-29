@@ -22,8 +22,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static CGFloat kDefaultWidth = 140;
-static CGFloat kDefaultHeight = 105;
+static CGFloat kDefaultWidth = 140.0f;
+static CGFloat kDefaultHeight = 105.0f;
 
 static NSString* kEmbedHTML = @"\
 <html>\
@@ -51,11 +51,21 @@ wmode=\"transparent\" width=\"%0.0f\" height=\"%0.0f\"></embed>\
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURLPath:(NSString*)urlPath {
-  if (self = [self initWithFrame:CGRectMake(0, 0, kDefaultWidth, kDefaultHeight)]) {
+	self = [self initWithFrame:CGRectMake(0, 0, kDefaultWidth, kDefaultHeight)];
+  if (self) {
     self.urlPath = urlPath;
   }
   return self;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)dealloc {
+  TT_RELEASE_SAFELY(_urlPath);
+
+  [super dealloc];
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,6 +83,7 @@ wmode=\"transparent\" width=\"%0.0f\" height=\"%0.0f\"></embed>\
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setUrlPath:(NSString*)urlPath {
   NSString* newUrlPath = [urlPath copy];
+  [_urlPath release];
   _urlPath = newUrlPath;
 
   if (nil != _urlPath) {

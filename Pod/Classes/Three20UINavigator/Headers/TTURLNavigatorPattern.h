@@ -20,7 +20,7 @@
 
 @interface TTURLNavigatorPattern : TTURLPattern {
   Class             _targetClass;
-  id                __unsafe_unretained _targetObject;
+  id                _targetObject;
   TTNavigationMode  _navigationMode;
   NSString*         _parentURL;
   NSInteger         _transition;
@@ -28,7 +28,7 @@
 }
 
 @property (nonatomic, assign)   Class             targetClass;
-@property (nonatomic, unsafe_unretained)   id                targetObject;
+@property (nonatomic, assign)   id                targetObject;
 @property (nonatomic, readonly) TTNavigationMode  navigationMode;
 @property (nonatomic, copy)     NSString*         parentURL;
 @property (nonatomic, assign)   NSInteger         transition;
@@ -43,7 +43,7 @@
 
 - (BOOL)matchURL:(NSURL*)URL;
 
-- (id)invoke:(id)target withURL:(__unsafe_unretained NSURL*)URL query:(__unsafe_unretained NSDictionary*)query;
+- (id)invoke:(id)target withURL:(NSURL*)URL query:(NSDictionary*)query;
 
 /**
  * either instantiates an object or delegates object creation

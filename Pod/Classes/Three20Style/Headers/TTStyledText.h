@@ -28,30 +28,36 @@
   TTStyledNode*   _rootNode;
   TTStyledFrame*  _rootFrame;
   UIFont*         _font;
+  UITextAlignment _textAlignment;
   CGFloat         _width;
   CGFloat         _height;
   NSMutableArray* _invalidImages;
   NSMutableArray* _imageRequests;
 
-  id<TTStyledTextDelegate> __unsafe_unretained _delegate;
+  id<TTStyledTextDelegate> _delegate;
 }
 
-@property (nonatomic, unsafe_unretained) id<TTStyledTextDelegate> delegate;
+@property (nonatomic, assign) id<TTStyledTextDelegate> delegate;
 
 /**
  * The first in the sequence of nodes that contain the styled text.
  */
-@property (nonatomic, strong) TTStyledNode* rootNode;
+@property (nonatomic, retain) TTStyledNode* rootNode;
 
 /**
  * The first in the sequence of frames of text calculated by the layout.
  */
-@property (unsafe_unretained, nonatomic, readonly) TTStyledFrame* rootFrame;
+@property (nonatomic, readonly) TTStyledFrame* rootFrame;
 
 /**
  * The font that will be used to measure and draw all text.
  */
-@property (nonatomic, strong) UIFont* font;
+@property (nonatomic, retain) UIFont* font;
+
+/**
+ * The text alignment used for all text.
+ */
+@property (nonatomic) UITextAlignment textAlignment;
 
 /**
  * The width that the text should be constrained to fit within.
