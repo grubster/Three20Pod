@@ -194,7 +194,7 @@
                          (__bridge id)cgFont, kCTFontAttributeName,
 
                          // Foreground color.
-                         (id)[(UIColor*)[self color] CGColor], kCTForegroundColorAttributeName,
+                         (__bridge id)[(UIColor*)[self color] CGColor], kCTForegroundColorAttributeName,
 
                          // Underline style.
                          [NSNumber numberWithInt:[self underlineStyle]],

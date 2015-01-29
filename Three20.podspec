@@ -70,7 +70,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CSSStyle' do |css|
-    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,ThirdPart}/**/*.{h,m}"
+    css.source_files          = "Pod/Classes/extThree20CSSStyle/{Sources,Headers,ThirdPart,Grammars}/**/*.{h,m}"
     css.private_header_files  = "Pod/Classes/extThree20CSSStyle/Headers/private/CssTokens.h"
     css.header_mappings_dir   = "Pod/Classes/extThree20CSSStyle/Headers"
     css.header_dir            = "extThree20CSSStyle"

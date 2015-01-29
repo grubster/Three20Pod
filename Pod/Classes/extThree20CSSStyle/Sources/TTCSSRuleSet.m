@@ -287,7 +287,7 @@
 	/////////////////////////////////
 	// Release.
 	if ( *anColor )
-		anColor = nil;
+		TT_RELEASE_SAFELY( *anColor );
 
 	///////////////////////////////////////
     // Array of color?
@@ -317,14 +317,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setColor:(id)anColor {
-    UIColor *colorCp = [color copy];
-	[self setUIColorProperty:&colorCp withValue:anColor];
+    UIColor *cColor = [color copy];
+	[self setUIColorProperty:&cColor withValue:anColor];
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)setBackground_color:(id)anColor {
-    UIColor *backgroundCp = [background_color copy];
-	[self setUIColorProperty:&backgroundCp withValue:anColor];
+    UIColor *cBackgroundColor = [background_color copy];
+	[self setUIColorProperty:&cBackgroundColor withValue:anColor];
 }
 
 

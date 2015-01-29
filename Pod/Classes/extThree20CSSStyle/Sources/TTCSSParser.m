@@ -64,7 +64,8 @@ int cssConsume(char* text, int token) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-  if (self = [super init]) {
+	self = [super init];
+  if (self) {
     _ruleSets           = [[NSMutableDictionary alloc] init];
     _activeCssSelectors = [[NSMutableArray alloc] init];
   }
@@ -75,8 +76,8 @@ int cssConsume(char* text, int token) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)consumeToken:(int)token text:(char*)text {
-  NSString* string = [[NSString stringWithCString: text
-                                         encoding: NSUTF8StringEncoding] lowercaseString];
+  NSString* string = [NSString stringWithCString: text
+                                         encoding: NSUTF8StringEncoding];
   switch (token) {
     case CSSHASH:
     case CSSIDENT: {
@@ -84,12 +85,12 @@ int cssConsume(char* text, int token) {
 
         // If we're inside a definition then we ignore hashes.
         if (CSSHASH != token && !_state.Flags.InsideProperty) {
-          _activePropertyName = nil;
+          TT_RELEASE_SAFELY(_activePropertyName);
           _activePropertyName = string;
 
           NSMutableArray* values = [[NSMutableArray alloc] init];
           [_activeRuleSet setObject:values forKey:_activePropertyName];
-          values = nil;
+          TT_RELEASE_SAFELY(values);
 
         } else {
           // This is a value, so add it to the active property.
@@ -106,7 +107,7 @@ int cssConsume(char* text, int token) {
           string = [_lastTokenText stringByAppendingString:string];
         }
         [_activeCssSelectors addObject:string];
-        _activePropertyName = nil;
+        TT_RELEASE_SAFELY(_activePropertyName);
       }
       break;
     }
@@ -148,7 +149,7 @@ int cssConsume(char* text, int token) {
         case '{': {
           _state.Flags.InsideDefinition = YES;
           _state.Flags.InsideFunction = NO;
-          _activeRuleSet = nil;
+          TT_RELEASE_SAFELY(_activeRuleSet);
           _activeRuleSet = [[NSMutableDictionary alloc] init];
           break;
         }
@@ -163,15 +164,15 @@ int cssConsume(char* text, int token) {
               for (NSString* key in iteratorProperties) {
                 [existingProperties setObject:[_activeRuleSet objectForKey:key] forKey:key];
               }
-              iteratorProperties = nil;
+              TT_RELEASE_SAFELY(iteratorProperties);
 
             } else {
               NSMutableDictionary* ruleSet = [_activeRuleSet mutableCopy];
               [_ruleSets setObject:ruleSet forKey:name];
-              ruleSet = nil;
+              TT_RELEASE_SAFELY(ruleSet);
             }
           }
-          _activeRuleSet = nil;
+          TT_RELEASE_SAFELY(_activeRuleSet);
           [_activeCssSelectors removeAllObjects];
           _state.Flags.InsideDefinition = NO;
           _state.Flags.InsideProperty = NO;
@@ -225,9 +226,9 @@ int cssConsume(char* text, int token) {
 
   [_ruleSets removeAllObjects];
   [_activeCssSelectors removeAllObjects];
-  _activeRuleSet = nil;
-  _activePropertyName = nil;
-  _lastTokenText = nil;
+  TT_RELEASE_SAFELY(_activeRuleSet);
+  TT_RELEASE_SAFELY(_activePropertyName);
+  TT_RELEASE_SAFELY(_lastTokenText);
 
   cssin = fopen([filename UTF8String], "r");
 
@@ -236,7 +237,7 @@ int cssConsume(char* text, int token) {
   fclose(cssin);
 
   NSDictionary* result = [_ruleSets copy];
-  _ruleSets = nil;
+  TT_RELEASE_SAFELY(_ruleSets);
   return result;
 }
 

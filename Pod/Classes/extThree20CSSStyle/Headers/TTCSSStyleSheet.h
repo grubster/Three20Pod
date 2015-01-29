@@ -38,12 +38,6 @@
 
   // CSS mapped properties.
   NSDictionary*		    _propertiesMap;
-
-  // CSS mapped colours.
-  NSDictionary*			_colorLookupTable;
-
-  //CSS Cache var
-  NSMutableDictionary*			_cachedCssStyles;
 }
 
 @property (nonatomic, readonly) NSDictionary* cssStyles;
