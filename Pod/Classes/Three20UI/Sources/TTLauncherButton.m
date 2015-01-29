@@ -57,9 +57,8 @@ static const NSInteger kMaxBadgeNumber = 99;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithItem:(TTLauncherItem*)item {
-	self = [self init];
-  if (self) {
-    _item = [item retain];
+  if (self = [self init]) {
+    _item = item;
 
     NSString* title =  [[NSBundle mainBundle] localizedStringForKey:item.title value:nil table:nil];
     [self setTitle:title forState:UIControlStateNormal];
@@ -81,22 +80,11 @@ static const NSInteger kMaxBadgeNumber = 99;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     self.isVertical = YES;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_item);
-  TT_RELEASE_SAFELY(_badge);
-  TT_RELEASE_SAFELY(_closeButton);
-
-  [super dealloc];
 }
 
 
@@ -217,7 +205,7 @@ static const NSInteger kMaxBadgeNumber = 99;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTButton*)closeButton {
   if (!_closeButton && _item.canDelete) {
-    _closeButton = [[TTButton buttonWithStyle:@"launcherCloseButton:"] retain];
+    _closeButton = [TTButton buttonWithStyle:@"launcherCloseButton:"];
     [_closeButton setImage:@"bundle://Three20.bundle/images/closeButton.png"
                   forState:UIControlStateNormal];
     _closeButton.size = CGSizeMake(26,29);
@@ -255,7 +243,7 @@ static const NSInteger kMaxBadgeNumber = 99;
 
     } else {
       [_closeButton removeFromSuperview];
-      TT_RELEASE_SAFELY(_closeButton);
+        _closeButton = nil;
     }
   }
 }

@@ -34,8 +34,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     _activityLabel = [[TTActivityLabel alloc] initWithStyle:TTActivityLabelStyleGray];
     [self.contentView addSubview:_activityLabel];
 
@@ -44,14 +43,6 @@
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_activityLabel);
-  TT_RELEASE_SAFELY(_item);
-  [super dealloc];
 }
 
 
@@ -84,8 +75,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object {
   if (_item != object) {
-    [_item release];
-    _item = [object retain];
+    _item = object;
 
     TTTableActivityItem* item = object;
     _activityLabel.text = item.text;

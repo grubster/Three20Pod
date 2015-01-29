@@ -95,8 +95,8 @@ TT_FIX_CATEGORY_BUG(UIViewControllerAdditions)
     TTDCONDITIONLOG(TTDFLAG_CONTROLLERGARBAGECOLLECTION,
                     @"Killing the common garbage collector.");
     [gsGarbageCollectorTimer invalidate];
-    TT_RELEASE_SAFELY(gsGarbageCollectorTimer);
-    TT_RELEASE_SAFELY(gsCommonControllers);
+      gsGarbageCollectorTimer = nil;
+      gsCommonControllers = nil;
   }
 }
 
@@ -114,11 +114,11 @@ TT_FIX_CATEGORY_BUG(UIViewControllerAdditions)
 
     if (nil == gsGarbageCollectorTimer) {
       gsGarbageCollectorTimer =
-        [[NSTimer scheduledTimerWithTimeInterval: kGarbageCollectionInterval
+        [NSTimer scheduledTimerWithTimeInterval: kGarbageCollectionInterval
                                           target: [UIViewController class]
                                         selector: @selector(doCommonGarbageCollection)
                                         userInfo: nil
-                                         repeats: YES] retain];
+                                         repeats: YES];
     }
 #if TTDFLAG_CONTROLLERGARBAGECOLLECTION
 
@@ -299,22 +299,16 @@ TT_FIX_CATEGORY_BUG(UIViewControllerAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showBars:(BOOL)show animated:(BOOL)animated {
-
-  BOOL statusBarHidden = [[[[NSBundle mainBundle] infoDictionary]
-                           objectForKey:@"UIStatusBarHidden"] boolValue];
-
-  if (!statusBarHidden) {
-    #ifdef __IPHONE_3_2
-    if ([[UIApplication sharedApplication]
-         respondsToSelector:@selector(setStatusBarHidden:withAnimation:)])
-      [[UIApplication sharedApplication] setStatusBarHidden:!show
-                                              withAnimation:(animated
-                                                             ? UIStatusBarAnimationFade
-                                                             :UIStatusBarAnimationNone)];
-    else
-  #endif
-    [[UIApplication sharedApplication] setStatusBarHidden:!show animated:animated];
-  }
+#ifdef __IPHONE_3_2
+	if ([[UIApplication sharedApplication]
+       respondsToSelector:@selector(setStatusBarHidden:withAnimation:)])
+		[[UIApplication sharedApplication] setStatusBarHidden:!show
+                                            withAnimation:(animated
+                                                           ? UIStatusBarAnimationFade
+                                                           : UIStatusBarAnimationNone)];
+	else
+#endif
+		[[UIApplication sharedApplication] setStatusBarHidden:!show animated:animated];
 
   if (animated) {
     [UIView beginAnimations:nil context:NULL];
@@ -359,7 +353,7 @@ TT_FIX_CATEGORY_BUG(UIViewControllerAdditions)
     for (UIViewController* controller in fullControllerList) {
 
       // Subtract one from the retain count here due to the copied set.
-      NSInteger retainCount = [controller retainCount] - 1;
+        NSInteger retainCount = CFGetRetainCount((__bridge CFTypeRef)controller);
 
       TTDCONDITIONLOG(TTDFLAG_CONTROLLERGARBAGECOLLECTION,
                       @"Retain count for %X is %d", (unsigned int)controller, retainCount);
@@ -378,7 +372,7 @@ TT_FIX_CATEGORY_BUG(UIViewControllerAdditions)
       }
     }
 
-    TT_RELEASE_SAFELY(fullControllerList);
+      fullControllerList = nil;
   }
 }
 

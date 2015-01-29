@@ -191,7 +191,7 @@
 +(id)populateObject:(id)anObject withData:(NSDictionary*)anDictionary
 		   usingMap:(NSDictionary*)anMap withDelegate:(id<TTDataPopulatorDelegate>)anDelegate {
 	// Create an instance.
-	TTDataPopulator *anInstance = [[[self alloc] init] autorelease];
+	TTDataPopulator *anInstance = [[self alloc] init];
 	// Set delegate.
 	anInstance.delegate = anDelegate;
 

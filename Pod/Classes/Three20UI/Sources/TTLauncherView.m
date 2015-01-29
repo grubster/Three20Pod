@@ -23,7 +23,6 @@
 #import "Three20UI/TTPageControl.h"
 #import "Three20UI/UIViewAdditions.h"
 
-
 // UI (private)
 #import "Three20UI/private/TTLauncherScrollView.h"
 #import "Three20UI/private/TTLauncherHighlightView.h"
@@ -43,12 +42,12 @@
 #import "Three20Core/TTDebugFlags.h"
 #import "Three20Core/TTGlobalCoreRects.h"
 
-static const CGFloat kMargin = 0.0f;
-static const CGFloat kPadding = 0.0f;
-static const CGFloat kPromptMargin = 40.0f;
-static const CGFloat kPagerHeight = 20.0f;
-static const CGFloat kWobbleRadians = 1.5f;
-static const CGFloat kSpringLoadFraction = 0.18f;
+static const CGFloat kMargin = 0;
+static const CGFloat kPadding = 0;
+static const CGFloat kPromptMargin = 40;
+static const CGFloat kPagerHeight = 20;
+static const CGFloat kWobbleRadians = 1.5;
+static const CGFloat kSpringLoadFraction = 0.18;
 
 static const NSTimeInterval kEditHoldTimeInterval = 1;
 static const NSTimeInterval kSpringLoadTimeInterval = 0.5;
@@ -69,14 +68,11 @@ static const NSInteger kDefaultColumnCount = 3;
 @synthesize prompt      = _prompt;
 @synthesize editing     = _editing;
 @synthesize delegate    = _delegate;
-@synthesize editable	= _editable;
-@synthesize persistenceMode           = _persistenceMode;
-@synthesize persistenceKey            = _persistenceKey;
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _scrollView = [[TTLauncherScrollView alloc] initWithFrame:
                    CGRectMake(0, 0, self.width, self.height - kPagerHeight)];
     _scrollView.delegate = self;
@@ -101,34 +97,9 @@ static const NSInteger kDefaultColumnCount = 3;
 
     self.autoresizesSubviews = YES;
     self.columnCount = kDefaultColumnCount;
-    self.editable = YES;
-    self.persistenceKey = @"launcherViewPages";
-    self.persistenceMode = TTLauncherPersistenceModeNone;
-
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  for (NSArray* page in _pages) {
-    for (TTLauncherItem* item in page) {
-      item.launcher = nil;
-    }
-  }
-
-  _scrollView.delegate = nil;
-
-  TT_INVALIDATE_TIMER(_editHoldTimer);
-  TT_INVALIDATE_TIMER(_springLoadTimer);
-  TT_RELEASE_SAFELY(_pages);
-  TT_RELEASE_SAFELY(_buttons);
-  TT_RELEASE_SAFELY(_scrollView);
-  TT_RELEASE_SAFELY(_pager);
-
-  [super dealloc];
 }
 
 
@@ -227,7 +198,7 @@ static const NSInteger kDefaultColumnCount = 3;
 - (void)showPrompt {
   CGRect boxFrame = CGRectMake(_scrollView.width, 0, _scrollView.width, _scrollView.height);
   CGRect labelFrame = CGRectInset(boxFrame, kPromptMargin, kPromptMargin);
-  UILabel* label = [[[UILabel alloc] initWithFrame:labelFrame] autorelease];
+  UILabel* label = [[UILabel alloc] initWithFrame:labelFrame];
   label.tag = kPromptTag;
   label.text = _prompt;
   label.font = [UIFont boldSystemFontOfSize:17];
@@ -243,7 +214,7 @@ static const NSInteger kDefaultColumnCount = 3;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTLauncherButton*)addButtonWithItem:(TTLauncherItem*)item {
-  TTLauncherButton* button = [[[TTLauncherButton alloc] initWithItem:item] autorelease];
+  TTLauncherButton* button = [[TTLauncherButton alloc] initWithItem:item];
 
   [button addTarget:self action:@selector(buttonTouchedUpInside:)
         forControlEvents:UIControlEventTouchUpInside];
@@ -266,7 +237,7 @@ static const NSInteger kDefaultColumnCount = 3;
   CGFloat buttonHeight = [self rowHeight];
   CGFloat pageWidth = _scrollView.width;
 
-  CGFloat x = kMargin, minX = 0.0f;
+  CGFloat x = kMargin, minX = 0;
   for (NSMutableArray* buttonPage in _buttons) {
     CGFloat y = kMargin;
     for (TTLauncherButton* button in buttonPage) {
@@ -301,7 +272,6 @@ static const NSInteger kDefaultColumnCount = 3;
   [self layoutIfNeeded];
   [_scrollView removeAllSubviews];
 
-  [_buttons release];
   _buttons = [[NSMutableArray alloc] init];
 
   for (NSArray* page in _pages) {
@@ -403,7 +373,7 @@ static const NSInteger kDefaultColumnCount = 3;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeButtonAnimationDidStop:(NSString*)animationID finished:(NSNumber*)finished
         context:(void*)context {
-  TTLauncherButton* button = context;
+  TTLauncherButton* button = (__bridge TTLauncherButton *)(context);
   [button removeFromSuperview];
 }
 
@@ -490,9 +460,6 @@ static const NSInteger kDefaultColumnCount = 3;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)buttonTouchedDown:(TTLauncherButton*)button withEvent:(UIEvent*)event {
-  if (!self.editable)
-    return;
-
   if (_editing) {
     if (!_dragButton) {
       [self startDraggingButton:button withEvent:event];
@@ -617,7 +584,6 @@ static const NSInteger kDefaultColumnCount = 3;
     }
 
     if (itemIndex != _positionOrigin) {
-      [[_dragButton retain] autorelease];
 
       NSMutableArray* itemPage = [self pageWithItem:_dragButton.item];
       NSMutableArray* buttonPage = [self pageWithButton:_dragButton];
@@ -746,13 +712,7 @@ static const NSInteger kDefaultColumnCount = 3;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-  [self updatePagerWithContentOffset:scrollView.contentOffset];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-  [self updatePagerWithContentOffset:scrollView.contentOffset];
+  [self updatePagerWithContentOffset:_scrollView.contentOffset];
 }
 
 
@@ -788,7 +748,6 @@ static const NSInteger kDefaultColumnCount = 3;
     }
   }
 
-  [_pages release];
   _pages = [[NSMutableArray alloc] init];
 
   for (NSArray* page in pages) {
@@ -797,10 +756,9 @@ static const NSInteger kDefaultColumnCount = 3;
     for (TTLauncherItem* item in pageCopy) {
       item.launcher = self;
     }
-    [pageCopy release];
   }
 
-  TT_RELEASE_SAFELY(_buttons);
+    _buttons = nil;
   [self setNeedsLayout];
 }
 
@@ -810,7 +768,7 @@ static const NSInteger kDefaultColumnCount = 3;
   if (_columnCount != columnCount) {
     _columnCount = columnCount;
     _rowCount = 0;
-    TT_RELEASE_SAFELY(_buttons);
+      _buttons = nil;
     [self setNeedsLayout];
   }
 }
@@ -843,7 +801,7 @@ static const NSInteger kDefaultColumnCount = 3;
     item.launcher = self;
 
     if (!_pages) {
-      _pages = [[NSMutableArray arrayWithObject:[NSMutableArray arrayWithObject:item]] retain];
+      _pages = [NSMutableArray arrayWithObject:[NSMutableArray arrayWithObject:item]];
 
     } else {
       NSMutableArray* page = [self pageWithFreeSpace:self.currentPageIndex];
@@ -877,7 +835,7 @@ static const NSInteger kDefaultColumnCount = 3;
       [buttonPage removeObject:button];
 
       if (animated) {
-        [UIView beginAnimations:nil context:button];
+        [UIView beginAnimations:nil context:(__bridge void *)(button)];
         [UIView setAnimationDuration:TT_FAST_TRANSITION_DURATION];
         [UIView setAnimationDelegate:self];
         [UIView setAnimationDidStopSelector:
@@ -934,9 +892,6 @@ static const NSInteger kDefaultColumnCount = 3;
     NSUInteger page = [path indexAtPosition:0];
     CGFloat x = page * _scrollView.width;
     [_scrollView setContentOffset:CGPointMake(x, 0) animated:animated];
-    if (!animated) {
-      [self updatePagerWithContentOffset:CGPointMake(x, 0)];
-    }
   }
 }
 
@@ -1000,49 +955,10 @@ static const NSInteger kDefaultColumnCount = 3;
 
   [self layoutButtons];
 
-  if (self.persistenceMode == TTLauncherPersistenceModeAll) {
-    [self persistLauncherItems];
-  }
-
   if ([_delegate respondsToSelector:@selector(launcherViewDidEndEditing:)]) {
     [_delegate launcherViewDidEndEditing:self];
   }
 }
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)persistLauncherItems {
-  NSData* pagesData = [NSKeyedArchiver archivedDataWithRootObject:self.pages];
-  [[NSUserDefaults standardUserDefaults] setValue:pagesData forKey:self.persistenceKey];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)restoreLauncherItems {
-  if (self.persistenceMode == TTLauncherPersistenceModeAll) {
-    NSData* pagesData = [[NSUserDefaults standardUserDefaults] objectForKey:self.persistenceKey];
-
-    NSObject* pages;
-    if (pagesData!=nil) {
-      pages = [NSKeyedUnarchiver unarchiveObjectWithData:pagesData];
-    }
-
-    if (pagesData!=nil && pages!=nil && [pages isKindOfClass:[NSArray class]]) {
-      self.pages = (NSArray*)pages;
-      return YES;
-    }
-  }
-
-  return NO;
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)resetDefaults {
-  NSUserDefaults* defaults = [NSUserDefaults standardUserDefaults];
-
-  [defaults removeObjectForKey:_persistenceKey];
-  [defaults synchronize];
-}
-
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1077,7 +993,7 @@ static const NSInteger kDefaultColumnCount = 3;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)highlightEndDidFinish {
   [_highlightView removeFromSuperview];
-  TT_RELEASE_SAFELY(_highlightView);
+    _highlightView = nil;
 }
 
 

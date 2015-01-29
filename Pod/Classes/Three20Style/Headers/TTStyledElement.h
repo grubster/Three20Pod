@@ -19,12 +19,12 @@
 
 @interface TTStyledElement : TTStyledNode {
   TTStyledNode* _firstChild;
-  TTStyledNode* _lastChild;
+  TTStyledNode* __unsafe_unretained _lastChild;
   NSString*     _className;
 }
 
 @property (nonatomic, readonly) TTStyledNode* firstChild;
-@property (nonatomic, readonly) TTStyledNode* lastChild;
+@property (unsafe_unretained, nonatomic, readonly) TTStyledNode* lastChild;
 @property (nonatomic, copy)     NSString*     className;
 
 - (id)initWithText:(NSString*)text;

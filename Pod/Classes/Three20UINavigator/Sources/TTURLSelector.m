@@ -44,15 +44,6 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_name);
-  TT_RELEASE_SAFELY(_next);
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)perform:(id)object returnType:(TTURLArgumentType)returnType {
   if (_next) {
     id value = [object performSelector:_selector];
@@ -74,7 +65,7 @@
         return @"";
       }
       case TTURLArgumentTypeInteger: {
-        int val;
+        __unsafe_unretained int val;
         [invocation getReturnValue:&val];
         return [NSString stringWithFormat:@"%d", val];
       }
@@ -99,7 +90,7 @@
         return [NSString stringWithFormat:@"%d", val];
       }
       default: {
-        id val;
+        __unsafe_unretained id val;
         [invocation getReturnValue:&val];
         return [NSString stringWithFormat:@"%@", val];
       }

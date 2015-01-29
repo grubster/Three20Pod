@@ -25,8 +25,8 @@
   CGFloat   _width;
 }
 
-@property (nonatomic, retain) UIColor*  color1;
-@property (nonatomic, retain) UIColor*  color2;
+@property (nonatomic, strong) UIColor*  color1;
+@property (nonatomic, strong) UIColor*  color2;
 @property (nonatomic)         CGFloat   location1;
 @property (nonatomic)         CGFloat   location2;
 @property (nonatomic)         CGFloat   width;

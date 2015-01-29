@@ -37,8 +37,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURL:(NSString*)URL {
-	self = [super initWithText:nil next:nil];
-  if (self) {
+  if (self = [super initWithText:nil next:nil]) {
     self.URL = URL;
   }
 
@@ -48,23 +47,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithURL:nil];
-  if (self) {
+  if (self = [self initWithURL:nil]) {
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_URL);
-  TT_RELEASE_SAFELY(_image);
-  TT_RELEASE_SAFELY(_defaultImage);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)description {
@@ -99,8 +86,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setURL:(NSString*)URL {
   if (nil == _URL || ![URL isEqualToString:_URL]) {
-    [_URL release];
-    _URL = [URL retain];
+    _URL = URL;
 
     if (nil != _URL) {
       self.image = [[TTURLCache sharedCache] imageForURL:_URL];

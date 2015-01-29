@@ -19,6 +19,6 @@
 
 @interface TTTableSubtextItemCell : TTTableLinkedItemCell
 
-@property (nonatomic, readonly) UILabel* captionLabel;
+@property (unsafe_unretained, nonatomic, readonly) UILabel* captionLabel;
 
 @end

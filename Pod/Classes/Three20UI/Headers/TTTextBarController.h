@@ -33,14 +33,14 @@
   CGFloat           _originTop;
   UIBarButtonItem*  _previousRightBarButtonItem;
 
-  id <TTTextBarDelegate> _delegate;
+  id <TTTextBarDelegate> __unsafe_unretained _delegate;
 }
 
 @property (nonatomic, readonly) TTTextEditor* textEditor;
 @property (nonatomic, readonly) TTButton*     postButton;
-@property (nonatomic, retain)   UIView*       footerBar;
+@property (nonatomic, strong)   UIView*       footerBar;
 
-@property (nonatomic, assign)   id <TTTextBarDelegate> delegate;
+@property (nonatomic, unsafe_unretained)   id <TTTextBarDelegate> delegate;
 
 /**
  * Posts the text to delegates, who have to actually do something with it.

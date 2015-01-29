@@ -24,7 +24,7 @@
   TTTextEditor* _textEditor;
   BOOL          _ignoreBeginAndEnd;
 
-  id<TTTextEditorDelegate> _delegate;
+  __unsafe_unretained id<TTTextEditorDelegate> _delegate;
 }
 
 @property (nonatomic) BOOL ignoreBeginAndEnd;

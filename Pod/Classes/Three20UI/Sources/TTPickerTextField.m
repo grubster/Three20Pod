@@ -32,12 +32,12 @@
 static NSString* kEmpty = @" ";
 static NSString* kSelected = @"`";
 
-static const CGFloat kCellPaddingY    = 3.0f;
-static const CGFloat kPaddingX        = 8.0f;
-static const CGFloat kSpacingY        = 6.0f;
-static const CGFloat kPaddingRatio    = 1.75f;
-static const CGFloat kClearButtonSize = 38.0f;
-static const CGFloat kMinCursorWidth  = 50.0f;
+static const CGFloat kCellPaddingY    = 3;
+static const CGFloat kPaddingX        = 8;
+static const CGFloat kSpacingY        = 6;
+static const CGFloat kPaddingRatio    = 1.75;
+static const CGFloat kClearButtonSize = 38;
+static const CGFloat kMinCursorWidth  = 50;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -52,8 +52,7 @@ static const CGFloat kMinCursorWidth  = 50.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _cellViews = [[NSMutableArray alloc] init];
     _lineCount = 1;
     _cursorOrigin = CGPointZero;
@@ -70,15 +69,6 @@ static const CGFloat kMinCursorWidth  = 50.0f;
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_cellViews);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)layoutCells {
@@ -130,8 +120,9 @@ static const CGFloat kMinCursorWidth  = 50.0f;
     self.height = newHeight;
     [self setNeedsDisplay];
 
-    if ([self.delegate respondsToSelector:@selector(textFieldDidResize:)]) {
-      [(id)self.delegate textFieldDidResize:self];
+    SEL sel = @selector(textFieldDidResize:);
+    if ([self.delegate respondsToSelector:sel]) {
+      [self.delegate performSelector:sel withObject:self];
     }
 
     [self scrollToVisibleLine:YES];
@@ -410,7 +401,7 @@ static const CGFloat kMinCursorWidth  = 50.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addCellWithObject:(id)object {
-  TTPickerViewCell* cell = [[[TTPickerViewCell alloc] init] autorelease];
+  TTPickerViewCell* cell = [[TTPickerViewCell alloc] init];
 
   NSString* label = [self labelForObject:object];
 
@@ -423,8 +414,9 @@ static const CGFloat kMinCursorWidth  = 50.0f;
   // Reset text so the cursor moves to be at the end of the cellViews
   self.text = kEmpty;
 
-  if ([self.delegate respondsToSelector:@selector(textField:didAddCellAtIndex:)]) {
-    [(id)self.delegate textField:self didAddCellAtIndex:_cellViews.count-1];
+  SEL sel = @selector(textField:didAddCellAtIndex:);
+  if ([self.delegate respondsToSelector:sel]) {
+    [self.delegate performSelector:sel withObject:self withObject:[NSNumber numberWithInt:(_cellViews.count-1)]];
   }
 }
 
@@ -432,16 +424,19 @@ static const CGFloat kMinCursorWidth  = 50.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeCellWithObject:(id)object {
   for (int i = 0; i < _cellViews.count; ++i) {
-    TTPickerViewCell* cell = [_cellViews objectAtIndex:i];
-    if (cell.object == object) {
-      [_cellViews removeObjectAtIndex:i];
-      [cell removeFromSuperview];
-
-      if ([self.delegate respondsToSelector:@selector(textField:didRemoveCellAtIndex:)]) {
-        [(id)self.delegate textField:self didRemoveCellAtIndex:i];
+      @autoreleasepool {
+          TTPickerViewCell* cell = [_cellViews objectAtIndex:i];
+          if (cell.object == object) {
+              [_cellViews removeObjectAtIndex:i];
+              [cell removeFromSuperview];
+              
+              SEL sel = @selector(textField:didRemoveCellAtIndex:);
+              if ([self.delegate respondsToSelector:sel]) {
+                  [self.delegate performSelector:sel withObject:self withObject:[NSNumber numberWithInt:i]];
+              }
+              break;
+          }
       }
-      break;
-    }
   }
 
   // Reset text so the cursor oves to be at the end of the cellViews

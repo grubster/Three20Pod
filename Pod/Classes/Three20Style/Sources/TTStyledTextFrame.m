@@ -32,22 +32,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text element:(TTStyledElement*)element node:(TTStyledTextNode*)node {
-	self = [super initWithElement:element];
-  if (self) {
+  if (self = [super initWithElement:element]) {
     _text = [text copy];
     _node = node;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_text);
-  TT_RELEASE_SAFELY(_font);
-
-  [super dealloc];
 }
 
 

@@ -40,8 +40,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     _label = [[TTStyledTextLabel alloc] init];
     _label.contentMode = UIViewContentModeLeft;
     [self.contentView addSubview:_label];
@@ -50,13 +49,6 @@
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_label);
-  [super dealloc];
 }
 
 

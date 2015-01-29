@@ -38,7 +38,7 @@
   BOOL _parseURLs;
 }
 
-@property (nonatomic, retain) TTStyledNode* rootNode;
+@property (nonatomic, strong) TTStyledNode* rootNode;
 @property (nonatomic)         BOOL          parseLineBreaks;
 @property (nonatomic)         BOOL          parseURLs;
 

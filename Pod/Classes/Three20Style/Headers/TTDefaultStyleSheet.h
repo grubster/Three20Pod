@@ -22,73 +22,68 @@
 @interface TTDefaultStyleSheet : TTStyleSheet
 
 // Common styles
-@property (nonatomic, readonly) UIColor*  textColor;
-@property (nonatomic, readonly) UIColor*  highlightedTextColor;
-@property (nonatomic, readonly) UIColor*  backgroundTextColor;
-@property (nonatomic, readonly) UIFont*   font;
-@property (nonatomic, readonly) UIColor*  backgroundColor;
-@property (nonatomic, readonly) UIColor*  navigationBarTintColor;
-@property (nonatomic, readonly) UIColor*  toolbarTintColor;
-@property (nonatomic, readonly) UIColor*  searchBarTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  textColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  highlightedTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIFont*   font;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  backgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  navigationBarTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  toolbarTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  searchBarTintColor;
 
 // Tables
-@property (nonatomic, readonly) UIColor*  tablePlainBackgroundColor;
-@property (nonatomic, readonly) UIColor*  tablePlainCellSeparatorColor;
-@property (nonatomic, readonly) UITableViewCellSeparatorStyle tablePlainCellSeparatorStyle;
-@property (nonatomic, readonly) UIColor*  tableGroupedBackgroundColor;
-@property (nonatomic, readonly) UIColor*  tableGroupedCellSeparatorColor;
-@property (nonatomic, readonly) UITableViewCellSeparatorStyle tableGroupedCellSeparatorStyle;
-@property (nonatomic, readonly) UIColor*  searchTableBackgroundColor;
-@property (nonatomic, readonly) UIColor*  searchTableSeparatorColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  tablePlainBackgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  tableGroupedBackgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  searchTableBackgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  searchTableSeparatorColor;
 
 // Table Headers
-@property (nonatomic, readonly) UIColor*  tableHeaderTextColor;
-@property (nonatomic, readonly) UIColor*  tableHeaderShadowColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  tableHeaderTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  tableHeaderShadowColor;
 @property (nonatomic, readonly) CGSize    tableHeaderShadowOffset;
-@property (nonatomic, readonly) UIColor*  tableHeaderTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  tableHeaderTintColor;
 
 // Photo Captions
-@property (nonatomic, readonly) UIColor*  photoCaptionTextColor;
-@property (nonatomic, readonly) UIColor*  photoCaptionTextShadowColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  photoCaptionTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  photoCaptionTextShadowColor;
 @property (nonatomic, readonly) CGSize    photoCaptionTextShadowOffset;
 
-@property (nonatomic, readonly) UIColor*  timestampTextColor;
-@property (nonatomic, readonly) UIColor*  linkTextColor;
-@property (nonatomic, readonly) UIColor*  moreLinkTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  timestampTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  linkTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor*  moreLinkTextColor;
 
-@property (nonatomic, readonly) UIColor* screenBackgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* screenBackgroundColor;
 
-@property (nonatomic, readonly) UIColor* tableActivityTextColor;
-@property (nonatomic, readonly) UIColor* tableErrorTextColor;
-@property (nonatomic, readonly) UIColor* tableSubTextColor;
-@property (nonatomic, readonly) UIColor* tableTitleTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tableActivityTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tableErrorTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tableSubTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tableTitleTextColor;
 
-@property (nonatomic, readonly) UIColor* tabTintColor;
-@property (nonatomic, readonly) UIColor* tabBarTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tabTintColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* tabBarTintColor;
 
-@property (nonatomic, readonly) UIColor* messageFieldTextColor;
-@property (nonatomic, readonly) UIColor* messageFieldSeparatorColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* messageFieldTextColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* messageFieldSeparatorColor;
 
-@property (nonatomic, readonly) UIColor* thumbnailBackgroundColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* thumbnailBackgroundColor;
 
-@property (nonatomic, readonly) UIColor* postButtonColor;
+@property (unsafe_unretained, nonatomic, readonly) UIColor* postButtonColor;
 
-@property (nonatomic, readonly) UIFont* buttonFont;
-@property (nonatomic, readonly) UIFont* tableFont;
-@property (nonatomic, readonly) UIFont* tableSmallFont;
-@property (nonatomic, readonly) UIFont* tableTitleFont;
-@property (nonatomic, readonly) UIFont* tableTimestampFont;
-@property (nonatomic, readonly) UIFont* tableButtonFont;
-@property (nonatomic, readonly) UIFont* tableSummaryFont;
-@property (nonatomic, readonly) UIFont* tableHeaderPlainFont;
-@property (nonatomic, readonly) UIFont* tableHeaderGroupedFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* buttonFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableSmallFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableTitleFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableTimestampFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableButtonFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableSummaryFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableHeaderPlainFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* tableHeaderGroupedFont;
 @property (nonatomic, readonly) CGFloat tableBannerViewHeight;
-@property (nonatomic, readonly) UIFont* photoCaptionFont;
-@property (nonatomic, readonly) UIFont* messageFont;
-@property (nonatomic, readonly) UIFont* errorTitleFont;
-@property (nonatomic, readonly) UIFont* errorSubtitleFont;
-@property (nonatomic, readonly) UIFont* activityLabelFont;
-@property (nonatomic, readonly) UIFont* activityBannerFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* photoCaptionFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* messageFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* errorTitleFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* errorSubtitleFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* activityLabelFont;
+@property (unsafe_unretained, nonatomic, readonly) UIFont* activityBannerFont;
 
 @property (nonatomic, readonly) UITableViewCellSelectionStyle tableSelectionStyle;
 

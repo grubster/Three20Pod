@@ -18,7 +18,7 @@
 
 // Network
 #import "Three20Network/TTURLRequestDelegate.h"
-
+#import "TTButton.h"
 @class TTButton;
 @class TTStyle;
 
@@ -32,7 +32,7 @@
   TTStyle*      _style;
   TTURLRequest* _request;
 
-  id<TTImageViewDelegate> _delegate;
+  __unsafe_unretained id<TTImageViewDelegate> _delegate;
 }
 
 @property (nonatomic, copy)   NSString* title;

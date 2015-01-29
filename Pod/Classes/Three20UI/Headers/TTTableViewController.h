@@ -28,6 +28,8 @@
   UIView*       _errorView;
   UIView*       _emptyView;
 
+  NSTimer*      _bannerTimer;
+
   UIView*           _menuView;
   UITableViewCell*  _menuCell;
 
@@ -37,27 +39,26 @@
 
   BOOL _variableHeightRows;
   BOOL _showTableShadows;
-  BOOL _clearsSelectionOnViewWillAppear;
 
   id<TTTableViewDataSource> _dataSource;
   id<UITableViewDelegate>   _tableDelegate;
 }
 
-@property (nonatomic, retain) IBOutlet UITableView* tableView;
+@property (nonatomic, strong) IBOutlet UITableView* tableView;
 
 /**
  * A view that is displayed as a banner at the bottom of the table view.
  */
-@property (nonatomic, retain) UIView* tableBannerView;
+@property (nonatomic, strong) UIView* tableBannerView;
 
 /**
  * A view that is displayed over the table view.
  */
-@property (nonatomic, retain) UIView* tableOverlayView;
+@property (nonatomic, strong) UIView* tableOverlayView;
 
-@property (nonatomic, retain) UIView* loadingView;
-@property (nonatomic, retain) UIView* errorView;
-@property (nonatomic, retain) UIView* emptyView;
+@property (nonatomic, strong) UIView* loadingView;
+@property (nonatomic, strong) UIView* errorView;
+@property (nonatomic, strong) UIView* emptyView;
 
 @property (nonatomic, readonly) UIView* menuView;
 
@@ -67,7 +68,7 @@
  * Setting dataSource has the side effect of also setting model to the value of the
  * dataSource's model property.
  */
-@property (nonatomic, retain) id<TTTableViewDataSource> dataSource;
+@property (nonatomic, strong) id<TTTableViewDataSource> dataSource;
 
 /**
  * The style of the table view.
@@ -86,12 +87,6 @@
  * empty cells for the remaining space. This causes the bottom shadow to appear out of place.
  */
 @property (nonatomic) BOOL showTableShadows;
-
-/**
- * A Boolean value indicating if the controller clears the selection when the table appears.
- * Default is YES.
- */
-@property (nonatomic) BOOL clearsSelectionOnViewWillAppear;
 
 /**
  * Initializes and returns a controller having the given style.

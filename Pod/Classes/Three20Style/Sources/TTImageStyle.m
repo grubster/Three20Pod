@@ -43,25 +43,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-	self = [super initWithNext:next];
-  if (self) {
+  if (self = [super initWithNext:next]) {
     _contentMode = UIViewContentModeScaleToFill;
     _size = CGSizeZero;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_imageURL);
-  TT_RELEASE_SAFELY(_image);
-  TT_RELEASE_SAFELY(_defaultImage);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +59,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTImageStyle*)styleWithImageURL:(NSString*)imageURL next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.imageURL = imageURL;
   return style;
 }
@@ -80,7 +68,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTImageStyle*)styleWithImageURL:(NSString*)imageURL defaultImage:(UIImage*)defaultImage
                               next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.imageURL = imageURL;
   style.defaultImage = defaultImage;
   return style;
@@ -93,7 +81,7 @@
                        contentMode:(UIViewContentMode)contentMode
                               size:(CGSize)size
                               next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.imageURL = imageURL;
   style.defaultImage = defaultImage;
   style.contentMode = contentMode;
@@ -104,7 +92,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTImageStyle*)styleWithImage:(UIImage*)image next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.image = image;
   return style;
 }
@@ -113,7 +101,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTImageStyle*)styleWithImage:(UIImage*)image defaultImage:(UIImage*)defaultImage
                            next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.image = image;
   style.defaultImage = defaultImage;
   return style;
@@ -126,7 +114,7 @@
                     contentMode:(UIViewContentMode)contentMode
                            size:(CGSize)size
                            next:(TTStyle*)next {
-  TTImageStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTImageStyle* style = [[self alloc] initWithNext:next];
   style.image = image;
   style.defaultImage = defaultImage;
   style.contentMode = contentMode;
@@ -209,7 +197,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIImage*)image {
   if (!_image && _imageURL) {
-    _image = [[[TTURLCache sharedCache] imageForURL:_imageURL] retain];
+    _image = [[TTURLCache sharedCache] imageForURL:_imageURL];
   }
 
   return _image;

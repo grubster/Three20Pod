@@ -96,21 +96,6 @@ __attribute__((weak_import));
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [[NSNotificationCenter defaultCenter] removeObserver:self];
-  _delegate = nil;
-  TT_RELEASE_SAFELY(_window);
-  TT_RELEASE_SAFELY(_rootViewController);
-  TT_RELEASE_SAFELY(_popoverController);
-  TT_RELEASE_SAFELY(_delayedControllers);
-  TT_RELEASE_SAFELY(_URLMap);
-  TT_RELEASE_SAFELY(_persistenceKey);
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTBaseNavigator*)globalNavigator {
   return gNavigator;
 }
@@ -119,8 +104,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (void)setGlobalNavigator:(TTBaseNavigator*)navigator {
   if (gNavigator != navigator) {
-    [gNavigator release];
-    gNavigator = [navigator retain];
+    gNavigator = navigator;
   }
 }
 
@@ -241,8 +225,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setRootViewController:(UIViewController*)controller {
   if (controller != _rootViewController) {
-    [_rootViewController release];
-    _rootViewController = [controller retain];
+    _rootViewController = controller;
 
     if (nil != _rootContainer) {
       [_rootContainer navigator:self setRootViewController:_rootViewController];
@@ -272,7 +255,7 @@ __attribute__((weak_import));
     // If this is the first controller, and it is not a "container", forcibly put
     // a navigation controller at the root of the controller hierarchy.
     if (nil == _rootViewController && !isContainer) {
-      [self setRootViewController:[[[[self navigationControllerClass] alloc] init] autorelease]];
+      [self setRootViewController:[[[self navigationControllerClass] alloc] init]];
     }
 
     if (nil != parentURLPath) {
@@ -314,8 +297,7 @@ __attribute__((weak_import));
                                         animated: animated];
 
   } else {
-    UINavigationController* navController = [[[[self navigationControllerClass] alloc] init]
-                                             autorelease];
+    UINavigationController* navController = [[[self navigationControllerClass] alloc] init];
     [navController pushViewController: controller
                              animated: NO];
     [parentController presentModalViewController: navController
@@ -338,11 +320,11 @@ __attribute__((weak_import));
 
   if (nil != _popoverController) {
     [_popoverController dismissPopoverAnimated:animated];
-    TT_RELEASE_SAFELY(_popoverController);
+      _popoverController = nil;
   }
 
   _popoverController = [[UIPopoverController alloc] initWithContentViewController:controller];
-  [_popoverController setDelegate:self];
+  _popoverController.delegate = self;
   if (nil != sourceButton) {
     [_popoverController presentPopoverFromBarButtonItem: sourceButton
                                permittedArrowDirections: UIPopoverArrowDirectionAny
@@ -573,7 +555,7 @@ __attribute__((weak_import));
   if (nil == _window) {
     UIWindow* keyWindow = [UIApplication sharedApplication].keyWindow;
     if (nil != keyWindow) {
-      _window = [keyWindow retain];
+      _window = keyWindow;
 
     } else {
       _window = [[[self windowClass] alloc] initWithFrame:TTScreenBounds()];
@@ -747,7 +729,7 @@ __attribute__((weak_import));
       [controller delayDidEnd];
     }
 
-    TT_RELEASE_SAFELY(_delayedControllers);
+      _delayedControllers = nil;
   }
 }
 
@@ -755,7 +737,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)cancelDelay {
   if (_delayCount && !--_delayCount) {
-    TT_RELEASE_SAFELY(_delayedControllers);
+      _delayedControllers = nil;
   }
 }
 
@@ -888,7 +870,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)removeAllViewControllers {
   [_rootViewController.view removeFromSuperview];
-  TT_RELEASE_SAFELY(_rootViewController);
+    _rootViewController = nil;
   [_URLMap removeAllObjects];
 }
 
@@ -951,7 +933,7 @@ __attribute__((weak_import));
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController {
   if (popoverController == _popoverController) {
-    TT_RELEASE_SAFELY(_popoverController);
+      _popoverController = nil;
   }
 }
 

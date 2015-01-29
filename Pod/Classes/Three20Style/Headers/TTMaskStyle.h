@@ -21,7 +21,7 @@
   UIImage* _mask;
 }
 
-@property (nonatomic, retain) UIImage* mask;
+@property (nonatomic, strong) UIImage* mask;
 
 + (TTMaskStyle*)styleWithMask:(UIImage*)mask next:(TTStyle*)next;
 

@@ -39,7 +39,7 @@
 #import "Three20Core/TTCorePreprocessorMacros.h"
 #import "Three20Core/TTDebug.h"
 
-static const CGFloat kCancelHighlightThreshold = 4.0f;
+static const CGFloat kCancelHighlightThreshold = 4;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,8 +59,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _textAlignment  = UITextAlignmentLeft;
     _contentInset   = UIEdgeInsetsZero;
 
@@ -71,22 +70,6 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  _text.delegate = nil;
-  TT_RELEASE_SAFELY(_text);
-  TT_RELEASE_SAFELY(_font);
-  TT_RELEASE_SAFELY(_textColor);
-  TT_RELEASE_SAFELY(_highlightedTextColor);
-  TT_RELEASE_SAFELY(_highlightedNode);
-  TT_RELEASE_SAFELY(_highlightedFrame);
-  TT_RELEASE_SAFELY(_accessibilityElements);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -138,18 +121,16 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
                                        forState:UIControlStateHighlighted];
         [self setStyle:style forFrame:frame];
 
-        [_highlightedFrame release];
-        _highlightedFrame = [frame retain];
-        [_highlightedNode release];
-        _highlightedNode = [frame.element retain];
+        _highlightedFrame = frame;
+        _highlightedNode = frame.element;
         tableView.highlightedLabel = self;
 
       } else {
         TTStyle* style = [TTSTYLESHEET styleWithSelector:className forState:UIControlStateNormal];
         [self setStyle:style forFrame:_highlightedFrame];
 
-        TT_RELEASE_SAFELY(_highlightedFrame);
-        TT_RELEASE_SAFELY(_highlightedNode);
+          _highlightedFrame = nil;
+          _highlightedNode = nil;
         tableView.highlightedLabel = nil;
       }
 
@@ -177,8 +158,8 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
   CGRect rect = CGRectMake(edges.left, edges.top,
                            edges.right-edges.left, edges.bottom-edges.top);
 
-  UIAccessibilityElement* acc = [[[UIAccessibilityElement alloc]
-                                initWithAccessibilityContainer:self] autorelease];
+  UIAccessibilityElement* acc = [[UIAccessibilityElement alloc]
+                                initWithAccessibilityContainer:self];
   acc.accessibilityFrame = CGRectOffset(rect, self.screenViewX, self.screenViewY);
   acc.accessibilityTraits = UIAccessibilityTraitStaticText;
   if (fromFrame == toFrame) {
@@ -202,8 +183,8 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addAccessibilityElementsForNode:(TTStyledNode*)node {
   if ([node isKindOfClass:[TTStyledLinkNode class]]) {
-    UIAccessibilityElement* acc = [[[UIAccessibilityElement alloc]
-                                  initWithAccessibilityContainer:self] autorelease];
+    UIAccessibilityElement* acc = [[UIAccessibilityElement alloc]
+                                  initWithAccessibilityContainer:self];
     TTStyledFrame* frame = [_text getFrameForNode:node];
     acc.accessibilityFrame = CGRectOffset(frame.bounds, self.screenViewX, self.screenViewY);
     acc.accessibilityTraits = UIAccessibilityTraitLink;
@@ -450,12 +431,10 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 - (void)setText:(TTStyledText*)text {
   if (text != _text) {
     _text.delegate = nil;
-    [_text release];
-    TT_RELEASE_SAFELY(_accessibilityElements);
-    _text = [text retain];
+      _accessibilityElements = nil;
+    _text = text;
     _text.delegate = self;
     _text.font = _font;
-    _text.textAlignment = _textAlignment;
     [self setNeedsLayout];
     [self setNeedsDisplay];
   }
@@ -477,26 +456,17 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFont:(UIFont*)font {
   if (font != _font) {
-    [_font release];
-    _font = [font retain];
+    _font = font;
     _text.font = _font;
     [self setNeedsLayout];
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setTextAlignment:(UITextAlignment)textAlignment {
-  if (textAlignment != _textAlignment) {
-    _textAlignment = textAlignment;
-    _text.textAlignment = _textAlignment;
-    [self setNeedsLayout];
-  }
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIColor*)textColor {
   if (!_textColor) {
-    _textColor = [TTSTYLEVAR(textColor) retain];
+    _textColor = TTSTYLEVAR(textColor);
   }
   return _textColor;
 }
@@ -505,8 +475,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setTextColor:(UIColor*)textColor {
   if (textColor != _textColor) {
-    [_textColor release];
-    _textColor = [textColor retain];
+    _textColor = textColor;
     [self setNeedsDisplay];
   }
 }
@@ -515,7 +484,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIColor*)highlightedTextColor {
   if (!_highlightedTextColor) {
-    _highlightedTextColor = [TTSTYLEVAR(highlightedTextColor) retain];
+    _highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
   }
   return _highlightedTextColor;
 }
@@ -528,8 +497,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
       [self setHighlightedFrame:nil];
 
     } else {
-      [_highlightedNode release];
-      _highlightedNode = [node retain];
+      _highlightedNode = node;
     }
   }
 }

@@ -23,7 +23,7 @@
   TTStyle* _next;
 }
 
-@property (nonatomic, retain) TTStyle* next;
+@property (nonatomic, strong) TTStyle* next;
 
 - (id)initWithNext:(TTStyle*)next;
 

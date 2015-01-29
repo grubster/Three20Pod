@@ -30,7 +30,7 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kDisclosureIndicatorWidth = 23.0f;
+static const CGFloat kDisclosureIndicatorWidth = 23;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,8 +43,7 @@ static const CGFloat kDisclosureIndicatorWidth = 23.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     _label = [[TTStyledTextLabel alloc] init];
     _label.contentMode = UIViewContentModeLeft;
     [self.contentView addSubview:_label];
@@ -52,15 +51,6 @@ static const CGFloat kDisclosureIndicatorWidth = 23.0f;
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_label);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -80,12 +70,9 @@ static const CGFloat kDisclosureIndicatorWidth = 23.0f;
     padding += kDisclosureIndicatorWidth;
   }
 
-  CGFloat margin = item.margin.left + item.margin.right;
+  item.text.width = tableView.width - padding;
 
-  item.text.width = tableView.width - padding - margin;
-
-  return item.text.height + item.padding.top + item.padding.bottom
-                          + item.margin.top + item.margin.bottom;
+  return item.text.height + item.padding.top + item.padding.bottom;
 }
 
 
@@ -100,7 +87,7 @@ static const CGFloat kDisclosureIndicatorWidth = 23.0f;
   [super layoutSubviews];
 
   TTTableStyledTextItem* item = self.object;
-  _label.frame = UIEdgeInsetsInsetRect(self.contentView.bounds, item.margin);
+  _label.frame = CGRectOffset(self.contentView.bounds, item.margin.left, item.margin.top);
 }
 
 

@@ -29,11 +29,11 @@
 @interface TTImageView : TTView <TTURLRequestDelegate> {
   TTURLRequest* _request;
   NSString*     _urlPath;
-  UIImage*      _image;
+  UIImage*      __unsafe_unretained _image;
   UIImage*      _defaultImage;
   BOOL          _autoresizesToImage;
 
-  id<TTImageViewDelegate> _delegate;
+  id<TTImageViewDelegate> __unsafe_unretained _delegate;
 }
 
 /**
@@ -46,12 +46,12 @@
  * The default image that is displayed until the image has been downloaded. If no urlPath is
  * specified, this image will be displayed indefinitely.
  */
-@property (nonatomic, retain) UIImage* defaultImage;
+@property (nonatomic, strong) UIImage* defaultImage;
 
 /**
  * The image that is currently being displayed.
  */
-@property (nonatomic, readonly) UIImage* image;
+@property (unsafe_unretained, nonatomic, readonly) UIImage* image;
 
 /**
  * Override the default sizing operation and resize the frame of this view with the size of
@@ -74,12 +74,7 @@
 /**
  * A delegate that notifies you when the image has started and finished loading.
  */
-@property (nonatomic, assign) id<TTImageViewDelegate> delegate;
-
-/**
- * The TTURLRequest requester used to load this image.
- */
-@property (nonatomic, readonly) TTURLRequest* request;
+@property (nonatomic, unsafe_unretained) id<TTImageViewDelegate> delegate;
 
 /**
  * Cancel any pending request, remove the image, and redraw the view.

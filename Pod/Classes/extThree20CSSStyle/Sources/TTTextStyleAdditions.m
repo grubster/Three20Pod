@@ -44,7 +44,7 @@ TT_FIX_CATEGORY_BUG(TTCSSTextStyleAdditions)
 + (TTTextStyle*)styleWithCssSelector:(NSString*)selector
                             forState:(UIControlState)state
                                 next:(TTStyle*)next {
-  TTTextStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTTextStyle* style = [[self alloc] initWithNext:next];
   UIFont  *font         = TTCSSSTATE(selector, font, state);
   UIColor *color        = TTCSSSTATE(selector, color, state);
   UIColor *shadowColor  = TTCSSSTATE(selector, shadowColor, state);

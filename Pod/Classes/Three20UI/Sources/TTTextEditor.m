@@ -33,16 +33,16 @@
 #import "Three20Core/TTCorePreprocessorMacros.h"
 #import "Three20Core/TTGlobalCoreRects.h"
 
-static const CGFloat kPaddingX = 8.0f;
-static const CGFloat kPaddingY = 9.0f;
+static const CGFloat kPaddingX = 8;
+static const CGFloat kPaddingY = 9;
 
 // XXXjoe This number is very sensitive - it is specifically calculated for precise word wrapping
 // with 15pt normal helvetica.  If you change this number at all, UITextView may wrap the text
 // before or after the TTTextEditor expands or contracts its height to match.  Obviously,
 // hard-coding this value here sucks, and I need to implement a solution that works for any font.
-static const CGFloat kTextViewInset = 31.0f;
+static const CGFloat kTextViewInset = 31;
 
-static const CGFloat kUITextViewVerticalPadding = 6.0f;
+static const CGFloat kUITextViewVerticalPadding = 6;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -60,8 +60,7 @@ static const CGFloat kUITextViewVerticalPadding = 6.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _internal = [[TTTextEditorInternal alloc] initWithTextEditor:self];
     _autoresizesToText = YES;
 
@@ -72,18 +71,6 @@ static const CGFloat kUITextViewVerticalPadding = 6.0f;
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_internal);
-  TT_RELEASE_SAFELY(_textField);
-  TT_RELEASE_SAFELY(_textView);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -

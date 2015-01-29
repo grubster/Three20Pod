@@ -37,12 +37,12 @@
 
 @property (nonatomic, copy)     NSString*       text;
 @property (nonatomic, copy)     NSString*       placeholder;
-@property (nonatomic, readonly) UITableView*    tableView;
+@property (unsafe_unretained, nonatomic, readonly) UITableView*    tableView;
 @property (nonatomic, readonly) TTView*         boxView;
-@property (nonatomic, retain)   UIColor*        tintColor;
-@property (nonatomic, retain)   UIColor*        textColor;
-@property (nonatomic, retain)   UIFont*         font;
-@property (nonatomic, retain)   TTStyle*        textFieldStyle;
+@property (nonatomic, strong)   UIColor*        tintColor;
+@property (nonatomic, strong)   UIColor*        textColor;
+@property (nonatomic, strong)   UIFont*         font;
+@property (nonatomic, strong)   TTStyle*        textFieldStyle;
 @property (nonatomic)           UIReturnKeyType returnKeyType;
 @property (nonatomic)           CGFloat         rowHeight;
 @property (nonatomic, readonly) BOOL            editing;
@@ -53,8 +53,8 @@
 @property (nonatomic)           BOOL showsDarkScreen;
 @property (nonatomic)           BOOL showsSearchIcon;
 
-@property (nonatomic, retain)   id<TTTableViewDataSource> dataSource;
-@property (nonatomic, assign)   id<UITextFieldDelegate> delegate;
+@property (nonatomic, strong)   id<TTTableViewDataSource> dataSource;
+@property (nonatomic, unsafe_unretained)   id<UITextFieldDelegate> delegate;
 
 - (void)search;
 

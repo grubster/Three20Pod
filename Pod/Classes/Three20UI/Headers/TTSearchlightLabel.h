@@ -34,9 +34,9 @@
 
 @property (nonatomic, copy)   NSString*       text;
 
-@property (nonatomic, retain) UIFont*         font;
-@property (nonatomic, retain) UIColor*        textColor;
-@property (nonatomic, retain) UIColor*        spotlightColor;
+@property (nonatomic, strong) UIFont*         font;
+@property (nonatomic, strong) UIColor*        textColor;
+@property (nonatomic, strong) UIColor*        spotlightColor;
 @property (nonatomic)         UITextAlignment textAlignment;
 
 - (void)startAnimating;

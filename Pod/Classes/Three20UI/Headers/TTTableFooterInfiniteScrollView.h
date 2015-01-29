@@ -22,7 +22,7 @@
   BOOL _loading;
 }
 
-@property (nonatomic, retain) UIActivityIndicatorView* indicator;
+@property (nonatomic, strong) UIActivityIndicatorView* indicator;
 
 - (void)setLoading:(BOOL)loading;
 

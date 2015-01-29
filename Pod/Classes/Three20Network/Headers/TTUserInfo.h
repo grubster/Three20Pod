@@ -25,11 +25,7 @@
  * For this reason, this object is a safe way to store an object that may be destroyed before
  * the request completes if you call cancelRequestsWithDelegate in the object's destructor.
  */
-@interface TTUserInfo : NSObject {
-  NSString* _topic;
-  id        _strongRef;
-  id        _weakRef;
-}
+@interface TTUserInfo : NSObject 
 
 @property (nonatomic, copy)   NSString* topic;
 @property (nonatomic, retain) id        strongRef;

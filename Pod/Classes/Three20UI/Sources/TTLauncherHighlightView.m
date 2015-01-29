@@ -73,16 +73,6 @@ static const CGFloat kHighlightTextPadding = 20.0f;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_textLabel);
-  TT_RELEASE_SAFELY(_statusBarCover);
-  self.parentView = nil;
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark Private
@@ -107,7 +97,7 @@ static const CGFloat kHighlightTextPadding = 20.0f;
                                constrainedToSize:CGSizeMake(width, superviewSize.height)].height;
 
   // If the highlighted rect is above center, put the text below it; otherwise, above it.
-  CGFloat y = 0.0f;
+  CGFloat y = 0.0;
   if (_highlightRect.origin.y + (_highlightRect.size.height / 2) < superviewSize.height / 2) {
     y = _highlightRect.origin.y + _highlightRect.size.height + kHighlightTextPadding;
 

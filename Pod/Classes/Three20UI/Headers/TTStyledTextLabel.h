@@ -45,7 +45,7 @@
 /**
  * The styled text displayed by the label.
  */
-@property (nonatomic, retain) TTStyledText* text;
+@property (nonatomic, strong) TTStyledText* text;
 
 /**
  * A shortcut for setting the text property to an HTML string.
@@ -55,20 +55,20 @@
 /**
  * The font of the text.
  */
-@property (nonatomic, retain) UIFont* font;
+@property (nonatomic, strong) UIFont* font;
 
 /**
  * The color of the text.
  */
-@property (nonatomic, retain) UIColor* textColor;
+@property (nonatomic, strong) UIColor* textColor;
 
 /**
  * The highlight color applied to the text.
  */
-@property (nonatomic, retain) UIColor* highlightedTextColor;
+@property (nonatomic, strong) UIColor* highlightedTextColor;
 
 /**
- * The alignment of the text.
+ * The alignment of the text. (NOT YET IMPLEMENTED)
  */
 @property (nonatomic) UITextAlignment textAlignment;
 
@@ -87,6 +87,6 @@
 /**
  * The link node which is being touched and highlighted by the user.
  */
-@property (nonatomic, retain) TTStyledElement* highlightedNode;
+@property (nonatomic, strong) TTStyledElement* highlightedNode;
 
 @end

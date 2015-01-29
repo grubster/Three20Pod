@@ -32,7 +32,7 @@ TT_FIX_CATEGORY_BUG(TTStyleInternal)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGGradientRef)newGradientWithColors:(UIColor**)colors locations:(CGFloat*)locations
+- (CGGradientRef)newGradientWithColors:(UIColor* __strong *)colors locations:(CGFloat*)locations
                                  count:(int)count {
   CGFloat* components = malloc(sizeof(CGFloat)*4*count);
   for (int i = 0; i < count; ++i) {
@@ -63,7 +63,7 @@ TT_FIX_CATEGORY_BUG(TTStyleInternal)
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (CGGradientRef)newGradientWithColors:(UIColor**)colors count:(int)count {
+- (CGGradientRef)newGradientWithColors:(UIColor* __strong *)colors count:(int)count {
   return [self newGradientWithColors:colors locations:nil count:count];
 }
 

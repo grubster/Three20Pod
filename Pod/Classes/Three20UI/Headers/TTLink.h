@@ -34,6 +34,6 @@
 /**
  * The TTURLAction that will be opened.
  */
-@property (nonatomic, retain) TTURLAction* URLAction;
+@property (nonatomic, strong) TTURLAction* URLAction;
 
 @end

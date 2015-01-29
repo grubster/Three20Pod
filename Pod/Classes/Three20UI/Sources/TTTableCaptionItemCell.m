@@ -26,8 +26,8 @@
 #import "Three20Style/TTGlobalStyle.h"
 #import "Three20Style/TTDefaultStyleSheet.h"
 
-static const CGFloat kKeySpacing = 12.0f;
-static const CGFloat kKeyWidth = 75.0f;
+static const CGFloat kKeySpacing = 12;
+static const CGFloat kKeyWidth = 75;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -38,12 +38,10 @@ static const CGFloat kKeyWidth = 75.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier]) {
     self.textLabel.font = TTSTYLEVAR(tableTitleFont);
     self.textLabel.textColor = TTSTYLEVAR(linkTextColor);
     self.textLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-	self.textLabel.backgroundColor = TTSTYLEVAR(backgroundTextColor);
     self.textLabel.textAlignment = UITextAlignmentRight;
     self.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
     self.textLabel.numberOfLines = 1;
@@ -52,7 +50,6 @@ static const CGFloat kKeyWidth = 75.0f;
     self.detailTextLabel.font = TTSTYLEVAR(tableSmallFont);
     self.detailTextLabel.textColor = TTSTYLEVAR(textColor);
     self.detailTextLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-	self.detailTextLabel.backgroundColor = TTSTYLEVAR(backgroundTextColor);
     self.detailTextLabel.adjustsFontSizeToFitWidth = YES;
     self.detailTextLabel.minimumFontSize = 8;
     self.detailTextLabel.lineBreakMode = UILineBreakModeWordWrap;

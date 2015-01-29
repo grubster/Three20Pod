@@ -37,8 +37,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text {
-	self = [self init];
-  if (self) {
+  if (self = [self init]) {
     self.text = text;
   }
   return self;
@@ -47,21 +46,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _text = nil;
     _font = nil;
   }
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_text);
-  TT_RELEASE_SAFELY(_font);
-
-  [super dealloc];
 }
 
 
@@ -73,7 +62,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawRect:(CGRect)rect {
-  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
+  TTStyleContext* context = [[TTStyleContext alloc] init];
   context.delegate = self;
   context.frame = self.bounds;
   context.contentFrame = context.frame;
@@ -88,7 +77,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)sizeThatFits:(CGSize)size {
-  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
+  TTStyleContext* context = [[TTStyleContext alloc] init];
   context.delegate = self;
   context.font = _font;
   context.frame = CGRectMake(0, 0, size.width, size.height);
@@ -142,7 +131,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (UIFont*)font {
   if (!_font) {
-    _font = [TTSTYLEVAR(font) retain];
+    _font = TTSTYLEVAR(font);
   }
   return _font;
 }
@@ -151,8 +140,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFont:(UIFont*)font {
   if (font != _font) {
-    [_font release];
-    _font = [font retain];
+    _font = font;
     [self setNeedsDisplay];
   }
 }
@@ -161,7 +149,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setText:(NSString*)text {
   if (text != _text) {
-    [_text release];
     _text = [text copy];
     [self setNeedsDisplay];
   }

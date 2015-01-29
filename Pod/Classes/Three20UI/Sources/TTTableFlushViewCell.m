@@ -37,21 +37,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_item);
-  TT_RELEASE_SAFELY(_view);
-
-  [super dealloc];
 }
 
 
@@ -96,15 +86,15 @@
 - (void)setObject:(id)object {
   if (object != _view && object != _item) {
     [_view removeFromSuperview];
-    TT_RELEASE_SAFELY(_view);
-    TT_RELEASE_SAFELY(_item);
+      _view = nil;
+      _item = nil;
 
     if ([object isKindOfClass:[UIView class]]) {
-      _view = [object retain];
+      _view = object;
 
     } else if ([object isKindOfClass:[TTTableViewItem class]]) {
-      _item = [object retain];
-      _view = [_item.view retain];
+      _item = object;
+      _view = _item.view;
     }
 
     [self.contentView addSubview:_view];

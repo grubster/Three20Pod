@@ -25,11 +25,11 @@
 
 @interface TTThumbsViewController : TTTableViewController <TTThumbsTableViewCellDelegate> {
   id<TTPhotoSource>                   _photoSource;
-  id<TTThumbsViewControllerDelegate>  _delegate;
+  id<TTThumbsViewControllerDelegate>  __unsafe_unretained _delegate;
 }
 
-@property (nonatomic, retain) id<TTPhotoSource>                   photoSource;
-@property (nonatomic, assign) id<TTThumbsViewControllerDelegate>  delegate;
+@property (nonatomic, strong) id<TTPhotoSource>                   photoSource;
+@property (nonatomic, unsafe_unretained) id<TTThumbsViewControllerDelegate>  delegate;
 
 - (id)initWithDelegate:(id<TTThumbsViewControllerDelegate>)delegate;
 - (id)initWithQuery:(NSDictionary*)query;

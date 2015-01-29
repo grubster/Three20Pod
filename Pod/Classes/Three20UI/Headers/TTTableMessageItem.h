@@ -26,7 +26,7 @@
 
 @property (nonatomic, copy)   NSString* title;
 @property (nonatomic, copy)   NSString* caption;
-@property (nonatomic, retain) NSDate*   timestamp;
+@property (nonatomic, strong) NSDate*   timestamp;
 @property (nonatomic, copy)   NSString* imageURL;
 
 + (id)itemWithTitle:(NSString*)title caption:(NSString*)caption text:(NSString*)text

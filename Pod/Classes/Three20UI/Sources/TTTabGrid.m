@@ -15,7 +15,7 @@
 //
 
 #import "Three20UI/TTTabGrid.h"
-
+#import "TTTab.m"
 // UI
 #import "Three20UI/TTButton.h"
 #import "Three20UI/UIViewAdditions.h"
@@ -39,8 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame  {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     self.style = TTSTYLE(tabGrid);
     _columnCount = 3;
   }
@@ -69,22 +68,24 @@
   if (self.tabViews.count > columnCount) {
     int column = 0;
     for (TTTab* tab in self.tabViews) {
-      if (column == 0) {
-        [tab setStylesWithSelector:@"tabGridTabTopLeft:"];
-
-      } else if (column == columnCount-1) {
-        [tab setStylesWithSelector:@"tabGridTabTopRight:"];
-
-      } else if (column == cellCount - columnCount) {
-        [tab setStylesWithSelector:@"tabGridTabBottomLeft:"];
-
-      } else if (column == cellCount - 1) {
-        [tab setStylesWithSelector:@"tabGridTabBottomRight:"];
-
-      } else {
-        [tab setStylesWithSelector:@"tabGridTabCenter:"];
-      }
-      ++column;
+        @autoreleasepool {
+            if (column == 0) {
+                [tab setStylesWithSelector:@"tabGridTabTopLeft:"];
+                
+            } else if (column == columnCount-1) {
+                [tab setStylesWithSelector:@"tabGridTabTopRight:"];
+                
+            } else if (column == cellCount - columnCount) {
+                [tab setStylesWithSelector:@"tabGridTabBottomLeft:"];
+                
+            } else if (column == cellCount - 1) {
+                [tab setStylesWithSelector:@"tabGridTabBottomRight:"];
+                
+            } else {
+                [tab setStylesWithSelector:@"tabGridTabCenter:"];
+            }
+            ++column;
+        }
     }
 
   } else {
@@ -108,7 +109,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)layoutTabs {
   if (self.width && self.height) {
-    TTGridLayout* layout = [[[TTGridLayout alloc] init] autorelease];
+    TTGridLayout* layout = [[TTGridLayout alloc] init];
     layout.padding = 1;
     layout.columnCount = [self columnCount];
     return [layout layoutSubviews:self.tabViews forView:self];

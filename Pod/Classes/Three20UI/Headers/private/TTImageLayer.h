@@ -22,7 +22,7 @@
 @class TTImageView;
 
 @interface TTImageLayer : CALayer {
-  TTImageView* _override;
+  __unsafe_unretained TTImageView* _override;
 }
 
 @property (nonatomic, assign) TTImageView* override;

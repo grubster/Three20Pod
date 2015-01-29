@@ -39,8 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.version = @"No version provided.";
     self.description = @"No description provided.";
     self.copyright = @"No copyright provided.";
@@ -49,21 +48,6 @@
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_id);
-  TT_RELEASE_SAFELY(_description);
-  TT_RELEASE_SAFELY(_name);
-  TT_RELEASE_SAFELY(_version);
-  TT_RELEASE_SAFELY(_copyright);
-  TT_RELEASE_SAFELY(_license);
-  TT_RELEASE_SAFELY(_authors);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)isEqual:(TTExtensionInfo*)extension {
@@ -74,7 +58,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setIdentifier:(NSString*)identifier {
   if (_id != identifier) {
-    [_id release];
     _id = [identifier copy];
   }
 }

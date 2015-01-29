@@ -41,24 +41,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-	self = [super initWithNext:next];
-  if (self) {
+  if (self = [super initWithNext:next]) {
     _location2 = 1;
     _width = 1;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_color1);
-  TT_RELEASE_SAFELY(_color2);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -69,8 +58,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTLinearGradientBorderStyle*)styleWithColor1:(UIColor*)color1 color2:(UIColor*)color2
                                           width:(CGFloat)width next:(TTStyle*)next {
-  TTLinearGradientBorderStyle* style = [[[TTLinearGradientBorderStyle alloc] initWithNext:next]
-                                        autorelease];
+  TTLinearGradientBorderStyle* style = [[TTLinearGradientBorderStyle alloc] initWithNext:next];
   style.color1 = color1;
   style.color2 = color2;
   style.width = width;
@@ -82,8 +70,7 @@
 + (TTLinearGradientBorderStyle*)styleWithColor1:(UIColor*)color1 location1:(CGFloat)location1
                                          color2:(UIColor*)color2 location2:(CGFloat)location2
                                           width:(CGFloat)width next:(TTStyle*)next {
-  TTLinearGradientBorderStyle* style = [[[TTLinearGradientBorderStyle alloc] initWithNext:next]
-                                        autorelease];
+  TTLinearGradientBorderStyle* style = [[TTLinearGradientBorderStyle alloc] initWithNext:next];
   style.color1 = color1;
   style.color2 = color2;
   style.width = width;

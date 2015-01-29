@@ -57,7 +57,6 @@
 
 @synthesize rootNode      = _rootNode;
 @synthesize font          = _font;
-@synthesize textAlignment = _textAlignment;
 @synthesize width         = _width;
 @synthesize height        = _height;
 @synthesize invalidImages = _invalidImages;
@@ -66,28 +65,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNode:(TTStyledNode*)rootNode {
-	self = [super init];
-  if (self) {
-    _rootNode = [rootNode retain];
+  if (self = [super init]) {
+    _rootNode = rootNode;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [self stopLoadingImages];
-  TT_RELEASE_SAFELY(_rootNode);
-  TT_RELEASE_SAFELY(_rootFrame);
-  TT_RELEASE_SAFELY(_font);
-  TT_RELEASE_SAFELY(_invalidImages);
-  TT_RELEASE_SAFELY(_imageRequests);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)description {
   return [self.rootNode outerText];
@@ -108,12 +91,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTStyledText*)textFromXHTML:(NSString*)source lineBreaks:(BOOL)lineBreaks URLs:(BOOL)URLs {
-  TTStyledTextParser* parser = [[[TTStyledTextParser alloc] init] autorelease];
+  TTStyledTextParser* parser = [[TTStyledTextParser alloc] init];
   parser.parseLineBreaks = lineBreaks;
   parser.parseURLs = URLs;
   [parser parseXHTML:source];
   if (parser.rootNode) {
-    return [[[TTStyledText alloc] initWithNode:parser.rootNode] autorelease];
+    return [[TTStyledText alloc] initWithNode:parser.rootNode];
 
   } else {
     return nil;
@@ -129,12 +112,12 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTStyledText*)textWithURLs:(NSString*)source lineBreaks:(BOOL)lineBreaks {
-  TTStyledTextParser* parser = [[[TTStyledTextParser alloc] init] autorelease];
+  TTStyledTextParser* parser = [[TTStyledTextParser alloc] init];
   parser.parseLineBreaks = lineBreaks;
   parser.parseURLs = YES;
   [parser parseText:source];
   if (parser.rootNode) {
-    return [[[TTStyledText alloc] initWithNode:parser.rootNode] autorelease];
+    return [[TTStyledText alloc] initWithNode:parser.rootNode];
 
   } else {
     return nil;
@@ -151,8 +134,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)stopLoadingImages {
   if (_imageRequests) {
-    NSMutableArray* requests = [_imageRequests retain];
-    TT_RELEASE_SAFELY(_imageRequests);
+    NSMutableArray* requests = _imageRequests;
+      _imageRequests = nil;
 
     if (!_invalidImages) {
       _invalidImages = [[NSMutableArray alloc] init];
@@ -162,7 +145,6 @@
       [_invalidImages addObject:request.userInfo];
       [request cancel];
     }
-    [requests release];
   }
 }
 
@@ -183,13 +165,13 @@
         } else {
           TTURLRequest* request = [TTURLRequest requestWithURL:imageNode.URL delegate:self];
           request.userInfo = imageNode;
-          request.response = [[[TTURLImageResponse alloc] init] autorelease];
+          request.response = [[TTURLImageResponse alloc] init];
           [request send];
         }
       }
     }
 
-    TT_RELEASE_SAFELY(_invalidImages);
+      _invalidImages = nil;
 
     if (loadedSome) {
       [_delegate styledTextNeedsDisplay:self];
@@ -295,16 +277,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setFont:(UIFont*)font {
   if (font != _font) {
-    [_font release];
-    _font = [font retain];
-    [self setNeedsLayout];
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setTextAlignment:(UITextAlignment)textAlignment {
-  if (textAlignment != _textAlignment) {
-    _textAlignment = textAlignment;
+    _font = font;
     [self setNeedsLayout];
   }
 }
@@ -337,15 +310,11 @@
   TTStyledLayout* layout = [[TTStyledLayout alloc] initWithRootNode:_rootNode];
   layout.width = _width;
   layout.font = _font;
-  layout.textAlignment = _textAlignment;
   [layout layout:_rootNode];
 
-  [_rootFrame release];
-  _rootFrame = [layout.rootFrame retain];
+  _rootFrame = layout.rootFrame;
   _height = ceil(layout.height);
-  [_invalidImages release];
-  _invalidImages = [layout.invalidImages retain];
-  [layout release];
+  _invalidImages = layout.invalidImages;
 
   [self loadImages];
 }
@@ -361,7 +330,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setNeedsLayout {
-  TT_RELEASE_SAFELY(_rootFrame);
+  _rootFrame = nil;
   _height = 0;
 }
 
@@ -419,7 +388,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)addText:(NSString*)text {
-  [self addChild:[[[TTStyledTextNode alloc] initWithText:text] autorelease]];
+  [self addChild:[[TTStyledTextNode alloc] initWithText:text]];
 }
 
 

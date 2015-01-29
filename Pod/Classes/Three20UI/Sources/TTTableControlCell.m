@@ -28,8 +28,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kDefaultTextViewLines = 5.0f;
-static const CGFloat kControlPadding = 8.0f;
+static const CGFloat kDefaultTextViewLines = 5;
+static const CGFloat kControlPadding = 8;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,21 +43,11 @@ static const CGFloat kControlPadding = 8.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_item);
-  TT_RELEASE_SAFELY(_control);
-
-  [super dealloc];
 }
 
 
@@ -167,7 +157,6 @@ static const CGFloat kControlPadding = 8.0f;
 
     if ([TTTableControlCell shouldConsiderControlIntrinsicSize:_control]) {
       minX += contentWidth - _control.width;
-      contentWidth = _control.width;
     }
 
     // XXXjoe For some reason I need to re-add the control as a subview or else
@@ -194,22 +183,16 @@ static const CGFloat kControlPadding = 8.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setObject:(id)object {
   if (object != _control && object != _item) {
-    if (_control.superview == self.contentView) {
-      //on cell reuse it is possible that another
-      //cell is already the owner of _control, so
-      //check if we're its superview first
-      [_control removeFromSuperview];
-    }
-
-    TT_RELEASE_SAFELY(_control);
-    TT_RELEASE_SAFELY(_item);
+    [_control removeFromSuperview];
+      _control = nil;
+      _item = nil;
 
     if ([object isKindOfClass:[UIView class]]) {
-      _control = [object retain];
+        _control = object;
 
     } else if ([object isKindOfClass:[TTTableControlItem class]]) {
-      _item = [object retain];
-      _control = [_item.control retain];
+        _item = object;
+        _control = _item.control;
     }
 
     _control.backgroundColor = [UIColor clearColor];

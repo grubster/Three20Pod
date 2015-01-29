@@ -41,8 +41,8 @@
 #import "Three20Core/NSStringAdditions.h"
 #import "Three20Core/TTGlobalCore.h"
 
-static CGFloat kMargin  = 1.0f;
-static CGFloat kPadding = 5.0f;
+static CGFloat kMargin  = 1;
+static CGFloat kPadding = 5;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,8 +59,7 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
   }
 
   return self;
@@ -69,8 +68,7 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNavigatorURL:(NSURL*)URL query:(NSDictionary*)query {
-	self = [self initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [self initWithNibName:nil bundle:nil]) {
     if (nil != query) {
       _delegate = [query objectForKey:@"delegate"];
       _defaultText = [[query objectForKey:@"text"] copy];
@@ -83,24 +81,11 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithNavigatorURL:nil query:nil];
-  if (self) {
+  if (self = [self initWithNavigatorURL:nil query:nil]) {
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_result);
-  TT_RELEASE_SAFELY(_defaultText);
-  TT_RELEASE_SAFELY(_footerBar);
-  TT_RELEASE_SAFELY(_previousRightBarButtonItem);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -120,7 +105,6 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dismissAnimationDidStop {
-  [self release];
 }
 
 
@@ -144,7 +128,7 @@ static CGFloat kPadding = 5.0f;
 - (void)loadView {
   CGSize screenSize = TTScreenBounds().size;
 
-  self.view = [[[UIView alloc] init] autorelease];
+  self.view = [[UIView alloc] init];
   _textBar = [[TTView alloc] init];
   _textBar.style = TTSTYLE(textBar);
   [self.view addSubview:_textBar];
@@ -187,10 +171,10 @@ static CGFloat kPadding = 5.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload {
   [super viewDidUnload];
-  TT_RELEASE_SAFELY(_textBar);
-  TT_RELEASE_SAFELY(_textEditor);
-  TT_RELEASE_SAFELY(_postButton);
-  TT_RELEASE_SAFELY(_previousRightBarButtonItem);
+    _textBar = nil;
+    _textEditor = nil;
+    _postButton = nil;
+    _previousRightBarButtonItem = nil;
 }
 
 
@@ -231,7 +215,7 @@ static CGFloat kPadding = 5.0f;
   if (title) {
     self.navigationItem.title = title;
   }
-  _defaultText = [[state objectForKey:@"text"] retain];
+  _defaultText = [state objectForKey:@"text"];
 }
 
 
@@ -248,10 +232,10 @@ static CGFloat kPadding = 5.0f;
 
   if (_defaultText) {
     _textEditor.text = _defaultText;
-    TT_RELEASE_SAFELY(_defaultText);
+      _defaultText = nil;
 
   } else {
-    _defaultText = [_textEditor.text retain];
+    _defaultText = _textEditor.text;
   }
 
   self.view.top = self.view.superview.height;
@@ -283,15 +267,14 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)textEditorDidBeginEditing:(TTTextEditor*)textEditor {
-  [self retain];
 
   _originTop = self.view.top;
 
   UIViewController* controller = self.view.viewController;
-  _previousRightBarButtonItem = [controller.navigationItem.rightBarButtonItem retain];
+  _previousRightBarButtonItem = controller.navigationItem.rightBarButtonItem;
   [controller.navigationItem setRightBarButtonItem:
-    [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                              target:self action:@selector(cancel)] autorelease] animated:YES];
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                              target:self action:@selector(cancel)] animated:YES];
 
   [UIView beginAnimations:nil context:nil];
   [UIView setAnimationDuration:TT_TRANSITION_DURATION];
@@ -313,7 +296,7 @@ static CGFloat kPadding = 5.0f;
 - (void)textEditorDidEndEditing:(TTTextEditor*)textEditor {
   UIViewController* controller = self.view.viewController;
   [controller.navigationItem setRightBarButtonItem:_previousRightBarButtonItem animated:YES];
-  TT_RELEASE_SAFELY(_previousRightBarButtonItem);
+    _previousRightBarButtonItem = nil;
 
   [UIView beginAnimations:nil context:nil];
   [UIView setAnimationDuration:TT_TRANSITION_DURATION];
@@ -387,8 +370,8 @@ static CGFloat kPadding = 5.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTButton*)postButton {
   if (!_postButton) {
-    _postButton = [[TTButton buttonWithStyle:@"textBarPostButton:"
-                             title:NSLocalizedString(@"Post", @"")] retain];
+    _postButton = [TTButton buttonWithStyle:@"textBarPostButton:"
+                             title:NSLocalizedString(@"Post", @"")];
     [_postButton addTarget: self
                     action: @selector(post)
           forControlEvents: UIControlEventTouchUpInside];
@@ -422,11 +405,11 @@ static CGFloat kPadding = 5.0f;
   if (!TTIsStringWithAnyText(_textEditor.text)
       && !_textEditor.text.isWhitespaceAndNewlines
       && !(_defaultText && [_defaultText isEqualToString:_textEditor.text])) {
-    UIAlertView* cancelAlertView = [[[UIAlertView alloc] initWithTitle:
+    UIAlertView* cancelAlertView = [[UIAlertView alloc] initWithTitle:
       TTLocalizedString(@"Cancel", @"")
       message:TTLocalizedString(@"Are you sure you want to cancel?", @"")
       delegate:self cancelButtonTitle:TTLocalizedString(@"Yes", @"")
-      otherButtonTitles:TTLocalizedString(@"No", @""), nil] autorelease];
+      otherButtonTitles:TTLocalizedString(@"No", @""), nil];
     [cancelAlertView show];
 
   } else {
@@ -437,8 +420,7 @@ static CGFloat kPadding = 5.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)dismissWithResult:(id)result animated:(BOOL)animated {
-  [_result release];
-  _result = [result retain];
+  _result = result;
 
   [self dismissPopupViewControllerAnimated:YES];
 
@@ -491,9 +473,9 @@ static CGFloat kPadding = 5.0f;
 
   NSString* title = [self titleForError:error];
   if (title.length) {
-    UIAlertView* alertView = [[[UIAlertView alloc] initWithTitle:TTLocalizedString(@"Error", @"")
+    UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:TTLocalizedString(@"Error", @"")
       message:title delegate:nil cancelButtonTitle:TTLocalizedString(@"Ok", @"")
-      otherButtonTitles:nil] autorelease];
+      otherButtonTitles:nil];
     [alertView show];
   }
 }

@@ -38,24 +38,24 @@
 
   UIActionSheet*    _actionSheet;
 
-  id<TTWebControllerDelegate> _delegate;
+  id<TTWebControllerDelegate> __unsafe_unretained _delegate;
 }
 
 /**
  * The current web view URL. If the web view is currently loading a URL, then the loading URL is
  * returned instead.
  */
-@property (nonatomic, readonly) NSURL*  URL;
+@property (unsafe_unretained, nonatomic, readonly) NSURL*  URL;
 
 /**
  * A view that is inserted at the top of the web view, within the scroller.
  */
-@property (nonatomic, retain)   UIView* headerView;
+@property (nonatomic, strong)   UIView* headerView;
 
 /**
- * The web controller delegate
+ * The web controller delegate, currently does nothing.
  */
-@property (nonatomic, assign)   id<TTWebControllerDelegate> delegate;
+@property (nonatomic, unsafe_unretained)   id<TTWebControllerDelegate> delegate;
 
 /**
  * Navigate to the given URL.
@@ -71,18 +71,10 @@
 
 @end
 
-/**
- * The web controller delegate, similar to UIWebViewDelegate, but prefixed with controller
- */
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 @protocol TTWebControllerDelegate <NSObject>
-
-@optional
-- (BOOL)webController:(TTWebController *)controller webView:(UIWebView *)webView
-                                 shouldStartLoadWithRequest:(NSURLRequest *)request
-                                             navigationType:(UIWebViewNavigationType)navigationType;
-- (void)webController:(TTWebController *)controller webViewDidStartLoad:(UIWebView *)webView;
-- (void)webController:(TTWebController *)controller webViewDidFinishLoad:(UIWebView *)webView;
-- (void)webController:(TTWebController *)controller webView:(UIWebView *)webView
-                                       didFailLoadWithError:(NSError *)error;
-
+// XXXjoe Need to make this similar to UIWebViewDelegate
 @end

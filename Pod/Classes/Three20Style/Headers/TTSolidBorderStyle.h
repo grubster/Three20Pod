@@ -22,7 +22,7 @@
   CGFloat   _width;
 }
 
-@property (nonatomic, retain) UIColor*  color;
+@property (nonatomic, strong) UIColor*  color;
 @property (nonatomic)         CGFloat   width;
 
 + (TTSolidBorderStyle*)styleWithColor:(UIColor*)color width:(CGFloat)width next:(TTStyle*)next;

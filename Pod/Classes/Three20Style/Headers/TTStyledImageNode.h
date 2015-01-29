@@ -26,8 +26,8 @@
 }
 
 @property (nonatomic, copy)   NSString* URL;
-@property (nonatomic, retain) UIImage*  image;
-@property (nonatomic, retain) UIImage*  defaultImage;
+@property (nonatomic, strong) UIImage*  image;
+@property (nonatomic, strong) UIImage*  defaultImage;
 @property (nonatomic)         CGFloat   width;
 @property (nonatomic)         CGFloat   height;
 

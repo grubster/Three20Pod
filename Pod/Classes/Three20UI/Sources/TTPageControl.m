@@ -42,8 +42,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     self.backgroundColor = [UIColor clearColor];
     self.dotStyle = @"pageDot:";
     self.hidesForSinglePage = NO;
@@ -52,17 +51,6 @@
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_dotStyle);
-  TT_RELEASE_SAFELY(_normalDotStyle);
-  TT_RELEASE_SAFELY(_currentDotStyle);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -73,8 +61,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTStyle*)normalDotStyle {
   if (!_normalDotStyle) {
-    _normalDotStyle = [[[TTStyleSheet globalStyleSheet] styleWithSelector:_dotStyle
-                                                        forState:UIControlStateNormal] retain];
+    _normalDotStyle = [[TTStyleSheet globalStyleSheet] styleWithSelector:_dotStyle
+                                                        forState:UIControlStateNormal];
   }
   return _normalDotStyle;
 }
@@ -83,8 +71,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTStyle*)currentDotStyle {
   if (!_currentDotStyle) {
-    _currentDotStyle = [[[TTStyleSheet globalStyleSheet] styleWithSelector:_dotStyle
-                                                         forState:UIControlStateSelected] retain];
+    _currentDotStyle = [[TTStyleSheet globalStyleSheet] styleWithSelector:_dotStyle
+                                                         forState:UIControlStateSelected];
   }
   return _currentDotStyle;
 }
@@ -102,7 +90,7 @@
     return;
   }
 
-  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
+  TTStyleContext* context = [[TTStyleContext alloc] init];
   TTBoxStyle* boxStyle = [self.normalDotStyle firstStyleOfClass:[TTBoxStyle class]];
 
   CGSize dotSize = [self.normalDotStyle addToSize:CGSizeZero context:context];
@@ -132,10 +120,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGSize)sizeThatFits:(CGSize)size {
-  TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
+  TTStyleContext* context = [[TTStyleContext alloc] init];
   CGSize dotSize = [self.normalDotStyle addToSize:CGSizeZero context:context];
 
-  CGFloat margin = 0.0f;
+  CGFloat margin = 0;
   TTBoxStyle* boxStyle = [self.normalDotStyle firstStyleOfClass:[TTBoxStyle class]];
   if (boxStyle) {
     margin = boxStyle.margin.right + boxStyle.margin.left;
@@ -198,10 +186,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setDotStyle:(NSString*)dotStyle {
   if (![dotStyle isEqualToString:_dotStyle]) {
-    [_dotStyle release];
     _dotStyle = [dotStyle copy];
-    TT_RELEASE_SAFELY(_normalDotStyle);
-    TT_RELEASE_SAFELY(_currentDotStyle);
+    _normalDotStyle = nil;
+    _currentDotStyle = nil;
   }
 }
 

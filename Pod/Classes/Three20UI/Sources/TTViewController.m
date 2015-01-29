@@ -50,8 +50,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
     self.navigationBarTintColor = TTSTYLEVAR(navigationBarTintColor);
   }
 
@@ -61,8 +60,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [self initWithNibName:nil bundle:nil]) {
   }
 
   return self;
@@ -73,7 +71,6 @@
 - (void)dealloc {
   [[TTURLRequestQueue mainQueue] cancelRequestsWithDelegate:self];
 
-  [super dealloc];
 }
 
 
@@ -90,7 +87,7 @@
 
   } else {
     CGRect frame = self.wantsFullScreenLayout ? TTScreenBounds() : TTNavigationFrame();
-    self.view = [[[UIView alloc] initWithFrame:frame] autorelease];
+    self.view = [[UIView alloc] initWithFrame:frame];
     self.view.autoresizesSubviews = YES;
     self.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     self.view.backgroundColor = TTSTYLEVAR(backgroundColor);
@@ -101,7 +98,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidUnload {
   [super viewDidUnload];
-  TT_RELEASE_SAFELY(_searchController);
+    _searchController = nil;
 }
 
 
@@ -110,6 +107,13 @@
   [super viewWillAppear:animated];
 
   [TTURLRequestQueue mainQueue].suspended = YES;
+
+  // Ugly hack to work around UISearchBar's inability to resize its text field
+  // to avoid being overlapped by the table section index
+//  if (_searchController && !_searchController.active) {
+//    [_searchController setActive:YES animated:NO];
+//    [_searchController setActive:NO animated:NO];
+//  }
 }
 
 
@@ -137,7 +141,7 @@
 - (void)setSearchViewController:(TTTableViewController*)searchViewController {
   if (searchViewController) {
     if (nil == _searchController) {
-      UISearchBar* searchBar = [[[UISearchBar alloc] init] autorelease];
+      UISearchBar* searchBar = [[UISearchBar alloc] init];
       [searchBar sizeToFit];
 
       _searchController = [[TTSearchDisplayController alloc] initWithSearchBar:searchBar
@@ -149,7 +153,7 @@
 
   } else {
     _searchController.searchResultsViewController = nil;
-    TT_RELEASE_SAFELY(_searchController);
+      _searchController = nil;
   }
 }
 

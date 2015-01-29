@@ -27,7 +27,7 @@
 
 
 // Remove GSEvent and UITouchAdditions from Release builds
-#ifdef DEBUG_TOUCHES
+#ifdef DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -104,19 +104,18 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initInView:(UIView *)view location:(CGPoint)location {
-	self = [super init];
-  if (self) {
-    _tapCount = 1;
-    _locationInWindow = location;
-    _previousLocationInWindow = location;
-
-    UIView *target = [view.window hitTest:_locationInWindow withEvent:nil];
-    _view = [target retain];
-    _window = [view.window retain];
-    _phase = UITouchPhaseBegan;
-    _touchFlags._firstTouchForView = 1;
-    _touchFlags._isTap = 1;
-    _timestamp = [NSDate timeIntervalSinceReferenceDate];
+  if (self = [super init]) {
+//    _tapCount = 1;
+//    _locationInWindow = location;
+//    _previousLocationInWindow = location;
+//
+//    UIView *target = [view.window hitTest:_locationInWindow withEvent:nil];
+//    _view = [target retain];
+//    _window = [view.window retain];
+//    _phase = UITouchPhaseBegan;
+//    _touchFlags._firstTouchForView = 1;
+//    _touchFlags._isTap = 1;
+//    _timestamp = [NSDate timeIntervalSinceReferenceDate];
   }
   return self;
 }
@@ -124,8 +123,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)changeToPhase:(UITouchPhase)phase {
-  _phase = phase;
-  _timestamp = [NSDate timeIntervalSinceReferenceDate];
+//  _phase = phase;
+//  _timestamp = [NSDate timeIntervalSinceReferenceDate];
 }
 
 
@@ -140,22 +139,21 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTouch:(UITouch *)touch {
-	self = [super init];
-  if (self) {
+  if (self == [super init]) {
     UIEventFake *selfFake = (UIEventFake*)self;
-    selfFake->_touches = [[NSMutableSet setWithObject:touch] retain];
+    selfFake->_touches = [NSMutableSet setWithObject:touch];
     selfFake->_timestamp = [NSDate timeIntervalSinceReferenceDate];
 
     CGPoint location = [touch locationInView:touch.window];
     GSEventFake* fakeGSEvent = [[GSEventFake alloc] init];
     fakeGSEvent->x = location.x;
     fakeGSEvent->y = location.y;
-    selfFake->_event = fakeGSEvent;
+    selfFake->_event = (__bridge CFTypeRef)(fakeGSEvent);
 
     CFMutableDictionaryRef dict = CFDictionaryCreateMutable(kCFAllocatorDefault, 2,
       &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    CFDictionaryAddValue(dict, touch.view, selfFake->_touches);
-    CFDictionaryAddValue(dict, touch.window, selfFake->_touches);
+    CFDictionaryAddValue(dict, (__bridge const void *)(touch.view), (__bridge const void *)(selfFake->_touches));
+    CFDictionaryAddValue(dict, (__bridge const void *)(touch.window), (__bridge const void *)(selfFake->_touches));
     selfFake->_keyedTouches = dict;
   }
   return self;
@@ -288,7 +286,7 @@ TT_FIX_CATEGORY_BUG(UIViewAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)ttScreenX {
-  CGFloat x = 0.0f;
+  CGFloat x = 0;
   for (UIView* view = self; view; view = view.superview) {
     x += view.left;
   }
@@ -298,7 +296,7 @@ TT_FIX_CATEGORY_BUG(UIViewAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)ttScreenY {
-  CGFloat y = 0.0f;
+  CGFloat y = 0;
   for (UIView* view = self; view; view = view.superview) {
     y += view.top;
   }
@@ -308,7 +306,7 @@ TT_FIX_CATEGORY_BUG(UIViewAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGFloat)screenViewX {
-  CGFloat x = 0.0f;
+  CGFloat x = 0;
   for (UIView* view = self; view; view = view.superview) {
       x += view.left;
 
@@ -423,18 +421,18 @@ TT_FIX_CATEGORY_BUG(UIViewAdditions)
 }
 
 
-#ifdef DEBUG_TOUCHES
+#ifdef DEBUG
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)simulateTapAtPoint:(CGPoint)location {
-  UITouch *touch = [[[UITouch alloc] initInView:self location:location] autorelease];
+  UITouch *touch = [[UITouch alloc] initInView:self location:location];
 
-  UIEvent *eventDown = [[[UIEvent alloc] initWithTouch:touch] autorelease];
+  UIEvent *eventDown = [[UIEvent alloc] initWithTouch:touch];
   [touch.view touchesBegan:[NSSet setWithObject:touch] withEvent:eventDown];
 
   [touch changeToPhase:UITouchPhaseEnded];
 
-  UIEvent *eventUp = [[[UIEvent alloc] initWithTouch:touch] autorelease];
+  UIEvent *eventUp = [[UIEvent alloc] initWithTouch:touch];
   [touch.view touchesEnded:[NSSet setWithObject:touch] withEvent:eventUp];
 }
 
@@ -443,7 +441,7 @@ TT_FIX_CATEGORY_BUG(UIViewAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CGPoint)offsetFromView:(UIView*)otherView {
-  CGFloat x = 0.0f, y = 0.0f;
+  CGFloat x = 0, y = 0;
   for (UIView* view = self; view && view != otherView; view = view.superview) {
     x += view.left;
     y += view.top;

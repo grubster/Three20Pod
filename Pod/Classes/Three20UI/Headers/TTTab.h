@@ -26,7 +26,7 @@
   TTLabel*    _badge;
 }
 
-@property (nonatomic, retain) TTTabItem* tabItem;
+@property (nonatomic, strong) TTTabItem* tabItem;
 
 - (id)initWithItem:(TTTabItem*)item tabBar:(TTTabBar*)tabBar;
 

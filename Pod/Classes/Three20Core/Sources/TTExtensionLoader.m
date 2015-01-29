@@ -58,7 +58,7 @@ static NSMutableDictionary* sTTFailedExtensions     = nil;
   TTExtensionInfo* extension = [self callExtensionID: extensionID
                                     methodWithPrefix: kExtensionInfoMethodPrefix];
   if (nil == extension) {
-    extension = [[[TTExtensionInfo alloc] init] autorelease];
+    extension = [[TTExtensionInfo alloc] init];
   }
   extension.identifier = extensionID;
   return extension;
@@ -106,7 +106,7 @@ static NSMutableDictionary* sTTFailedExtensions     = nil;
       [loader loadExtension:extension];
     }
 
-    TT_RELEASE_SAFELY(loader);
+      loader = nil;
   }
 }
 
@@ -143,7 +143,7 @@ static NSMutableDictionary* sTTFailedExtensions     = nil;
         }
       }
 
-      TT_RELEASE_SAFELY(loader);
+        loader = nil;
     }
   }
 

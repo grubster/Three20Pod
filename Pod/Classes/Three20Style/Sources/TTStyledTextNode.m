@@ -30,8 +30,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text {
-	self = [self initWithText:text next:nil];
-  if (self) {
+  if (self = [self initWithText:text next:nil]) {
   }
 
   return self;
@@ -40,20 +39,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text next:(TTStyledNode*)nextSibling {
-	self = [super initWithNextSibling:nextSibling];
-  if (self) {
+  if (self = [super initWithNextSibling:nextSibling]) {
     self.text = text;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_text);
-
-  [super dealloc];
 }
 
 

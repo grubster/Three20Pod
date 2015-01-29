@@ -15,10 +15,7 @@
 //
 
 #import "Three20UI/TTLauncherItem.h"
-
-// Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -32,7 +29,6 @@
 @synthesize style       = _style;
 @synthesize badgeValue  = _badgeValue;
 @synthesize canDelete   = _canDelete;
-@synthesize userInfo    = _userInfo;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,8 +39,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title image:(NSString*)image URL:(NSString*)URL {
-	self = [self initWithTitle:title image:image URL:URL canDelete:NO];
-  if (self) {
+  if (self = [self initWithTitle:title image:image URL:URL canDelete:NO]) {
   }
 
   return self;
@@ -54,8 +49,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title image:(NSString*)image URL:(NSString*)URL
       canDelete:(BOOL)canDelete {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _canDelete = canDelete;
 
     self.title = title;
@@ -65,21 +59,6 @@
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_badgeValue);
-  TT_RELEASE_SAFELY(_title);
-  TT_RELEASE_SAFELY(_image);
-  TT_RELEASE_SAFELY(_URL);
-  TT_RELEASE_SAFELY(_style);
-  TT_RELEASE_SAFELY(_userInfo);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -88,8 +67,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithCoder:(NSCoder*)decoder {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     self.title = [decoder decodeObjectForKey:@"title"];
     self.image = [decoder decodeObjectForKey:@"image"];
     self.URL = [decoder decodeObjectForKey:@"URL"];
@@ -137,9 +115,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setBadgeValue:(NSString *)badgeValue {
   if (_badgeValue != badgeValue) {
-    [_badgeValue release];
     _badgeValue = [badgeValue copy];
   }
+
 
   [_launcher performSelector:@selector(updateItemBadge:) withObject:self];
 }

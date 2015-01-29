@@ -16,4 +16,4 @@
 
 #import "Three20Style/TTGlobalStyle.h"
 
-const CGFloat ttkRounded = -1.0f;
+const CGFloat ttkRounded = -1;

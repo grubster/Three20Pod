@@ -23,9 +23,9 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kPaddingX = 8.0f;
-static const CGFloat kPaddingY = 3.0f;
-static const CGFloat kMaxWidth = 250.0f;
+static const CGFloat kPaddingX = 8;
+static const CGFloat kPaddingY = 3;
+static const CGFloat kMaxWidth = 250;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -39,8 +39,7 @@ static const CGFloat kMaxWidth = 250.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _labelView = [[UILabel alloc] init];
     _labelView.backgroundColor = [UIColor clearColor];
     _labelView.textColor = TTSTYLEVAR(textColor);
@@ -53,16 +52,6 @@ static const CGFloat kMaxWidth = 250.0f;
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_object);
-  TT_RELEASE_SAFELY(_labelView);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////

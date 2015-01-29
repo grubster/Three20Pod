@@ -31,19 +31,19 @@
   NSArray*        _tabItems;
   NSMutableArray* _tabViews;
 
-  id<TTTabDelegate> _delegate;
+  id<TTTabDelegate> __unsafe_unretained _delegate;
 }
 
 @property (nonatomic, copy)     NSString*   tabStyle;
 
-@property (nonatomic, assign)   TTTabItem*  selectedTabItem;
-@property (nonatomic, assign)   TTTab*      selectedTabView;
+@property (nonatomic, unsafe_unretained)   TTTabItem*  selectedTabItem;
+@property (nonatomic, unsafe_unretained)   TTTab*      selectedTabView;
 @property (nonatomic)           NSInteger   selectedTabIndex;
 
 @property (nonatomic, copy)     NSArray*    tabItems;
 @property (nonatomic, readonly) NSArray*    tabViews;
 
-@property (nonatomic, assign)   id<TTTabDelegate> delegate;
+@property (nonatomic, unsafe_unretained)   id<TTTabDelegate> delegate;
 
 - (id)initWithFrame:(CGRect)frame;
 

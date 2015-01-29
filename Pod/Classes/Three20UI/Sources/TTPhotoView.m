@@ -57,30 +57,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _photoVersion = TTPhotoVersionNone;
     self.clipsToBounds = NO;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [[TTURLRequestQueue mainQueue] cancelRequestsWithDelegate:self];
-  [super setDelegate:nil];
-  TT_RELEASE_SAFELY(_photo);
-  TT_RELEASE_SAFELY(_captionLabel);
-  TT_RELEASE_SAFELY(_captionStyle);
-  TT_RELEASE_SAFELY(_statusSpinner);
-  TT_RELEASE_SAFELY(_statusLabel);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -185,7 +168,7 @@
   CGFloat height = self.height;
   CGFloat cx = self.bounds.origin.x + width/2;
   CGFloat cy = self.bounds.origin.y + height/2;
-  CGFloat marginRight = 0.0f, marginLeft = 0.0f, marginBottom = TTToolbarHeight();
+  CGFloat marginRight = 0, marginLeft = 0, marginBottom = TTToolbarHeight();
 
   // Since the photo view is constrained to the size of the image, but we want to position
   // the status views relative to the screen, offset by the difference
@@ -237,8 +220,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setPhoto:(id<TTPhoto>)photo {
   if (!photo || photo != _photo) {
-    [_photo release];
-    _photo = [photo retain];
+    _photo = photo;
     _photoVersion = TTPhotoVersionNone;
 
     self.urlPath = nil;
@@ -280,13 +262,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)loadPreview:(BOOL)fromNetwork {
-	if (![self loadVersion:TTPhotoVersionLarge fromNetwork:NO]) {
-      if (![self loadVersion:TTPhotoVersionSmall fromNetwork:NO]) {
-        if (![self loadVersion:TTPhotoVersionThumbnail fromNetwork:fromNetwork]) {
-          return NO;
-        }
+  if (![self loadVersion:TTPhotoVersionLarge fromNetwork:NO]) {
+    if (![self loadVersion:TTPhotoVersionSmall fromNetwork:NO]) {
+      if (![self loadVersion:TTPhotoVersionThumbnail fromNetwork:fromNetwork]) {
+        return NO;
       }
     }
+  }
+
   return YES;
 }
 

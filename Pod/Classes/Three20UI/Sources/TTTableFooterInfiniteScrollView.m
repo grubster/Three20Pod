@@ -42,9 +42,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
   if ((self = [super initWithFrame:frame])) {
-    self.indicator = [[[UIActivityIndicatorView alloc]
-                       initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray]
-                      autorelease];
+    self.indicator = [[UIActivityIndicatorView alloc]
+                       initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     self.indicator.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin |
     UIViewAutoresizingFlexibleRightMargin;
 
@@ -60,7 +59,7 @@
   CGContextSetRGBFillColor(contextRef, 1, 1, 1, 1);
   CGContextFillRect(contextRef, rect);
   if (!_loading) {
-    CGFloat dotSize = 5.0f;
+    CGFloat dotSize = 5;
     CGFloat x = roundf((self.width / 2) - (dotSize / 2));
     CGFloat y = roundf((self.height / 2) - (dotSize / 2));
     CGContextSetRGBFillColor(contextRef, 0.75, 0.75, 0.75, 1.0);

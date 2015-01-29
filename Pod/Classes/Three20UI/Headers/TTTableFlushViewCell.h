@@ -24,7 +24,7 @@
   UIView*           _view;
 }
 
-@property (nonatomic, readonly, retain) TTTableViewItem*  item;
-@property (nonatomic, readonly, retain) UIView*           view;
+@property (nonatomic, readonly, strong) TTTableViewItem*  item;
+@property (nonatomic, readonly, strong) UIView*           view;
 
 @end

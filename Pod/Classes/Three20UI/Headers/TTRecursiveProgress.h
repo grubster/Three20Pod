@@ -63,7 +63,7 @@
  * subProgress.percent = 0.5; // didSetProgress:0.4
  */
 @interface TTRecursiveProgress : NSObject {
-  id<TTRecursiveProgressDelegate>  _delegate;  // Only valid in the topmost node.
+  id<TTRecursiveProgressDelegate>  __unsafe_unretained _delegate;  // Only valid in the topmost node.
   TTRecursiveProgress*              _parent;    // Only valid in child nodes.
 
   CGFloat _firstPercent;
@@ -90,7 +90,7 @@
 /**
  * The root level delegate.
  */
-@property (nonatomic, assign) id<TTRecursiveProgressDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<TTRecursiveProgressDelegate> delegate;
 
 
 + (id)progressWithDelegate:(id<TTRecursiveProgressDelegate>)delegate;

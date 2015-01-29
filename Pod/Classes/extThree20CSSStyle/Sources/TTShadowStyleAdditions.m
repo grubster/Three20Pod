@@ -44,7 +44,7 @@ TT_FIX_CATEGORY_BUG(TTCSSShadowStyleAdditions)
 + (TTShadowStyle*)styleWithCssSelector:(NSString*)selector
                               forState:(UIControlState)state
                                   next:(TTStyle*)next {
-  TTShadowStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTShadowStyle* style = [[self alloc] initWithNext:next];
   style.color  = TTCSSSTATE(selector, shadowColor,  state);
   style.blur   = TTCSSSTATE(selector, shadowRadius, state);
   style.offset = TTCSSSTATE(selector, shadowOffset, state);

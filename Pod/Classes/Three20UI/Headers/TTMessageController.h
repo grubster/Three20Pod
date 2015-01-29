@@ -52,21 +52,21 @@
   BOOL _requireNonEmptyMessageBody;
 
   id<TTTableViewDataSource>       _dataSource;
-  id<TTMessageControllerDelegate> _delegate;
+  id<TTMessageControllerDelegate> __unsafe_unretained _delegate;
 }
 
 /**
  * The delegate that will receive messages from the TTMessageControllerDelegate
  * protocol.
  */
-@property (nonatomic, assign) id<TTMessageControllerDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<TTMessageControllerDelegate> delegate;
 
 /**
  * The datasource used to autocomplete TTMessageRecipientFields. This class is
  * also responsible for determining how cells representing recipients are
  * labeled.
  */
-@property (nonatomic, retain) id<TTTableViewDataSource> dataSource;
+@property (nonatomic, strong) id<TTTableViewDataSource> dataSource;
 
 /**
  * An array of TTMessageField instances representing the editable fields. These

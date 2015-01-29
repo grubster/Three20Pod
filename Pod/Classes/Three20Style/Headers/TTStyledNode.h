@@ -19,13 +19,13 @@
 
 @interface TTStyledNode : NSObject {
   TTStyledNode* _nextSibling;
-  TTStyledNode* _parentNode;
+  TTStyledNode* __unsafe_unretained _parentNode;
 }
 
-@property (nonatomic, retain)   TTStyledNode* nextSibling;
-@property (nonatomic, assign)   TTStyledNode* parentNode;
-@property (nonatomic, readonly) NSString*     outerText;
-@property (nonatomic, readonly) NSString*     outerHTML;
+@property (nonatomic, strong)   TTStyledNode* nextSibling;
+@property (nonatomic, unsafe_unretained)   TTStyledNode* parentNode;
+@property (unsafe_unretained, nonatomic, readonly) NSString*     outerText;
+@property (unsafe_unretained, nonatomic, readonly) NSString*     outerHTML;
 
 // Designated initializer
 - (id)initWithNextSibling:(TTStyledNode*)nextSibling;

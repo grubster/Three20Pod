@@ -32,8 +32,8 @@
 #import "Three20Core/TTGlobalCoreLocale.h"
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static CGFloat kThumbSize = 75.0f;
-static CGFloat kThumbSpacing = 4.0f;
+static CGFloat kThumbSize = 75;
+static CGFloat kThumbSpacing = 4;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -48,21 +48,12 @@ static CGFloat kThumbSpacing = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithPhotoSource:(id<TTPhotoSource>)photoSource
                  delegate:(id<TTThumbsTableViewCellDelegate>)delegate {
-	self = [super init];
-  if (self) {
-    _photoSource = [photoSource retain];
+  if (self = [super init]) {
+    _photoSource = photoSource;
     _delegate = delegate;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_photoSource);
-
-  [super dealloc];
 }
 
 
@@ -193,12 +184,6 @@ static CGFloat kThumbSpacing = 4.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)subtitleForEmpty {
   return TTLocalizedString(@"This photo set contains no photos.", @"");
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)reloadButtonForEmpty {
-  return NO;
 }
 
 

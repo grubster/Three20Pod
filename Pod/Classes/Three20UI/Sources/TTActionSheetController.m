@@ -36,8 +36,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
     _URLs = [[NSMutableArray alloc] init];
   }
 
@@ -47,8 +46,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title delegate:(id)delegate {
-	self = [self initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [self initWithNibName:nil bundle:nil]) {
     _delegate = delegate;
 
     if (nil != title) {
@@ -62,8 +60,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithTitle:(NSString*)title {
-	self = [self initWithTitle:title delegate:nil];
-  if (self) {
+  if (self = [self initWithTitle:title delegate:nil]) {
   }
 
   return self;
@@ -72,20 +69,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithTitle:nil delegate:nil];
-  if (self) {
+  if (self = [self initWithTitle:nil delegate:nil]) {
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_URLs);
-  TT_RELEASE_SAFELY(_userInfo);
-
-  [super dealloc];
 }
 
 
@@ -97,10 +84,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)loadView {
-  TTActionSheet* actionSheet = [[[TTActionSheet alloc] initWithTitle:nil delegate:self
+  TTActionSheet* actionSheet = [[TTActionSheet alloc] initWithTitle:nil delegate:self
                                                        cancelButtonTitle:nil
                                                        destructiveButtonTitle:nil
-                                                       otherButtonTitles:nil] autorelease];
+                                                       otherButtonTitles:nil];
   actionSheet.popupViewController = self;
   self.view = actionSheet;
 }

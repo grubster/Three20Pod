@@ -40,7 +40,14 @@ TT_FIX_CATEGORY_BUG(NSDateAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (NSDate*)dateWithToday {
-  return [[NSDate date] dateAtMidnight];
+  NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+  formatter.dateFormat = @"yyyy-d-M";
+
+  NSString* formattedTime = [formatter stringFromDate:[NSDate date]];
+  NSDate* date = [formatter dateFromString:formattedTime];
+    formatter = nil;
+
+  return date;
 }
 
 
@@ -52,13 +59,14 @@ TT_FIX_CATEGORY_BUG(NSDateAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSDate*)dateAtMidnight {
-	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
-	NSDateComponents *comps = [gregorian components:
-                               (NSYearCalendarUnit|NSMonthCalendarUnit|NSDayCalendarUnit)
-                                           fromDate:[NSDate date]];
-	NSDate *midnight = [gregorian dateFromComponents:comps];
-	[gregorian release];
-	return midnight;
+  NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+  formatter.dateFormat = @"yyyy-d-M";
+
+  NSString* formattedTime = [formatter stringFromDate:self];
+  NSDate* date = [formatter dateFromString:formattedTime];
+    formatter = nil;
+
+  return date;
 }
 
 
@@ -144,61 +152,30 @@ TT_FIX_CATEGORY_BUG(NSDateAdditions)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)formatRelativeTime {
-  NSTimeInterval elapsed = [self timeIntervalSinceNow];
-  if (elapsed > 0) {
-    if (elapsed <= 1) {
-      return TTLocalizedString(@"in just a moment", @"");
-    }
-    else if (elapsed < TT_MINUTE) {
-      int seconds = (int)(elapsed);
-      return [NSString stringWithFormat:TTLocalizedString(@"in %d seconds", @""), seconds];
+  NSTimeInterval elapsed = abs([self timeIntervalSinceNow]);
+  if (elapsed <= 1) {
+    return TTLocalizedString(@"just a moment ago", @"");
 
-    }
-    else if (elapsed < 2*TT_MINUTE) {
-      return TTLocalizedString(@"in about a minute", @"");
-    }
-    else if (elapsed < TT_HOUR) {
-      int mins = (int)(elapsed/TT_MINUTE);
-      return [NSString stringWithFormat:TTLocalizedString(@"in %d minutes", @""), mins];
-    }
-    else if (elapsed < TT_HOUR*1.5) {
-      return TTLocalizedString(@"in about an hour", @"");
-    }
-    else if (elapsed < TT_DAY) {
-      int hours = (int)((elapsed+TT_HOUR/2)/TT_HOUR);
-      return [NSString stringWithFormat:TTLocalizedString(@"in %d hours", @""), hours];
-    }
-    else {
-      return [self formatDateTime];
-    }
-  }
-  else {
-    elapsed = -elapsed;
+  } else if (elapsed < TT_MINUTE) {
+    int seconds = (int)(elapsed);
+    return [NSString stringWithFormat:TTLocalizedString(@"%d seconds ago", @""), seconds];
 
-    if (elapsed <= 1) {
-      return TTLocalizedString(@"just a moment ago", @"");
+  } else if (elapsed < 2*TT_MINUTE) {
+    return TTLocalizedString(@"about a minute ago", @"");
 
-    } else if (elapsed < TT_MINUTE) {
-      int seconds = (int)(elapsed);
-      return [NSString stringWithFormat:TTLocalizedString(@"%d seconds ago", @""), seconds];
+  } else if (elapsed < TT_HOUR) {
+    int mins = (int)(elapsed/TT_MINUTE);
+    return [NSString stringWithFormat:TTLocalizedString(@"%d minutes ago", @""), mins];
 
-    } else if (elapsed < 2*TT_MINUTE) {
-      return TTLocalizedString(@"about a minute ago", @"");
+  } else if (elapsed < TT_HOUR*1.5) {
+    return TTLocalizedString(@"about an hour ago", @"");
 
-    } else if (elapsed < TT_HOUR) {
-      int mins = (int)(elapsed/TT_MINUTE);
-      return [NSString stringWithFormat:TTLocalizedString(@"%d minutes ago", @""), mins];
+  } else if (elapsed < TT_DAY) {
+    int hours = (int)((elapsed+TT_HOUR/2)/TT_HOUR);
+    return [NSString stringWithFormat:TTLocalizedString(@"%d hours ago", @""), hours];
 
-    } else if (elapsed < TT_HOUR*1.5) {
-      return TTLocalizedString(@"about an hour ago", @"");
-
-    } else if (elapsed < TT_DAY) {
-      int hours = (int)((elapsed+TT_HOUR/2)/TT_HOUR);
-      return [NSString stringWithFormat:TTLocalizedString(@"%d hours ago", @""), hours];
-
-    } else {
-      return [self formatDateTime];
-    }
+  } else {
+    return [self formatDateTime];
   }
 }
 

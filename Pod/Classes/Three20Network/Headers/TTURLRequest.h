@@ -22,14 +22,6 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h" // For __TTDEPRECATED_METHOD
 
-/**
- * A constant to improve code readabillity, when using negative numbers for
- * timeoutInterval.
- *
- * @see timeoutInterval
- */
-extern const NSTimeInterval TTURLRequestUseQueueTimeout;
-
 @protocol TTURLRequestDelegate;
 @protocol TTURLResponse;
 
@@ -62,8 +54,6 @@ extern const NSTimeInterval TTURLRequestUseQueueTimeout;
 
   NSInteger             _totalBytesLoaded;
   NSInteger             _totalBytesExpected;
-  
-  NSTimeInterval        _timeoutInterval;
 
   NSInteger             _totalBytesDownloaded;
   NSInteger             _totalContentLength;
@@ -74,7 +64,6 @@ extern const NSTimeInterval TTURLRequestUseQueueTimeout;
   BOOL  _shouldHandleCookies;
   BOOL  _respondedFromCache;
   BOOL  _filterPasswordLogging;
-  BOOL  _multiPartForm;
 
   NSMutableArray* _delegates;
 }
@@ -185,12 +174,12 @@ extern const NSTimeInterval TTURLRequestUseQueueTimeout;
 @property (nonatomic) BOOL shouldHandleCookies;
 
 /**
- * The number of request body bytes already uploaded by this request.
+ * The number of bytes loaded by this request.
  */
 @property (nonatomic) NSInteger totalBytesLoaded;
 
 /**
- * The total number of request body bytes expected to be uploaded for this request.
+ * The number of expected bytes from this request.
  */
 @property (nonatomic) NSInteger totalBytesExpected;
 
@@ -203,35 +192,6 @@ extern const NSTimeInterval TTURLRequestUseQueueTimeout;
  *  The number of content length of request.
  */
 @property (nonatomic) NSInteger totalContentLength;
-
-/**
- * The timeout to use for the request.
- *
- * If a negative value is set the request uses
- * the defaultTimeout of the TTURLRequestQueue. <b>This differs from behaviour of
- * NSURLRequest.</b> Given a negative timeoutInterval NSURLRequest always fails.
- *
- * You should use the TTURLRequestUseQueueTimeout constant to improve
- * code readabillity, instead of negative numbers.
- *
- * The default value is TTURLRequestUseQueueTimeout
- *
- * @par from NSURLRequest.h:
- *
- * The timeout interval specifies the limit on the idle
- * interval alloted to a request in the process of loading. The "idle
- * interval" is defined as the period of time that has passed since the
- * last instance of load activity occurred for a request that is in the
- * process of loading. Hence, when an instance of load activity occurs
- * (e.g. bytes are received from the network for a request), the idle
- * interval for a request is reset to 0. If the idle interval ever
- * becomes greater than or equal to the timeout interval, the request
- * is considered to have timed out. This timeout interval is measured
- * in seconds.
- *
- * @see TTURLRequestQueue::defaultTimeout
- */
-@property (nonatomic) NSTimeInterval timeoutInterval;
 
 /**
  * Whether or not the request was loaded from the cache.
@@ -257,11 +217,6 @@ extern const NSTimeInterval TTURLRequestUseQueueTimeout;
  */
 @property (nonatomic, readonly) NSMutableArray* delegates;
 
-/**
- * Determine whether to construct a multipart form or to instead encode the http body as the W3C default
- * of application/x-www-form-urlencoded  
- */
-@property (nonatomic, assign) BOOL multiPartForm;
 
 + (TTURLRequest*)request;
 

@@ -22,8 +22,8 @@
   NSMutableArray* _items;
 }
 
-@property (nonatomic, retain) NSMutableArray* items;
-@property (nonatomic, retain) NSMutableArray* sections;
+@property (nonatomic, strong) NSMutableArray* items;
+@property (nonatomic, strong) NSMutableArray* sections;
 
 /**
  * Objects should be in this format:

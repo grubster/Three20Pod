@@ -36,26 +36,6 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [[TTURLRequestQueue mainQueue] cancelRequestsWithDelegate:self];
-  [_loadingRequest cancel];
-
-  TT_RELEASE_SAFELY(_loadingRequest);
-  TT_RELEASE_SAFELY(_loadedTime);
-  TT_RELEASE_SAFELY(_cacheKey);
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)reset {
-  TT_RELEASE_SAFELY(_cacheKey);
-  TT_RELEASE_SAFELY(_loadedTime);
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark TTModel
@@ -113,7 +93,7 @@
       [[TTURLCache sharedCache] invalidateKey:_cacheKey];
     }
 
-    TT_RELEASE_SAFELY(_cacheKey);
+      _cacheKey = nil;
   }
 }
 
@@ -126,8 +106,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidStartLoad:(TTURLRequest*)request {
-  [_loadingRequest release];
-  _loadingRequest = [request retain];
+    _loadingRequest = nil; //force release
+  _loadingRequest = request;
   [self didStartLoad];
 }
 
@@ -135,26 +115,22 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidFinishLoad:(TTURLRequest*)request {
   if (!self.isLoadingMore) {
-    [_loadedTime release];
-    _loadedTime = [request.timestamp retain];
+      _loadedTime = nil;
+      _loadedTime = request.timestamp;
     self.cacheKey = request.cacheKey;
   }
-
-  TT_RELEASE_SAFELY(_loadingRequest);
   [self didFinishLoad];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error {
-  TT_RELEASE_SAFELY(_loadingRequest);
   [self didFailLoadWithError:error];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidCancelLoad:(TTURLRequest*)request {
-  TT_RELEASE_SAFELY(_loadingRequest);
   [self didCancelLoad];
 }
 

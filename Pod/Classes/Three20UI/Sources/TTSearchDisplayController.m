@@ -42,24 +42,12 @@ static const NSTimeInterval kPauseInterval = 0.4;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithSearchBar:(UISearchBar*)searchBar contentsController:(UIViewController*)controller {
-	self = [super initWithSearchBar:searchBar contentsController:controller];
-  if (self) {
+  if (self = [super initWithSearchBar:searchBar contentsController:controller]) {
     self.delegate = self;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_INVALIDATE_TIMER(_pauseTimer);
-  TT_RELEASE_SAFELY(_searchResultsDelegate2);
-  TT_RELEASE_SAFELY(_searchResultsViewController);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -211,8 +199,7 @@ static const NSTimeInterval kPauseInterval = 0.4;
 - (void)setSearchResultsDelegate:(id<UITableViewDelegate>)searchResultsDelegate {
   [super setSearchResultsDelegate:searchResultsDelegate];
   if (_searchResultsDelegate2 != searchResultsDelegate) {
-    [_searchResultsDelegate2 release];
-    _searchResultsDelegate2 = [searchResultsDelegate retain];
+    _searchResultsDelegate2 = searchResultsDelegate;
   }
 }
 

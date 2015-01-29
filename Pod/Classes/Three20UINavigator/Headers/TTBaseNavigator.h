@@ -37,7 +37,7 @@
 
   UIViewController*           _rootViewController;
   NSMutableArray*             _delayedControllers;
-  id        _popoverController;
+  UIPopoverController*        _popoverController;
 
   NSString*                   _persistenceKey;
   TTNavigatorPersistenceMode  _persistenceMode;
@@ -48,8 +48,8 @@
   BOOL                        _supportsShakeToReload;
   BOOL                        _opensExternalURLs;
 
-  id<TTNavigatorDelegate>       _delegate;
-  id<TTNavigatorRootContainer>  _rootContainer;
+  id<TTNavigatorDelegate>       __unsafe_unretained _delegate;
+  id<TTNavigatorRootContainer>  __unsafe_unretained _rootContainer;
 }
 
 /**
@@ -65,7 +65,7 @@
  * By default retrieves the keyWindow. If there is no keyWindow, creates a new
  * TTNavigatorWindow.
  */
-@property (nonatomic, retain) UIWindow* window;
+@property (nonatomic, strong) UIWindow* window;
 
 /**
  * A container that holds the root view controller.
@@ -74,7 +74,7 @@
  *
  * @default nil
  */
-@property (nonatomic, assign) id<TTNavigatorRootContainer> rootContainer;
+@property (nonatomic, unsafe_unretained) id<TTNavigatorRootContainer> rootContainer;
 
 /**
  * The controller that is at the root of the view controller hierarchy.
@@ -84,7 +84,7 @@
 /**
  * The currently visible view controller.
  */
-@property (nonatomic, readonly) UIViewController* visibleViewController;
+@property (unsafe_unretained, nonatomic, readonly) UIViewController* visibleViewController;
 
 /**
  * The view controller that is currently on top of the navigation stack.
@@ -92,7 +92,7 @@
  * This differs from visibleViewController in that it ignores things like search
  * display controllers which are visible, but not part of navigation.
  */
-@property (nonatomic, readonly) UIViewController* topViewController;
+@property (unsafe_unretained, nonatomic, readonly) UIViewController* topViewController;
 
 /**
  * The URL of the currently visible view controller;
@@ -154,7 +154,7 @@
  */
 @property (nonatomic, readonly) BOOL isDelayed;
 
-@property (nonatomic, assign) id<TTNavigatorDelegate> delegate;
+@property (nonatomic, unsafe_unretained) id<TTNavigatorDelegate> delegate;
 
 /**
  * Determines the navigator that contains this view.

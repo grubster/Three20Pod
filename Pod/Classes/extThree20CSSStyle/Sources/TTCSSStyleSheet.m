@@ -65,20 +65,6 @@ NSString* kKeyTextShadowColor   = @"color";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [[NSNotificationCenter defaultCenter]
-   removeObserver: self
-   name: UIApplicationDidReceiveMemoryWarningNotification
-   object: nil];
-
-  TT_RELEASE_SAFELY(_cssStyles);
-  TT_RELEASE_SAFELY(_cachedCssStyles);
-  TT_RELEASE_SAFELY(_colorLookupTable);
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark NSNotifications
@@ -109,7 +95,7 @@ NSString* kKeyTextShadowColor   = @"color";
     NSDictionary* results = [parser parseFilename:filename];
     TT_RELEASE_SAFELY(parser);
 
-    _cssStyles = [results retain];
+    _cssStyles = results;
     _cachedCssStyles = [[NSMutableDictionary alloc] initWithCapacity:[_cssStyles count]];
 
     didLoadSuccessfully = YES;
@@ -184,7 +170,7 @@ NSString* kKeyTextShadowColor   = @"color";
     [_cachedCssStyles setObject:ruleSet forKey:selector];
 
     // Can release here because it's now being retained by _processedCssStyles
-    [ruleSet release];
+    ruleSet = nil;
   }
 
   [ruleSet setObject:object forKey:propertyName];

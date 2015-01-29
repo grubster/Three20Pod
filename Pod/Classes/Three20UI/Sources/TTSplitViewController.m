@@ -37,15 +37,14 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
     self.delegate = self;
 
     self.viewControllers = [NSArray arrayWithObjects:
-                            [[[UINavigationController alloc] initWithNibName: nil
-                                                                      bundle: nil] autorelease],
-                            [[[UINavigationController alloc] initWithNibName: nil
-                                                                      bundle: nil] autorelease],
+                            [[UINavigationController alloc] initWithNibName: nil
+                                                                      bundle: nil],
+                            [[UINavigationController alloc] initWithNibName: nil
+                                                                      bundle: nil],
                             nil];
 
     _leftNavigator = [[TTNavigator alloc] init];
@@ -58,18 +57,6 @@
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  self.delegate = nil;
-  TT_RELEASE_SAFELY(_leftNavigator);
-  TT_RELEASE_SAFELY(_rightNavigator);
-  TT_RELEASE_SAFELY(_splitViewButton);
-  TT_RELEASE_SAFELY(_popoverSplitController);
-
-  [super dealloc];
 }
 
 

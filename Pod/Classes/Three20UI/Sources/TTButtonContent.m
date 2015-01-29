@@ -16,9 +16,6 @@
 
 #import "Three20UI/private/TTButtonContent.h"
 
-// Style
-#import "Three20Style/TTImageStyle.h"
-
 // UI
 #import "Three20UI/TTImageViewDelegate.h"
 
@@ -45,25 +42,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithButton:(TTButton*)button {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _button = button;
   }
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [_request cancel];
-  TT_RELEASE_SAFELY(_request);
-  TT_RELEASE_SAFELY(_title);
-  TT_RELEASE_SAFELY(_imageURL);
-  TT_RELEASE_SAFELY(_image);
-  TT_RELEASE_SAFELY(_style);
-  self.delegate = nil;
-
-  [super dealloc];
 }
 
 
@@ -75,8 +57,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidStartLoad:(TTURLRequest*)request {
-  [_request release];
-  _request = [request retain];
+  _request = request;
 
   if ([_delegate respondsToSelector:@selector(imageViewDidStartLoad:)]) {
     [_delegate imageViewDidStartLoad:nil];
@@ -90,7 +71,7 @@
   self.image = response.image;
   [_button setNeedsDisplay];
 
-  TT_RELEASE_SAFELY(_request);
+    _request = nil;
 
   if ([_delegate respondsToSelector:@selector(imageView:didLoadImage:)]) {
     [_delegate imageView:nil didLoadImage:response.image];
@@ -100,7 +81,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)request:(TTURLRequest*)request didFailLoadWithError:(NSError*)error {
-  TT_RELEASE_SAFELY(_request);
+  _request = nil;
 
   if ([_delegate respondsToSelector:@selector(imageView:didFailLoadWithError:)]) {
     [_delegate imageView:nil didFailLoadWithError:error];
@@ -110,7 +91,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)requestDidCancelLoad:(TTURLRequest*)request {
-  TT_RELEASE_SAFELY(_request);
+    _request = nil;
 }
 
 
@@ -126,8 +107,8 @@
     return;
 
   [self stopLoading];
-  [_imageURL release];
-  _imageURL = [URL retain];
+    _imageURL = nil;
+    _imageURL = URL;
 
   if (_imageURL.length) {
     [self reload];
@@ -152,13 +133,8 @@
       }
 
     } else {
-      TTImageStyle* imageStyle = [_style firstStyleOfClass:[TTImageStyle class]];
-      if (imageStyle && imageStyle.defaultImage) {
-        self.image = imageStyle.defaultImage;
-      }
-
       TTURLRequest* request = [TTURLRequest requestWithURL:_imageURL delegate:self];
-      request.response = [[[TTURLImageResponse alloc] init] autorelease];
+      request.response = [[TTURLImageResponse alloc] init];
       [request send];
     }
   }

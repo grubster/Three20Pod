@@ -45,19 +45,6 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_URL);
-  TT_RELEASE_SAFELY(_scheme);
-  TT_RELEASE_SAFELY(_path);
-  TT_RELEASE_SAFELY(_query);
-  TT_RELEASE_SAFELY(_fragment);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -76,7 +63,7 @@
 
     NSString* name = len > 2 ? [text substringWithRange:NSMakeRange(1, endRange)] : nil;
 
-    TTURLWildcard* wildcard = [[[TTURLWildcard alloc] init] autorelease];
+    TTURLWildcard* wildcard = [[TTURLWildcard alloc] init];
     wildcard.name = name;
 
     ++_specificity;
@@ -84,7 +71,7 @@
     return wildcard;
 
   } else {
-    TTURLLiteral* literal = [[[TTURLLiteral alloc] init] autorelease];
+    TTURLLiteral* literal = [[TTURLLiteral alloc] init];
     literal.name = text;
     _specificity += 2;
     return literal;
@@ -158,7 +145,7 @@
   }
 
   if (URL.fragment) {
-    _fragment = [[self parseText:URL.fragment] retain];
+    _fragment = [self parseText:URL.fragment];
   }
 }
 

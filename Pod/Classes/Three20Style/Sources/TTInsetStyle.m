@@ -30,8 +30,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNext:(TTStyle*)next {
-	self = [super initWithNext:next];
-  if (self) {
+  if (self = [super initWithNext:next]) {
     _inset = UIEdgeInsetsZero;
   }
 
@@ -47,7 +46,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTInsetStyle*)styleWithInset:(UIEdgeInsets)inset next:(TTStyle*)next {
-  TTInsetStyle* style = [[[self alloc] initWithNext:next] autorelease];
+  TTInsetStyle* style = [[self alloc] initWithNext:next];
   style.inset = inset;
   return style;
 }

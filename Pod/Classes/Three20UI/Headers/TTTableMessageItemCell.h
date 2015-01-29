@@ -25,9 +25,9 @@
   TTImageView*  _imageView2;
 }
 
-@property (nonatomic, readonly, retain) UILabel*      titleLabel;
-@property (nonatomic, readonly)         UILabel*      captionLabel;
-@property (nonatomic, readonly, retain) UILabel*      timestampLabel;
-@property (nonatomic, readonly, retain) TTImageView*  imageView2;
+@property (nonatomic, readonly, strong) UILabel*      titleLabel;
+@property (unsafe_unretained, nonatomic, readonly)         UILabel*      captionLabel;
+@property (nonatomic, readonly, strong) UILabel*      timestampLabel;
+@property (nonatomic, readonly, strong) TTImageView*  imageView2;
 
 @end

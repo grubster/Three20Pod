@@ -24,8 +24,8 @@
   NSInteger _lightSource;
 }
 
-@property (nonatomic, retain) UIColor*  highlight;
-@property (nonatomic, retain) UIColor*  shadow;
+@property (nonatomic, strong) UIColor*  highlight;
+@property (nonatomic, strong) UIColor*  shadow;
 @property (nonatomic)         CGFloat   width;
 @property (nonatomic)         NSInteger lightSource;
 

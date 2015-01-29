@@ -22,8 +22,8 @@
   UIColor* _color2;
 }
 
-@property (nonatomic, retain) UIColor* color1;
-@property (nonatomic, retain) UIColor* color2;
+@property (nonatomic, strong) UIColor* color1;
+@property (nonatomic, strong) UIColor* color2;
 
 + (TTLinearGradientFillStyle*)styleWithColor1:(UIColor*)color1 color2:(UIColor*)color2
                                          next:(TTStyle*)next;

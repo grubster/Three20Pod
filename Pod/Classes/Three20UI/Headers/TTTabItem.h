@@ -28,7 +28,7 @@
 
 @property (nonatomic, copy)   NSString* title;
 @property (nonatomic, copy)   NSString* icon;
-@property (nonatomic, retain) id        object;
+@property (nonatomic, strong) id        object;
 @property (nonatomic)         int       badgeNumber;
 
 - (id)initWithTitle:(NSString*)title;

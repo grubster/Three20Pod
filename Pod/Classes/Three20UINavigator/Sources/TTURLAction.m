@@ -40,13 +40,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)action {
-  return [[[self alloc] init] autorelease];
+  return [[self alloc] init];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)actionWithURLPath:(NSString*)urlPath {
-  return [[[self alloc] initWithURLPath:urlPath] autorelease];
+  return [[self alloc] initWithURLPath:urlPath];
 }
 
 
@@ -70,20 +70,6 @@
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_urlPath);
-  TT_RELEASE_SAFELY(_parentURLPath);
-  TT_RELEASE_SAFELY(_query);
-  TT_RELEASE_SAFELY(_state);
-  TT_RELEASE_SAFELY(_sourceView);
-  TT_RELEASE_SAFELY(_sourceButton);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTURLAction*)applyParentURLPath:(NSString*)parentURLPath {

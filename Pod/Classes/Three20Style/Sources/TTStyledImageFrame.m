@@ -38,20 +38,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithElement:(TTStyledElement*)element node:(TTStyledImageNode*)node {
-	self = [super initWithElement:element];
-  if (self) {
+  if (self = [super initWithElement:element]) {
     _imageNode = node;
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_style);
-
-  [super dealloc];
 }
 
 
@@ -103,7 +94,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawInRect:(CGRect)rect {
   if (_style) {
-    TTStyleContext* context = [[[TTStyleContext alloc] init] autorelease];
+    TTStyleContext* context = [[TTStyleContext alloc] init];
     context.delegate = self;
     context.frame = rect;
     context.contentFrame = rect;

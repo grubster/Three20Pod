@@ -23,7 +23,7 @@
 }
 
 @property (nonatomic, copy)   NSString* text;
-@property (nonatomic, retain) UIFont*   font;
+@property (nonatomic, strong) UIFont*   font;
 
 - (id)initWithText:(NSString*)text;
 

@@ -22,11 +22,11 @@
 
 @interface TTThumbsDataSource : TTTableViewDataSource {
   id<TTPhotoSource>                 _photoSource;
-  id<TTThumbsTableViewCellDelegate> _delegate;
+  id<TTThumbsTableViewCellDelegate> __unsafe_unretained _delegate;
 }
 
-@property (nonatomic, retain) id<TTPhotoSource>                 photoSource;
-@property (nonatomic, assign) id<TTThumbsTableViewCellDelegate> delegate;
+@property (nonatomic, strong) id<TTPhotoSource>                 photoSource;
+@property (nonatomic, unsafe_unretained) id<TTThumbsTableViewCellDelegate> delegate;
 
 - (id)initWithPhotoSource: (id<TTPhotoSource>)photoSource
                  delegate: (id<TTThumbsTableViewCellDelegate>)delegate;

@@ -31,8 +31,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURL:(NSString*)URL {
-	self = [self initWithText:nil URL:URL next:nil];
-  if (self) {
+  if (self = [self initWithText:nil URL:URL next:nil]) {
   }
 
   return self;
@@ -41,8 +40,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithURL:(NSString*)URL next:(TTStyledNode*)nextSibling {
-	self = [self initWithText:nil URL:URL next:nextSibling];
-  if (self) {
+  if (self = [self initWithText:nil URL:URL next:nextSibling]) {
   }
 
   return self;
@@ -51,8 +49,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithText:(NSString*)text URL:(NSString*)URL next:(TTStyledNode*)nextSibling {
-	self = [super initWithText:text next:nextSibling];
-  if (self) {
+  if (self = [super initWithText:text next:nextSibling]) {
     self.URL = URL;
   }
 
@@ -62,21 +59,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithText:nil URL:nil next:nil];
-  if (self) {
+  if (self = [self initWithText:nil URL:nil next:nil]) {
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_URL);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)description {

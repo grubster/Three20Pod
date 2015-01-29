@@ -81,14 +81,6 @@ static NSString* kUniversalURLPattern = @"*";
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_parentURL);
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString *)description {
   if (nil != _targetClass) {
     return [NSString stringWithFormat:@"%@ => %@", _URL, _targetClass];
@@ -222,7 +214,6 @@ static NSString* kUniversalURLPattern = @"*";
       [self analyzeArgument:_fragment method:method argNames:argNames];
     }
 
-    [selectorName release];
   }
 }
 
@@ -260,32 +251,33 @@ static NSString* kUniversalURLPattern = @"*";
           break;
         }
         case TTURLArgumentTypeInteger: {
-          int val = [text intValue];
+          __unsafe_unretained int val = [text intValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeLongLong: {
-          long long val = [text longLongValue];
+          __unsafe_unretained long long val = [text longLongValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeFloat: {
-          float val = [text floatValue];
+          __unsafe_unretained float val = [text floatValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeDouble: {
-          double val = [text doubleValue];
+          __unsafe_unretained double val = [text doubleValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         case TTURLArgumentTypeBool: {
-          BOOL val = [text boolValue];
+          __unsafe_unretained BOOL val = [text boolValue];
           [invocation setArgument:&val atIndex:argIndex+2];
           break;
         }
         default: {
-          [invocation setArgument:&text atIndex:argIndex+2];
+            __unsafe_unretained NSString *unsafeText = text;
+          [invocation setArgument:&unsafeText atIndex:argIndex+2];
           break;
         }
       }
@@ -301,7 +293,7 @@ static NSString* kUniversalURLPattern = @"*";
               forInvocation: (NSInvocation*)invocation
                       query: (NSDictionary*)query {
   NSInteger remainingArgs = _argumentCount;
-  NSMutableDictionary* unmatchedArgs = query ? [[query mutableCopy] autorelease] : nil;
+  __unsafe_unretained NSMutableDictionary* unmatchedArgs = query ? [query mutableCopy] : nil;
 
   NSArray* pathComponents = URL.path.pathComponents;
   for (NSInteger i = 0; i < _path.count; ++i) {
@@ -431,16 +423,16 @@ static NSString* kUniversalURLPattern = @"*";
      withURL: (NSURL*)URL
        query: (NSDictionary*)query {
   id returnValue = nil;
-
+    __unsafe_unretained NSURL* unsafeURL = URL;
   NSMethodSignature *sig = [target methodSignatureForSelector:self.selector];
   if (sig) {
     NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:sig];
     [invocation setTarget:target];
     [invocation setSelector:self.selector];
     if (self.isUniversal) {
-      [invocation setArgument:&URL atIndex:2];
+      [invocation setArgument:&unsafeURL atIndex:2];
       if (query) {
-        [invocation setArgument:&query atIndex:3];
+        [invocation setArgument:&unsafeURL atIndex:3];
       }
 
     } else {
@@ -449,7 +441,7 @@ static NSString* kUniversalURLPattern = @"*";
     [invocation invoke];
 
     if (sig.methodReturnLength) {
-      [invocation getReturnValue:&returnValue];
+      [invocation getReturnValue:&unsafeURL];
     }
   }
 
@@ -475,18 +467,17 @@ static NSString* kUniversalURLPattern = @"*";
     } else {
       returnValue = [returnValue init];
     }
-    [returnValue autorelease];
+      returnValue;
 #endif
 
   } else {
-    id target = [_targetObject retain];
+    id target = _targetObject;
     if (_selector) {
       returnValue = [self invoke:target withURL:URL query:query];
 
     } else {
       TTDWARNING(@"No object created from URL:'%@' URL");
     }
-    [target release];
   }
   return returnValue;
 }

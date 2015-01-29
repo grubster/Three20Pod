@@ -41,8 +41,8 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kShadowHeight = 24.0f;
-static const CGFloat kDesiredTableHeight = 150.0f;
+static const CGFloat kShadowHeight = 24;
+static const CGFloat kDesiredTableHeight = 150;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -59,8 +59,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _internal = [[TTSearchTextFieldInternal alloc] initWithTextField:self];
 
     self.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -79,40 +78,23 @@ static const CGFloat kDesiredTableHeight = 150.0f;
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [_dataSource.model.delegates removeObject:self];
-  _tableView.delegate = nil;
-  TT_RELEASE_SAFELY(_dataSource);
-  TT_RELEASE_SAFELY(_internal);
-  TT_RELEASE_SAFELY(_tableView);
-  TT_RELEASE_SAFELY(_shadowView);
-  TT_RELEASE_SAFELY(_screenView);
-  TT_RELEASE_SAFELY(_previousNavigationItem);
-  TT_RELEASE_SAFELY(_previousRightBarButtonItem);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showDoneButton:(BOOL)show {
   UIViewController* controller = [TTNavigator navigator].visibleViewController;
   if (controller) {
     if (show) {
-      _previousNavigationItem = [controller.navigationItem retain];
-      _previousRightBarButtonItem = [controller.navigationItem.rightBarButtonItem retain];
+      _previousNavigationItem = controller.navigationItem;
+      _previousRightBarButtonItem = controller.navigationItem.rightBarButtonItem;
 
-      UIBarButtonItem* doneButton = [[[UIBarButtonItem alloc]
+      UIBarButtonItem* doneButton = [[UIBarButtonItem alloc]
       initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-      target:self action:@selector(doneAction)] autorelease];
+      target:self action:@selector(doneAction)];
       [controller.navigationItem setRightBarButtonItem:doneButton animated:YES];
 
     } else {
       [_previousNavigationItem setRightBarButtonItem:_previousRightBarButtonItem animated:YES];
-      TT_RELEASE_SAFELY(_previousRightBarButtonItem);
-      TT_RELEASE_SAFELY(_previousNavigationItem);
+        _previousRightBarButtonItem = nil;
+        _previousNavigationItem = nil;
     }
   }
 }
@@ -121,7 +103,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showDarkScreen:(BOOL)show {
   if (show && !_screenView) {
-    _screenView = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    _screenView = [UIButton buttonWithType:UIButtonTypeCustom];
     _screenView.backgroundColor = TTSTYLEVAR(screenBackgroundColor);
     _screenView.frame = [self rectForSearchResults:NO];
     _screenView.alpha = 0;
@@ -269,7 +251,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
   if ([_internal.delegate respondsToSelector:@selector(textField:didSelectObject:)]) {
     id object = [_dataSource tableView:tableView objectForRowAtIndexPath:indexPath];
     UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
-    if (cell.selectionStyle != UITableViewCellSelectionStyleNone) {
+    if (cell.selectionStyle != UITableViewCellSeparatorStyleNone) {
       [_internal.delegate performSelector:@selector(textField:didSelectObject:) withObject:self
                           withObject:object];
     }
@@ -364,8 +346,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 - (void)setDataSource:(id<TTTableViewDataSource>)dataSource {
   if (dataSource != _dataSource) {
     [_dataSource.model.delegates removeObject:self];
-    [_dataSource release];
-    _dataSource = [dataSource retain];
+    _dataSource = dataSource;
     [_dataSource.model.delegates addObject:self];
   }
 }
@@ -419,7 +400,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)showSearchResults:(BOOL)show {
   if (show && _dataSource) {
-    [self tableView];
+    self.tableView;
 
     if (!_shadowView) {
       _shadowView = [[TTView alloc] init];
@@ -472,7 +453,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 - (CGRect)rectForSearchResults:(BOOL)withKeyboard {
   UIView* superview = self.superviewForSearchResults;
 
-  CGFloat y = 0.0f;
+  CGFloat y = 0;
   UIView* view = self;
   while (view != superview) {
     y += view.top;
@@ -481,7 +462,7 @@ static const CGFloat kDesiredTableHeight = 150.0f;
 
   CGFloat height = self.height;
   CGFloat keyboardHeight = withKeyboard ? TTKeyboardHeight() : 0;
-  CGFloat tableHeight = self.window.height - (self.screenViewY + height + keyboardHeight);
+  CGFloat tableHeight = self.window.height - (self.ttScreenY + height + keyboardHeight);
 
   return CGRectMake(0, y + self.height-1, superview.frame.size.width, tableHeight+1);
 }

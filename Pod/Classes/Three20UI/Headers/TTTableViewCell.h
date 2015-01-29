@@ -38,7 +38,7 @@ extern const NSInteger  kTableMessageTextLineCount;
  */
 @interface TTTableViewCell : UITableViewCell
 
-@property (nonatomic, retain) id object;
+@property (nonatomic, strong) id object;
 
 /**
  * Measure the height of the row with the object that will be assigned to the cell.

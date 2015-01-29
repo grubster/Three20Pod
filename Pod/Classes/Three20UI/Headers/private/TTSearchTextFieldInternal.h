@@ -22,7 +22,7 @@
 @interface TTSearchTextFieldInternal : NSObject <UITextFieldDelegate> {
   TTSearchTextField*      _textField;
 
-  id<UITextFieldDelegate> _delegate;
+  __unsafe_unretained id<UITextFieldDelegate> _delegate;
 }
 
 @property (nonatomic, assign) id<UITextFieldDelegate> delegate;

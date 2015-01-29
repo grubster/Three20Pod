@@ -32,10 +32,10 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static const CGFloat kShadowHeight        = 20.0f;
-static const CGFloat kShadowInverseHeight = 10.0f;
+static const CGFloat kShadowHeight        = 20.0;
+static const CGFloat kShadowInverseHeight = 10.0;
 
-static const CGFloat kCancelHighlightThreshold = 4.0f;
+static const CGFloat kCancelHighlightThreshold = 4;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -50,22 +50,12 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame style:(UITableViewStyle)style {
-	self = [super initWithFrame:frame style:style];
-  if (self) {
+  if (self = [super initWithFrame:frame style:style]) {
     _highlightStartPoint = CGPointZero;
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_highlightedLabel);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -102,15 +92,6 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 //  }
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    [super touchesMoved:touches withEvent:event];
-
-    if ([self.delegate respondsToSelector:@selector(tableView:touchesMoved:withEvent:)]) {
-        id<TTTableViewDelegate> delegate = (id<TTTableViewDelegate>)self.delegate;
-        [delegate tableView:self touchesMoved:touches withEvent:event];
-    }
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)touchesEnded:(NSSet*)touches withEvent:(UIEvent*)event {
@@ -220,7 +201,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (CAGradientLayer*)shadowAsInverse:(BOOL)inverse {
-  CAGradientLayer* newShadow = [[[CAGradientLayer alloc] init] autorelease];
+  CAGradientLayer* newShadow = [[CAGradientLayer alloc] init];
   CGRect newShadowFrame = CGRectMake(0.0, 0.0,
                                      self.frame.size.width,
                                      inverse ? kShadowInverseHeight : kShadowHeight);
@@ -236,8 +217,8 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
                            colorWithAlphaComponent:0.0].CGColor;
 
   newShadow.colors = [NSArray arrayWithObjects:
-            (id)(inverse ? lightColor : darkColor),
-            (id)(inverse ? darkColor : lightColor),
+            (__bridge id)(inverse ? lightColor : darkColor),
+            (__bridge id)(inverse ? darkColor : lightColor),
             nil];
   return newShadow;
 }
@@ -258,9 +239,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
   } else if (![[self.layer.sublayers objectAtIndex:0] isEqual:_originShadow]) {
     [_originShadow removeFromSuperlayer];
-
-    _originShadow = [self shadowAsInverse:NO];
-   [self.layer insertSublayer:_originShadow atIndex:0];
+    [self.layer insertSublayer:_originShadow atIndex:0];
   }
 
   [CATransaction begin];
@@ -278,10 +257,10 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
   NSArray* indexPathsForVisibleRows = [self indexPathsForVisibleRows];
   if (0 == [indexPathsForVisibleRows count]) {
     [_topShadow removeFromSuperlayer];
-    TT_RELEASE_SAFELY(_topShadow);
+      _topShadow = nil;
 
     [_bottomShadow removeFromSuperlayer];
-    TT_RELEASE_SAFELY(_bottomShadow);
+      _bottomShadow = nil;
     return;
   }
 
@@ -295,7 +274,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
     // Create the top shadow if necessary.
     if (nil == _topShadow) {
-      _topShadow = [[self shadowAsInverse:YES] retain];
+      _topShadow = [self shadowAsInverse:YES];
       [cell.layer insertSublayer:_topShadow atIndex:0];
 
     }  else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_topShadow] != 0) {
@@ -310,7 +289,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
   } else {
     [_topShadow removeFromSuperlayer];
-    TT_RELEASE_SAFELY(_topShadow);
+      _topShadow = nil;
   }
 
   NSIndexPath* lastRow = [indexPathsForVisibleRows lastObject];
@@ -321,7 +300,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
     UIView* cell = [self cellForRowAtIndexPath:lastRow];
 
     if (nil == _bottomShadow) {
-      _bottomShadow = [[self shadowAsInverse:NO] retain];
+      _bottomShadow = [self shadowAsInverse:NO];
       [cell.layer insertSublayer:_bottomShadow atIndex:0];
 
     }  else if ([cell.layer.sublayers indexOfObjectIdenticalTo:_bottomShadow] != 0) {
@@ -336,7 +315,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 
   } else {
     [_bottomShadow removeFromSuperlayer];
-    TT_RELEASE_SAFELY(_bottomShadow);
+      _bottomShadow = nil;
   }
 }
 
@@ -351,8 +330,7 @@ static const CGFloat kCancelHighlightThreshold = 4.0f;
 - (void)setHighlightedLabel:(TTStyledTextLabel*)label {
   if (label != _highlightedLabel) {
     _highlightedLabel.highlightedNode = nil;
-    [_highlightedLabel release];
-    _highlightedLabel = [label retain];
+    _highlightedLabel = label;
   }
 }
 

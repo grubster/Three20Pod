@@ -38,12 +38,11 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithExtensionID:(NSString*)identifier {
-	self = [super initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [super initWithNibName:nil bundle:nil]) {
     self.title = @"Extension Info";
     self.tableViewStyle = UITableViewStyleGrouped;
 
-    _extension = [[[TTExtensionLoader availableExtensions] objectForKey:identifier] retain];
+    _extension = [[TTExtensionLoader availableExtensions] objectForKey:identifier];
 
     self.variableHeightRows = YES;
   }
@@ -59,18 +58,11 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_extension);
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)viewDidLoad {
   [super viewDidLoad];
 
-  NSMutableArray* items = [[[NSMutableArray alloc] init] autorelease];
-  NSMutableArray* titles = [[[NSMutableArray alloc] init] autorelease];
+  NSMutableArray* items = [[NSMutableArray alloc] init];
+  NSMutableArray* titles = [[NSMutableArray alloc] init];
 
   [titles addObject:@"Description"];
   [items addObject:[NSArray arrayWithObjects:
@@ -87,8 +79,8 @@
 
   if ([_extension.authors count] > 0) {
     [titles addObject:@"Authors"];
-    NSMutableArray* authorItems = [[[NSMutableArray alloc] initWithCapacity:
-                                    [_extension.authors count]] autorelease];
+    NSMutableArray* authorItems = [[NSMutableArray alloc] initWithCapacity:
+                                    [_extension.authors count]];
     for (TTExtensionAuthor* author in _extension.authors) {
       TTDASSERT([author isKindOfClass:[TTExtensionAuthor class]]);
       [authorItems addObject:[TTTableTextItem itemWithText:author.name]];

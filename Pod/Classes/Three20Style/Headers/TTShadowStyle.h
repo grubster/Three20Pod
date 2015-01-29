@@ -23,7 +23,7 @@
   CGSize    _offset;
 }
 
-@property (nonatomic, retain) UIColor*  color;
+@property (nonatomic, strong) UIColor*  color;
 @property (nonatomic)         CGFloat   blur;
 @property (nonatomic)         CGSize    offset;
 

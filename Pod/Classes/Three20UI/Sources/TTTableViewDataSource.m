@@ -32,7 +32,6 @@
 #import "Three20UI/TTTableTextItem.h"
 #import "Three20UI/TTTableActivityItem.h"
 #import "Three20UI/TTTableControlItem.h"
-#import "Three20UI/TTTableSettingsItem.h"
 
 // - Table Cells
 #import "Three20UI/TTTableMoreButtonCell.h"
@@ -48,7 +47,6 @@
 #import "Three20UI/TTTableTextItemCell.h"
 #import "Three20UI/TTStyledTextTableCell.h"
 #import "Three20UI/TTTableFlushViewCell.h"
-#import "Three20UI/TTTableSettingsItemCell.h"
 
 // Style
 #import "Three20Style/TTStyledText.h"
@@ -66,16 +64,6 @@
 @implementation TTTableViewDataSource
 
 @synthesize model = _model;
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_model);
-  TT_RELEASE_SAFELY(_itemCellClassMapping);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,13 +114,12 @@
                                            length:strlen(className)
                                            encoding:NSASCIIStringEncoding freeWhenDone:NO];
 
-  UITableViewCell* cell;
-  cell = (UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifier];
+  UITableViewCell* cell =
+    (UITableViewCell*)[tableView dequeueReusableCellWithIdentifier:identifier];
   if (cell == nil) {
-    cell = [[[cellClass alloc] initWithStyle:UITableViewCellStyleDefault
-                               reuseIdentifier:identifier] autorelease];
+    cell = [[cellClass alloc] initWithStyle:UITableViewCellStyleDefault
+                               reuseIdentifier:identifier];
   }
-  [identifier release];
 
   if ([cell isKindOfClass:[TTTableViewCell class]]) {
     [(TTTableViewCell*)cell setObject:object];
@@ -248,91 +235,53 @@
   return nil;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)setCellClass:(Class)cellClass forItemClass:(Class)itemClass {
-  if (!_itemCellClassMapping) {
-    _itemCellClassMapping = [[NSMutableDictionary alloc] init];
-  }
-  [_itemCellClassMapping setObject:cellClass forKey:itemClass];
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object {
-  if ([object conformsToProtocol:@protocol(TTTableItemSelectingClass)])
-    return [object cellClass];
-
-  else if (_itemCellClassMapping &&
-          [_itemCellClassMapping objectForKey:[object class]])
-  {
-    return [_itemCellClassMapping objectForKey:[object class]];
-  }
-
-  else if ([object isKindOfClass:[TTTableItem class]]) {
+  if ([object isKindOfClass:[TTTableItem class]]) {
     if ([object isKindOfClass:[TTTableMoreButton class]]) {
       return [TTTableMoreButtonCell class];
-    }
 
-    else if ([object isKindOfClass:[TTTableSubtextItem class]]) {
-        return [TTTableSubtextItemCell class];
+    } else if ([object isKindOfClass:[TTTableSubtextItem class]]) {
+      return [TTTableSubtextItemCell class];
 
-    } else if ([object isKindOfClass:[TTTableSettingsItem class]]) {
-      return [TTTableSettingsItemCell class];
-    }
-
-    else if ([object isKindOfClass:[TTTableRightCaptionItem class]]) {
+    } else if ([object isKindOfClass:[TTTableRightCaptionItem class]]) {
       return [TTTableRightCaptionItemCell class];
-    }
 
-    else if ([object isKindOfClass:[TTTableCaptionItem class]]) {
+    } else if ([object isKindOfClass:[TTTableCaptionItem class]]) {
       return [TTTableCaptionItemCell class];
-    }
 
-    else if ([object isKindOfClass:[TTTableSubtitleItem class]]) {
+    } else if ([object isKindOfClass:[TTTableSubtitleItem class]]) {
       return [TTTableSubtitleItemCell class];
 
-    }
-
-    else if ([object isKindOfClass:[TTTableMessageItem class]]) {
+    } else if ([object isKindOfClass:[TTTableMessageItem class]]) {
       return [TTTableMessageItemCell class];
 
-    }
-
-    else if ([object isKindOfClass:[TTTableImageItem class]]) {
+    } else if ([object isKindOfClass:[TTTableImageItem class]]) {
       return [TTTableImageItemCell class];
 
-    }
-
-    else if ([object isKindOfClass:[TTTableStyledTextItem class]]) {
+    } else if ([object isKindOfClass:[TTTableStyledTextItem class]]) {
       return [TTStyledTextTableItemCell class];
 
-    }
-
-    else if ([object isKindOfClass:[TTTableActivityItem class]]) {
+    } else if ([object isKindOfClass:[TTTableActivityItem class]]) {
       return [TTTableActivityItemCell class];
 
-    }
-
-    else if ([object isKindOfClass:[TTTableControlItem class]]) {
+    } else if ([object isKindOfClass:[TTTableControlItem class]]) {
       return [TTTableControlCell class];
 
-    }
-
-    else {
+    } else {
       return [TTTableTextItemCell class];
     }
-  }
 
-  else if ([object isKindOfClass:[TTStyledText class]]) {
+  } else if ([object isKindOfClass:[TTStyledText class]]) {
     return [TTStyledTextTableCell class];
-  }
 
-  else if ([object isKindOfClass:[UIControl class]]
+  } else if ([object isKindOfClass:[UIControl class]]
              || [object isKindOfClass:[UITextView class]]
              || [object isKindOfClass:[TTTextEditor class]]) {
     return [TTTableControlCell class];
-  }
 
-  else if ([object isKindOfClass:[UIView class]]) {
+  } else if ([object isKindOfClass:[UIView class]]) {
     return [TTTableFlushViewCell class];
   }
 
@@ -347,9 +296,8 @@
   if ([object isKindOfClass:[TTTableTextItem class]]) {
     TTTableTextItem* item = object;
     return item.text;
-  }
 
-  else {
+  } else {
     return [NSString stringWithFormat:@"%@", object];
   }
 }
@@ -381,9 +329,8 @@
 - (NSString*)titleForLoading:(BOOL)reloading {
   if (reloading) {
     return TTLocalizedString(@"Updating...", @"");
-  }
 
-  else {
+  } else {
     return TTLocalizedString(@"Loading...", @"");
   }
 }
@@ -404,12 +351,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString*)subtitleForEmpty {
   return nil;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (BOOL)reloadButtonForEmpty {
-  return YES;
 }
 
 

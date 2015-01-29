@@ -25,10 +25,10 @@
   CGFloat   _width;
 }
 
-@property (nonatomic, retain) UIColor*  top;
-@property (nonatomic, retain) UIColor*  right;
-@property (nonatomic, retain) UIColor*  bottom;
-@property (nonatomic, retain) UIColor*  left;
+@property (nonatomic, strong) UIColor*  top;
+@property (nonatomic, strong) UIColor*  right;
+@property (nonatomic, strong) UIColor*  bottom;
+@property (nonatomic, strong) UIColor*  left;
 @property (nonatomic)         CGFloat   width;
 
 + (TTFourBorderStyle*)styleWithTop:(UIColor*)top right:(UIColor*)right bottom:(UIColor*)bottom

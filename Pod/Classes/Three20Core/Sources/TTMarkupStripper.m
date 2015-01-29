@@ -28,14 +28,6 @@
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_strings);
-
-  [super dealloc];
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
 #pragma mark NSXMLParserDelegate
@@ -70,10 +62,10 @@
   NSXMLParser*  parser    = [[NSXMLParser alloc] initWithData:data];
   parser.delegate = self;
   [parser parse];
-  TT_RELEASE_SAFELY(parser);
+    parser = nil;
 
   NSString* result = [_strings componentsJoinedByString:@""];
-  TT_RELEASE_SAFELY(_strings);
+    _strings = nil;
 
   return result;
 }

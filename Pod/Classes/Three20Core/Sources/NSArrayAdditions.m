@@ -41,7 +41,7 @@ TT_FIX_CATEGORY_BUG(NSArrayAdditions)
       [delegate performSelector:selector];
     }
   }
-  [copy release];
+    copy = nil;
 }
 
 
@@ -54,7 +54,7 @@ TT_FIX_CATEGORY_BUG(NSArrayAdditions)
       [delegate performSelector:selector withObject:p1];
     }
   }
-  [copy release];
+    copy = nil;
 }
 
 
@@ -67,7 +67,7 @@ TT_FIX_CATEGORY_BUG(NSArrayAdditions)
       [delegate performSelector:selector withObject:p1 withObject:p2];
     }
   }
-  [copy release];
+    copy = nil;
 }
 
 
@@ -80,7 +80,7 @@ TT_FIX_CATEGORY_BUG(NSArrayAdditions)
       [delegate performSelector:selector withObject:p1 withObject:p2 withObject:p3];
     }
   }
-  [copy release];
+    copy = nil;
 }
 
 

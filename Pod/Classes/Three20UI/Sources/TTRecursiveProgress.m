@@ -32,7 +32,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (id)progressWithDelegate:(id<TTRecursiveProgressDelegate>)delegate {
-  return [[[self alloc] initWithDelegate:delegate] autorelease];
+  return [[self alloc] initWithDelegate:delegate];
 }
 
 
@@ -40,16 +40,15 @@
 + (id)progressWithParent: (TTRecursiveProgress*)parent
             firstPercent: (CGFloat)firstPercent
              lastPercent: (CGFloat)lastPercent {
-  return [[[self alloc] initWithParent: parent
+  return [[self alloc] initWithParent: parent
                           firstPercent: firstPercent
-                           lastPercent: lastPercent] autorelease];
+                           lastPercent: lastPercent];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithDelegate:(id<TTRecursiveProgressDelegate>)delegate {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _firstPercent = 0;
     _lastPercent = 1;
     _parent = nil;
@@ -64,8 +63,7 @@
 - (id)initWithParent:(TTRecursiveProgress*)parent
         firstPercent: (CGFloat)firstPercent
          lastPercent: (CGFloat)lastPercent {
-	self = [super init];
-  if (self) {
+  if (self = [super init]) {
     _firstPercent = firstPercent;
     _lastPercent = lastPercent;
     _parent = parent;

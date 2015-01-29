@@ -30,11 +30,6 @@
 
 - (id)tableView:(UITableView*)tableView objectForRowAtIndexPath:(NSIndexPath*)indexPath;
 
-/**
- * Map one Cell Class for specific Item Class of the Data Source.
- */
-- (void)setCellClass:(Class)cellClass forItemClass:(Class)itemClass;
-
 - (Class)tableView:(UITableView*)tableView cellClassForObject:(id)object;
 
 - (NSString*)tableView:(UITableView*)tableView labelForObject:(id)object;
@@ -58,12 +53,6 @@
 - (NSString*)titleForEmpty;
 
 - (NSString*)subtitleForEmpty;
-
-
-/**
- * return YES to include a reload button in the TTErrorView.
- */
-- (BOOL)reloadButtonForEmpty;
 
 - (UIImage*)imageForError:(NSError*)error;
 
@@ -90,7 +79,6 @@
 
 @interface TTTableViewDataSource : NSObject <TTTableViewDataSource> {
   id<TTModel> _model;
-  NSMutableDictionary * _itemCellClassMapping;
 }
 
 @end

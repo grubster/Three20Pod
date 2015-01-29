@@ -38,8 +38,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     self.text = @"";
     self.font = TTSTYLEVAR(font);
     self.textColor = [UIColor colorWithWhite:0.25 alpha:1];
@@ -51,20 +50,6 @@
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [self stopAnimating];
-  TT_RELEASE_SAFELY(_text);
-  TT_RELEASE_SAFELY(_font);
-  TT_RELEASE_SAFELY(_textColor);
-  TT_RELEASE_SAFELY(_spotlightColor);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark -
@@ -133,7 +118,7 @@
 
   CGSize textSize = [self sizeThatFits:CGSizeZero];
 
-  CGFloat x = 0.0f;
+  CGFloat x = 0;
   if (_textAlignment == UITextAlignmentRight) {
     x = self.frame.size.width - textSize.width;
 
@@ -141,7 +126,7 @@
     x = ceil(self.frame.size.width/2 - textSize.width/2);
   }
 
-  CGFloat y = 0.0f;
+  CGFloat y = 0;
   if (self.contentMode == UIViewContentModeCenter) {
     y = ceil(rect.size.height/2 + _font.capHeight/2);
 

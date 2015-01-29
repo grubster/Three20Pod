@@ -43,7 +43,7 @@
   NSDictionary*			_colorLookupTable;
 
   //CSS Cache var
-  NSDictionary*			_cachedCssStyles;
+  NSMutableDictionary*			_cachedCssStyles;
 }
 
 @property (nonatomic, readonly) NSDictionary* cssStyles;

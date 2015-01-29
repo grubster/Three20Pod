@@ -46,7 +46,7 @@
  *
  * @default TTSTYLEVAR(navigationBarTintColor)
  */
-@property (nonatomic, retain) UIColor* navigationBarTintColor;
+@property (nonatomic, strong) UIColor* navigationBarTintColor;
 
 /**
  * The style of the status bar when this view controller is appearing.

@@ -27,8 +27,8 @@
   BOOL                             _infiniteScrollEnabled;
 }
 
-@property (nonatomic, retain) TTTableHeaderDragRefreshView* headerView;
-@property (nonatomic, retain) TTTableFooterInfiniteScrollView* footerView;
+@property (nonatomic, strong) TTTableHeaderDragRefreshView* headerView;
+@property (nonatomic, strong) TTTableFooterInfiniteScrollView* footerView;
 @property (readonly) BOOL dragRefreshEnabled;
 @property (readonly) BOOL infiniteScrollEnabled;
 

@@ -32,7 +32,7 @@
 #import "Three20Style/TTDefaultStyleSheet.h"
 #import "Three20Style/TTGlobalStyle.h"
 
-static const CGFloat kMaxLabelHeight = 2000.0f;
+static const CGFloat kMaxLabelHeight = 2000;
 static const UILineBreakMode kLineBreakMode = UILineBreakModeWordWrap;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -43,8 +43,7 @@ static const UILineBreakMode kLineBreakMode = UILineBreakModeWordWrap;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:style reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:style reuseIdentifier:identifier]) {
     self.textLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
     self.textLabel.lineBreakMode = kLineBreakMode;
     self.textLabel.numberOfLines = 0;
@@ -125,7 +124,6 @@ static const UILineBreakMode kLineBreakMode = UILineBreakModeWordWrap;
 
     TTTableTextItem* item = object;
     self.textLabel.text = item.text;
-	self.textLabel.backgroundColor = TTSTYLEVAR(backgroundTextColor);
 
     if ([object isKindOfClass:[TTTableButton class]]) {
       self.textLabel.font = TTSTYLEVAR(tableButtonFont);

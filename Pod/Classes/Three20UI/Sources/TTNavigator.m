@@ -65,7 +65,7 @@ UIViewController* TTOpenURLFromView(NSString* URL, UIView* view) {
 + (TTNavigator*)navigator {
   TTBaseNavigator* navigator = [TTBaseNavigator globalNavigator];
   if (nil == navigator) {
-    navigator = [[[TTNavigator alloc] init] autorelease];
+    navigator = [[TTNavigator alloc] init];
     // setNavigator: retains.
     [super setGlobalNavigator:navigator];
   }
@@ -139,7 +139,7 @@ UIViewController* TTOpenURLFromView(NSString* URL, UIView* view) {
 - (void)didRestoreController:(UIViewController*)controller {
   if ([controller isKindOfClass:[TTModelViewController class]]) {
     TTModelViewController* modelViewController = (TTModelViewController*)controller;
-    [modelViewController model];
+    modelViewController.model;
   }
 }
 

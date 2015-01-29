@@ -56,7 +56,7 @@
         return nil;
 
     // Grab the Font Name.
-    NSString *fontName = (NSString*)CTFontCopyPostScriptName(ctFont);
+    NSString *fontName = (__bridge NSString*)CTFontCopyPostScriptName(ctFont);
 
     //////////////////////////////////
     // Create and return UIFont.
@@ -191,7 +191,7 @@
     NSDictionary *att = [NSDictionary dictionaryWithObjectsAndKeys:
 
                           // Font name.
-                         (id)cgFont, kCTFontAttributeName,
+                         (__bridge id)cgFont, kCTFontAttributeName,
 
                          // Foreground color.
                          (id)[(UIColor*)[self color] CGColor], kCTForegroundColorAttributeName,

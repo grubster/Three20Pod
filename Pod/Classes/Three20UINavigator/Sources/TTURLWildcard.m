@@ -44,16 +44,6 @@
   return self;
 }
 
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_name);
-  TT_RELEASE_SAFELY(_selector);
-
-  [super dealloc];
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)match:(NSString*)text {
   return YES;
@@ -77,7 +67,7 @@
   if (names.count > 1) {
     TTURLSelector* selector = nil;
     for (NSString* name in names) {
-      TTURLSelector* newSelector = [[[TTURLSelector alloc] initWithName:name] autorelease];
+      TTURLSelector* newSelector = [[TTURLSelector alloc] initWithName:name];
       if (selector) {
         selector.next = newSelector;
 
@@ -89,7 +79,7 @@
 
   } else {
     self.argType = TTURLArgumentTypeForProperty(cls, _name);
-    self.selector = [[[TTURLSelector alloc] initWithName:_name] autorelease];
+    self.selector = [[TTURLSelector alloc] initWithName:_name];
   }
 }
 

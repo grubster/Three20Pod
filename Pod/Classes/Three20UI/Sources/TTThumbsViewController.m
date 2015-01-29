@@ -41,7 +41,7 @@
 #import "Three20Core/TTGlobalCoreRects.h"
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static CGFloat kThumbnailRowHeight = 79.0f;
+static CGFloat kThumbnailRowHeight = 79;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,8 +55,7 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-	self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-  if (self) {
+  if (self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil]) {
     self.statusBarStyle = UIStatusBarStyleBlackTranslucent;
     self.navigationBarStyle = UIBarStyleBlackTranslucent;
     self.navigationBarTintColor = nil;
@@ -70,8 +69,7 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithDelegate:(id<TTThumbsViewControllerDelegate>)delegate {
-	self = [self initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [self initWithNibName:nil bundle:nil]) {
     self.delegate = delegate;
   }
 
@@ -95,22 +93,11 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)init {
-	self = [self initWithNibName:nil bundle:nil];
-  if (self) {
+  if (self = [self initWithNibName:nil bundle:nil]) {
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  [_photoSource.delegates removeObject:self];
-  TT_RELEASE_SAFELY(_photoSource);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,14 +215,12 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 
   if (_delegate) {
     self.navigationItem.leftBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithCustomView:[[[UIView alloc] init]
-                                                  autorelease]]
-     autorelease];
+    [[UIBarButtonItem alloc] initWithCustomView:[[UIView alloc] init]];
     self.navigationItem.rightBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithTitle:TTLocalizedString(@"Done", @"")
+    [[UIBarButtonItem alloc] initWithTitle:TTLocalizedString(@"Done", @"")
                                       style:UIBarButtonItemStyleBordered
                                      target:self
-                                     action:@selector(removeFromSupercontroller)] autorelease];
+                                     action:@selector(removeFromSupercontroller)];
   }
 }
 
@@ -304,8 +289,7 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)setPhotoSource:(id<TTPhotoSource>)photoSource {
   if (photoSource != _photoSource) {
-    [_photoSource release];
-    _photoSource = [photoSource retain];
+    _photoSource = photoSource;
 
     self.title = _photoSource.title;
     self.dataSource = [self createDataSource];
@@ -315,13 +299,13 @@ static CGFloat kThumbnailRowHeight = 79.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (TTPhotoViewController*)createPhotoViewController {
-  return [[[TTPhotoViewController alloc] init] autorelease];
+  return [[TTPhotoViewController alloc] init];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id<TTTableViewDataSource>)createDataSource {
-  return [[[TTThumbsDataSource alloc] initWithPhotoSource:_photoSource delegate:self] autorelease];
+  return [[TTThumbsDataSource alloc] initWithPhotoSource:_photoSource delegate:self];
 }
 
 

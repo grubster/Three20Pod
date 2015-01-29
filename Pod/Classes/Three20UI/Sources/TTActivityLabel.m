@@ -32,11 +32,11 @@
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
 
-static CGFloat kMargin          = 10.0f;
-static CGFloat kPadding         = 15.0f;
-static CGFloat kBannerPadding   = 8.0f;
-static CGFloat kSpacing         = 6.0f;
-static CGFloat kProgressMargin  = 6.0f;
+static CGFloat kMargin          = 10;
+static CGFloat kPadding         = 15;
+static CGFloat kBannerPadding   = 8;
+static CGFloat kSpacing         = 6;
+static CGFloat kProgressMargin  = 6;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -51,8 +51,7 @@ static CGFloat kProgressMargin  = 6.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame style:(TTActivityLabelStyle)style text:(NSString*)text {
-	self = [super initWithFrame:frame];
-  if (self) {
+  if (self = [super initWithFrame:frame]) {
     _style = style;
     _progress = 0;
     _smoothesProgress = NO;
@@ -140,8 +139,7 @@ static CGFloat kProgressMargin  = 6.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame style:(TTActivityLabelStyle)style {
-	self = [self initWithFrame:frame style:style text:nil];
-  if (self) {
+  if (self = [self initWithFrame:frame style:style text:nil]) {
   }
 
   return self;
@@ -150,8 +148,7 @@ static CGFloat kProgressMargin  = 6.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(TTActivityLabelStyle)style {
-	self = [self initWithFrame:CGRectZero style:style text:nil];
-  if (self) {
+  if (self = [self initWithFrame:CGRectZero style:style text:nil]) {
   }
 
   return self;
@@ -160,24 +157,11 @@ static CGFloat kProgressMargin  = 6.0f;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithFrame:(CGRect)frame {
-	self = [self initWithFrame:frame style:TTActivityLabelStyleWhiteBox text:nil];
-  if (self) {
+  if (self = [self initWithFrame:frame style:TTActivityLabelStyleWhiteBox text:nil]) {
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_INVALIDATE_TIMER(_smoothTimer);
-  TT_RELEASE_SAFELY(_bezelView);
-  TT_RELEASE_SAFELY(_progressView);
-  TT_RELEASE_SAFELY(_activityIndicator);
-  TT_RELEASE_SAFELY(_label);
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -191,7 +175,7 @@ static CGFloat kProgressMargin  = 6.0f;
 
   CGSize textSize = [_label.text sizeWithFont:_label.font];
 
-  CGFloat indicatorSize = 0.0f;
+  CGFloat indicatorSize = 0;
   [_activityIndicator sizeToFit];
   if (_activityIndicator.isAnimating) {
     if (_activityIndicator.height > textSize.height) {

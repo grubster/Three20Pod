@@ -7,7 +7,7 @@ Pod::Spec.new do |s|
   s.author            = { "Pedro Souza" => "pedronicholas.souza@gmail.com" }
   s.source            = { :git => "https://github.com/grubster/Three20Pod.git", :tag => "1.0.11" }
   s.platform          = :ios
-  s.requires_arc      = false
+  s.requires_arc      = true
   s.source_files      = "Pod/Classes/Three20/{Source,Headers}/*.{h,m}"
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => "$(SRCROOT)/Pods/Headers/**" }
   s.frameworks = 'UIKit'

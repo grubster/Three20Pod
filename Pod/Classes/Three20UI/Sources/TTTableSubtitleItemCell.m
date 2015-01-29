@@ -38,12 +38,10 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString*)identifier {
-	self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier];
-  if (self) {
+  if (self = [super initWithStyle:UITableViewCellStyleValue2 reuseIdentifier:identifier]) {
     self.textLabel.font = TTSTYLEVAR(tableFont);
     self.textLabel.textColor = TTSTYLEVAR(textColor);
     self.textLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-	self.textLabel.backgroundColor = TTSTYLEVAR(backgroundTextColor);
     self.textLabel.textAlignment = UITextAlignmentLeft;
     self.textLabel.lineBreakMode = UILineBreakModeTailTruncation;
     self.textLabel.adjustsFontSizeToFitWidth = YES;
@@ -51,7 +49,6 @@
     self.detailTextLabel.font = TTSTYLEVAR(font);
     self.detailTextLabel.textColor = TTSTYLEVAR(tableSubTextColor);
     self.detailTextLabel.highlightedTextColor = TTSTYLEVAR(highlightedTextColor);
-	self.detailTextLabel.backgroundColor = TTSTYLEVAR(backgroundTextColor);
     self.detailTextLabel.textAlignment = UITextAlignmentLeft;
     self.detailTextLabel.contentMode = UIViewContentModeTop;
     self.detailTextLabel.lineBreakMode = UILineBreakModeTailTruncation;
@@ -59,14 +56,6 @@
   }
 
   return self;
-}
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_imageView2);
-
-  [super dealloc];
 }
 
 
@@ -94,11 +83,6 @@
 #pragma mark -
 #pragma mark UIView
 
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)prepareForReuse {
-    [super prepareForReuse];
-    [_imageView2 unsetImage];
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)layoutSubviews {
@@ -106,7 +90,7 @@
 
   CGFloat height = self.contentView.height;
   CGFloat width = self.contentView.width - (height + kTableCellSmallMargin);
-  CGFloat left = 0.0f;
+  CGFloat left = 0;
 
   if (_imageView2) {
     _imageView2.frame = CGRectMake(0, 0, height, height);

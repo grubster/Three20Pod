@@ -18,7 +18,6 @@
 
 // UI
 #import "Three20UI/TTTableItem.h"
-#import "Three20UI/TTTableSection.h"
 
 // Core
 #import "Three20Core/TTCorePreprocessorMacros.h"
@@ -35,24 +34,13 @@
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (id)initWithItems:(NSArray*)items sections:(NSArray*)sections {
-	self = [self init];
-  if (self) {
+  if (self = [self init]) {
     _items    = [items mutableCopy];
     _sections = [sections mutableCopy];
   }
 
   return self;
 }
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)dealloc {
-  TT_RELEASE_SAFELY(_items);
-  TT_RELEASE_SAFELY(_sections);
-
-  [super dealloc];
-}
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -68,8 +56,7 @@
   va_list ap;
   va_start(ap, object);
   while (object) {
-    if ([object isKindOfClass:[NSString class]] ||
-        [object isKindOfClass:[TTTableSection class]]) {
+    if ([object isKindOfClass:[NSString class]]) {
       [sections addObject:object];
       section = [NSMutableArray array];
       [items addObject:section];
@@ -81,7 +68,7 @@
   }
   va_end(ap);
 
-  return [[[self alloc] initWithItems:items sections:sections] autorelease];
+  return [[self alloc] initWithItems:items sections:sections];
 }
 
 
@@ -92,8 +79,7 @@
   va_list ap;
   va_start(ap, object);
   while (object) {
-    if ([object isKindOfClass:[NSString class]] ||
-        [object isKindOfClass:[TTTableSection class]]) {
+    if ([object isKindOfClass:[NSString class]]) {
       [sections addObject:object];
 
     } else {
@@ -103,13 +89,13 @@
   }
   va_end(ap);
 
-  return [[[self alloc] initWithItems:items sections:sections] autorelease];
+  return [[self alloc] initWithItems:items sections:sections];
 }
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 + (TTSectionedDataSource*)dataSourceWithItems:(NSArray*)items sections:(NSArray*)sections {
-  return [[[self alloc] initWithItems:items sections:sections] autorelease];
+  return [[self alloc] initWithItems:items sections:sections];
 }
 
 
@@ -140,26 +126,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
   if (_sections.count) {
-    if ([[_sections objectAtIndex:section] isKindOfClass:[TTTableSection class]]) {
-      TTTableSection* sectionInfo = [_sections objectAtIndex:section];
-      return sectionInfo.headerTitle;
-
-    } else {
-      return [_sections objectAtIndex:section];
-    }
-
-  } else {
-    return nil;
-  }
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
-  if (tableView.style==UITableViewStyleGrouped &&
-      _sections.count &&
-      [[_sections objectAtIndex:section] isKindOfClass:[TTTableSection class]]) {
-    TTTableSection* sectionInfo = [_sections objectAtIndex:section];
-    return sectionInfo.footerTitle;
+    return [_sections objectAtIndex:section];
 
   } else {
     return nil;
